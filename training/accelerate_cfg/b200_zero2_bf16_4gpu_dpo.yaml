@@ -1,0 +1,28 @@
+# DeepSpeed ZeRO-2 + BF16 for single-node B200 4-GPU DPO training
+# Use with: accelerate launch --config_file accelerate_cfg/b200_deepspeed_zero2_bf16_4gpu_dpo.yaml
+compute_environment: LOCAL_MACHINE
+debug: false
+distributed_type: DEEPSPEED
+downcast_bf16: 'no'
+enable_cpu_affinity: false
+gpu_ids: all
+machine_rank: 0
+main_training_function: main
+mixed_precision: bf16
+num_machines: 1
+num_processes: 4
+rdzv_backend: static
+same_network: true
+tpu_env: []
+tpu_use_cluster: false
+tpu_use_sudo: false
+use_cpu: false
+deepspeed_config:
+  gradient_accumulation_steps: 1
+  gradient_clipping: 1.0
+  offload_optimizer_device: none
+  offload_param_device: none
+  zero3_init_flag: false
+  zero3_save_16bit_model: false
+  zero_stage: 2
+  train_micro_batch_size_per_gpu: 1

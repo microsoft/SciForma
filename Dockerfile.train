@@ -1,0 +1,44 @@
+# SciForma — Training Docker Image (B200 / A100 / H100)
+# Usage:
+#   docker build -f Dockerfile.train -t sciforma-train .
+#   docker run --gpus all \
+#       -e HF_TOKEN=hf_xxx \
+#       -e SCIFORMA_DATA_ROOT=/data \
+#       -v /your/data:/data \
+#       -v /your/checkpoints:/checkpoints \
+#       sciforma-train \
+#       bash training/scripts/run_stage1.sh
+
+FROM nvcr.io/nvidia/pytorch:24.10-py3
+
+LABEL org.opencontainers.image.title="SciForma Training"
+LABEL org.opencontainers.image.source="https://github.com/microsoft/SciForma"
+
+ENV PYTHONPATH=/workspace/SciForma
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /workspace/SciForma
+
+RUN apt-get update && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*
+
+# diffusers from git
+RUN pip install --no-cache-dir \
+    "git+https://github.com/huggingface/diffusers.git@3996788b"
+
+# All deps
+COPY requirements.txt requirements-train.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-train.txt
+
+# Flash Attention (pre-compiled)
+RUN pip install --no-cache-dir flash-attn --no-build-isolation || \
+    echo "Flash-attn build failed — skipping (optional)"
+
+# Copy project code
+COPY sciforma/          ./sciforma/
+COPY training/          ./training/
+COPY generate/          ./generate/
+COPY eval/              ./eval/
+COPY .env.example       ./.env.example
+
+CMD ["/bin/bash"]

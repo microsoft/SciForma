@@ -1,0 +1,38 @@
+# SciForma — Python dependencies
+# Python 3.10, CUDA 12.1+
+#
+# Quick install (inference only):
+#   pip install -r requirements.txt
+#
+# Training stack (additional):
+#   pip install -r requirements-train.txt
+
+# ── Core ML ──────────────────────────────────────────────────────────────────
+# CUDA build — install manually before this file:
+#   pip install torch==2.5.1 torchvision --index-url https://download.pytorch.org/whl/cu121
+torch>=2.4.0
+
+# ── HuggingFace stack ─────────────────────────────────────────────────────────
+# diffusers: must install from git for Flux2Klein / Flux2Transformer2DModel support
+#   pip install git+https://github.com/huggingface/diffusers.git
+transformers>=4.50.0
+accelerate>=0.34.0
+safetensors>=0.4.0
+huggingface_hub>=0.27.0
+
+# ── Inference / generate pipeline ─────────────────────────────────────────────
+openai>=1.30.0
+azure-identity>=1.17.0
+python-dotenv>=1.0.0
+
+# ── Data / image ──────────────────────────────────────────────────────────────
+Pillow>=10.0.0
+numpy>=1.24.0
+pandas>=2.0.0
+pyarrow>=14.0.0
+datasets>=2.18.0
+
+# ── Misc ─────────────────────────────────────────────────────────────────────
+ftfy>=6.1.0
+sentencepiece>=0.1.99
+tqdm

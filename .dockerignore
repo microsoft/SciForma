@@ -1,0 +1,46 @@
+# SciForma .dockerignore
+# Excludes large/sensitive files from Docker build context
+
+# Model weights and checkpoints (mount at runtime)
+*.pt
+*.safetensors
+*.bin
+*.ckpt
+*.npz             # VAE latent cache files
+checkpoints/
+outputs/
+
+# Data files (mount at runtime)
+# benchmark/prompts/ and benchmark/rubrics/ ARE included (needed for eval)
+benchmark/results/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Development artifacts
+wandb/
+logs/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Secrets
+_local_secrets.py
+.env
+*.env
+
+# Paper source (PDFs)
+paper/
+assets/*.pdf
+
+# Git
+.git/
+.gitignore
