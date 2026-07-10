@@ -121,16 +121,12 @@ def setup_all_env():
 
 # Debug helper
 def print_token_status():
-    """Print status of token configuration (for debugging)."""
-    print("=" * 60)
-    print("Token Configuration Status")
-    print("=" * 60)
-    print(f"secrets.py available: {_SECRETS_AVAILABLE}")
-    print(f"HF_TOKEN env: {'SET' if os.environ.get('HF_TOKEN') else 'NOT SET'}")
-    print(f"HF_TOKEN secrets: {'SET' if _SECRETS_HF_TOKEN else 'NOT SET'}")
-    print(f"WANDB_API_KEY env: {'SET' if os.environ.get('WANDB_API_KEY') else 'NOT SET'}")
-    print(f"Final HF token: {'Available' if get_hf_token() else 'NOT Available'}")
-    print("=" * 60)
+    """Print whether tokens are configured (values are never logged)."""
+    import sys
+    hf_set = bool(os.environ.get('HF_TOKEN') or _SECRETS_HF_TOKEN)
+    wandb_set = bool(os.environ.get('WANDB_API_KEY'))
+    sys.stderr.write(f"[token_helper] HF_TOKEN={'SET' if hf_set else 'NOT SET'}, "
+                     f"WANDB_API_KEY={'SET' if wandb_set else 'NOT SET'}\n")
 
 
 if __name__ == "__main__":

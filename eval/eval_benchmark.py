@@ -798,7 +798,7 @@ class ClientPool:
                     client = OpenAI(base_url=endpoint, api_key=api_key, max_retries=0)
                     self._clients.append((client, deployment_name, endpoint))
                 except Exception as e:
-                    logger.warning(f"  x {endpoint}: {e}")
+                    logger.warning(f"  x {endpoint}: {type(e).__name__}")
             if not self._clients:
                 raise RuntimeError("No Azure API-key clients could be initialised.")
             logger.info(f"Client pool ready: {len(self._clients)} endpoints")
@@ -814,7 +814,7 @@ class ClientPool:
                 client = OpenAI(base_url=endpoint, api_key=token_fn, max_retries=0)
                 self._clients.append((client, deployment_name, endpoint))
             except Exception as e:
-                logger.warning(f"  x {endpoint}: {e}")
+                logger.warning(f"  x {endpoint}: {type(e).__name__}")
 
         if not self._clients:
             raise RuntimeError(
