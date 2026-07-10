@@ -421,15 +421,10 @@ Adds inventory-aligned editing triplets co-trained with generation. Source token
 ### M-DPO: Multi-Dimensional Conjunctive Preference Optimization
 
 ```bash
-# Set policy_init_path → Stage 2 checkpoint-90000/ema_weights.pt
-bash training/scripts/run_mdpo.sh   # Canonical M-DPO (configs/mdpo/mdpo.py)
-
-# Ablation variants (see scripts/ablations/ and configs/mdpo/ablations/):
-bash training/scripts/ablations/run_mdpo_contrastive_global.sh
-# Multiple M-DPO variants in configs/mdpo/ablations/
+bash training/scripts/run_mdpo.sh
 ```
 
-Config: `training/configs/mdpo/mdpo.py` (canonical) · Ablation: `configs/mdpo/ablations/mdpo_1v2ct_global_contrastive.py`
+Config: `training/configs/mdpo/mdpo.py`
 
 **M-DPO loss** — for each group, the winner `w` is contrasted against three axis-specific losers `{l_C, l_A, l_T}` using a multi-way Bradley–Terry objective:
 
