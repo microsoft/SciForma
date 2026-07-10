@@ -28,7 +28,7 @@ python-dotenv>=1.0.0
 # ── Data / image ──────────────────────────────────────────────────────────────
 Pillow>=10.0.0
 numpy>=1.24.0
-pandas>=2.0.0
+pandas>=3.0.3
 pyarrow>=14.0.0
 datasets>=2.18.0
 
