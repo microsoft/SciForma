@@ -449,8 +449,6 @@ Key hyperparameters: `dpo_beta=2000`, `sft_weight=0`, `lr=1e-6`, logit-normal ti
 
 ---
 
----
-
 ## License
 
 The code in this repository is released under the [MIT License](LICENSE). The pretrained model weights (SciForma-Base, SciForma-9B) are released under the [FLUX Non-Commercial License v2.1](https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B/blob/main/LICENSE.md) inherited from FLUX.2-klein-base-9B.
