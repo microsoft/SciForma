@@ -1,5 +1,27 @@
 <div align="center">
 
+# SciForma: Structure-Faithful Generation of Scientific Diagrams
+
+<p>
+  <a href="https://arxiv.org/"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-coming%20soon-b31b1b?logo=arxiv&logoColor=white" height="22" /></a>
+  &nbsp;
+  <a href="https://huggingface.co/microsoft/SciForma-9B"><img alt="Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97-Models-yellow" height="22" /></a>
+  &nbsp;
+  <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K"><img alt="Dataset" src="https://img.shields.io/badge/%F0%9F%A4%97-Dataset-green" height="22" /></a>
+  &nbsp;
+  <a href="https://huggingface.co/datasets/microsoft/SciFormaBench"><img alt="Benchmark" src="https://img.shields.io/badge/%F0%9F%A4%97-Benchmark-blue" height="22" /></a>
+  &nbsp;
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg" height="22" /></a>
+</p>
+
+**Yuxuan Luo<sup>1</sup> · Peng Zhang<sup>2</sup> · Xinjie Zhang<sup>3</sup> · Xun Guo<sup>3</sup> · Zhouhui Lian<sup>1✉</sup> · Yan Lu<sup>3</sup>**
+
+<sup>1</sup>Peking University &nbsp;&nbsp; <sup>2</sup>Zhejiang University &nbsp;&nbsp; <sup>3</sup>Microsoft Research Asia
+
+<a href="assets/teaser.pdf"><img src="assets/teaser.png" width="100%" alt="SciForma Teaser"></a>
+
+</div>
+
 ---
 
 **SciForma** is a 9B-parameter framework for the *structure-faithful* generation of scientific methodology diagrams. SciForma decomposes diagram quality into three independently verifiable axes — **Component**, **Arrow**, and **Text** — guided by a *structural inventory*. Built on FLUX.2-klein-base-9B, it is fine-tuned in two SFT stages then post-trained with **Multi-Dimensional Conjunctive Preference Optimization (M-DPO)**, which enforces simultaneous correctness across all axes and adaptively routes gradients toward the most deficient axis.
