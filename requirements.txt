@@ -17,7 +17,7 @@ torch>=2.4.0
 #   pip install git+https://github.com/huggingface/diffusers.git
 transformers>=4.50.0
 accelerate>=0.34.0
-safetensors>=0.4.0
+safetensors>=0.8.0
 huggingface_hub>=0.27.0
 
 # ── Inference / generate pipeline ─────────────────────────────────────────────
