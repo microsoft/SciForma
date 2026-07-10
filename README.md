@@ -9,6 +9,8 @@
   &nbsp;
   <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K"><img alt="Dataset" src="https://img.shields.io/badge/%F0%9F%A4%97-Dataset-green" height="22" /></a>
   &nbsp;
+  <a href="https://huggingface.co/datasets/microsoft/SciFormaBench"><img alt="Benchmark" src="https://img.shields.io/badge/%F0%9F%A4%97-Benchmark-blue" height="22" /></a>
+  &nbsp;
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg" height="22" /></a>
 </p>
 

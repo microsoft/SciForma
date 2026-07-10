@@ -26,7 +26,7 @@ docker run --rm -it \
     --env WANDB_API_KEY="${WANDB_API_KEY:-}" \
     --env CUDA_VISIBLE_DEVICES="$GPU_IDS" \
     "$IMAGE" \
-    python scripts/generate_benchmark.py \
+    python generate/benchmark.py \
         --model_path microsoft/SciForma-9B \
         --split simple medium hard \
         --output_dir /workspace/output/sciforma-9b \
