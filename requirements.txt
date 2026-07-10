@@ -16,7 +16,7 @@ torch>=2.4.0
 # diffusers: must install from git for Flux2Klein / Flux2Transformer2DModel support
 #   pip install git+https://github.com/huggingface/diffusers.git
 transformers>=4.50.0
-accelerate>=0.34.0
+accelerate>=1.14.0
 safetensors>=0.4.0
 huggingface_hub>=0.27.0
 
