@@ -793,12 +793,15 @@ class ClientPool:
         if _JUDGE_BACKEND == "azure_apikey":
             eps = endpoints or ENDPOINT_TOKEN_SCOPE
             logger.info(f"Initialising client pool ({len(eps)} Azure endpoints, auth=apikey) ...")
+            _failed = 0
             for endpoint, api_key in eps.items():
                 try:
                     client = OpenAI(base_url=endpoint, api_key=api_key, max_retries=0)
                     self._clients.append((client, deployment_name, endpoint))
-                except Exception as e:
-                    logger.warning(f"  x {endpoint}: {type(e).__name__}")
+                except Exception:
+                    _failed += 1
+            if _failed:
+                logger.warning(f"  {_failed} endpoint(s) failed to initialise")
             if not self._clients:
                 raise RuntimeError("No Azure API-key clients could be initialised.")
             logger.info(f"Client pool ready: {len(self._clients)} endpoints")
@@ -808,13 +811,16 @@ class ClientPool:
         # ── azure_cli backend (default): AzureCliCredential ──────────────
         eps = endpoints or ENDPOINT_TOKEN_SCOPE
         logger.info(f"Initialising client pool ({len(eps)} endpoints, auth={auth_mode}) ...")
+        _failed = 0
         for endpoint, scope in eps.items():
             try:
                 token_fn = self._get_token_fn(scope, auth_mode)
                 client = OpenAI(base_url=endpoint, api_key=token_fn, max_retries=0)
                 self._clients.append((client, deployment_name, endpoint))
-            except Exception as e:
-                logger.warning(f"  x {endpoint}: {type(e).__name__}")
+            except Exception:
+                _failed += 1
+        if _failed:
+            logger.warning(f"  {_failed} endpoint(s) failed to initialise")
 
         if not self._clients:
             raise RuntimeError(
