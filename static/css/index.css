@@ -85,9 +85,23 @@ body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; color:var(--text-pr
 .fig-img { width:100%; border-radius:var(--radius); box-shadow:var(--shadow-md); }
 .fig-caption { text-align:center; font-size:.83rem; color:var(--text-secondary); margin-top:8px; }
 
-/* ── MMMG-style leaderboard ── */
-.lb-table { font-size:.88rem; border-collapse:collapse; }
-.lb-table thead th { cursor:pointer; }
+/* ── M-DPO collapsible ── */
+.mdpo-details { border:1px solid #ddd; border-radius:10px; margin-top:1.5rem; overflow:hidden; }
+.mdpo-details summary { padding:14px 20px; cursor:pointer; font-weight:600; font-size:.95rem; background:#f8fafc; list-style:none; user-select:none; }
+.mdpo-details summary::-webkit-details-marker { display:none; }
+.mdpo-details[open] summary { border-bottom:1px solid #ddd; }
+.mdpo-math-content { padding:20px; }
+.mdpo-tab-row { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+.mdpo-tab { background:#f0f0f0; border:1px solid #ddd; border-radius:6px; padding:5px 14px; font-size:.82rem; font-weight:600; cursor:pointer; transition:all .18s; }
+.mdpo-tab.active { background:#0078d4; color:#fff; border-color:#0078d4; }
+.mdpo-tab:hover:not(.active) { background:#e0e7ef; }
+.mdpo-panel { font-size:.9rem; color:#333; line-height:1.7; }
+.math-block { font-family:'Courier New',monospace; background:#f4f8fc; border:1px solid #dce8ff; border-radius:6px; padding:10px 16px; margin:10px 0; font-size:.88rem; overflow-x:auto; }
+
+/* ── Teaser: ensure no clipping ── */
+.teaser-wrap { width:100%; overflow:visible; }
+.t-item { overflow:hidden; }
+.teaser-top { overflow:visible; }
 
 
 /* ── Impact Hero ── */

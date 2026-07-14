@@ -77,26 +77,24 @@
 </section>
 
 <!-- ══ TEASER ══ -->
-<section class="section" style="padding-top:0">
-  <div class="container is-max-widescreen" style="margin-top:-80px;margin-bottom:-60px">
-    <div class="columns is-centered m-6">
-      <div class="column is-full has-text-centered content">
-        <div class="box m-5">
-          <div class="teaser-wrap">
-            <div class="teaser-top">
-              <div class="t-item"><a class="glightbox" href="assets/images/teaser/img1.png" data-gallery="teaser"><img src="assets/images/teaser/img1.png" alt="" loading="lazy"/></a></div>
-              <div class="t-item"><a class="glightbox" href="assets/images/teaser/img2.png" data-gallery="teaser"><img src="assets/images/teaser/img2.png" alt="" loading="lazy"/></a></div>
-              <div class="t-item t-item-3"><a class="glightbox" href="assets/images/teaser/img3.png" data-gallery="teaser"><img src="assets/images/teaser/img3.png" alt="" loading="lazy"/></a></div>
-              <div class="t-item"><a class="glightbox" href="assets/images/teaser/img4.png" data-gallery="teaser"><img src="assets/images/teaser/img4.png" alt="" loading="lazy"/></a></div>
-              <div class="t-item"><a class="glightbox" href="assets/images/teaser/img5.png" data-gallery="teaser"><img src="assets/images/teaser/img5.png" alt="" loading="lazy"/></a></div>
-            </div>
-            <div class="teaser-row3">
-              <div class="t-item"><a class="glightbox" href="assets/images/teaser/img6.png" data-gallery="teaser"><img src="assets/images/teaser/img6.png" alt="" loading="lazy"/></a></div>
-              <div class="t-item"><a class="glightbox" href="assets/images/teaser/img7.png" data-gallery="teaser"><img src="assets/images/teaser/img7.png" alt="" loading="lazy"/></a></div>
-            </div>
+<section class="section" style="padding-top:0; padding-bottom:0">
+  <div class="container is-max-widescreen">
+    <div class="columns is-centered">
+      <div class="column is-full has-text-centered content" style="padding:1rem 1.5rem">
+        <div class="teaser-wrap">
+          <div class="teaser-top">
+            <div class="t-item"><a class="glightbox" href="assets/images/teaser/img1.png" data-gallery="teaser"><img src="assets/images/teaser/img1.png" alt="" loading="lazy"/></a></div>
+            <div class="t-item"><a class="glightbox" href="assets/images/teaser/img2.png" data-gallery="teaser"><img src="assets/images/teaser/img2.png" alt="" loading="lazy"/></a></div>
+            <div class="t-item t-item-3"><a class="glightbox" href="assets/images/teaser/img3.png" data-gallery="teaser"><img src="assets/images/teaser/img3.png" alt="" loading="lazy"/></a></div>
+            <div class="t-item"><a class="glightbox" href="assets/images/teaser/img4.png" data-gallery="teaser"><img src="assets/images/teaser/img4.png" alt="" loading="lazy"/></a></div>
+            <div class="t-item"><a class="glightbox" href="assets/images/teaser/img5.png" data-gallery="teaser"><img src="assets/images/teaser/img5.png" alt="" loading="lazy"/></a></div>
           </div>
-          <p class="caption" style="margin-top:10px">SciForma-9B generated scientific methodology diagrams. Hover 3s to zoom · Click to expand.</p>
+          <div class="teaser-row3">
+            <div class="t-item"><a class="glightbox" href="assets/images/teaser/img6.png" data-gallery="teaser"><img src="assets/images/teaser/img6.png" alt="" loading="lazy"/></a></div>
+            <div class="t-item"><a class="glightbox" href="assets/images/teaser/img7.png" data-gallery="teaser"><img src="assets/images/teaser/img7.png" alt="" loading="lazy"/></a></div>
+          </div>
         </div>
+        <p class="caption" style="margin-top:10px">SciForma-9B generated scientific methodology diagrams. Hover 3s to zoom · Click to expand.</p>
       </div>
     </div>
   </div>
@@ -120,7 +118,7 @@
 <!-- ══ DATA & BENCHMARK ══ -->
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-    <h1 class="title is-2">SciFormaData-700K &amp; SciFormaBench</h1>
+    <h1 class="title is-2">SciFormaData-700K</h1>
   </div>
 </section>
 
@@ -129,19 +127,14 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <div class="content has-text-justified">
-          <p>We build a large-scale data engine spanning <strong>338,214 arXiv papers (2015–2025)</strong>, producing <strong>661K generation pairs</strong> and <strong>70K editing triplets</strong>. The dataset is organized around a structural primitive: a per-axis inventory of components, arrows, and text labels. <strong>SciFormaBench-2K</strong> provides 2,000 human-verified benchmark instances across Simple / Medium / Hard difficulty levels, evaluated by a GPT-5.4 judge.</p>
+          <p><strong>Structural Inventory.</strong> Central to SciForma is the notion of a <em>structural inventory</em> — a structured, per-axis description of a diagram's expected elements. Each inventory explicitly enumerates (1) <em>components</em> (named boxes, nodes, or modules), (2) <em>arrows</em> (directed connections with labels), and (3) <em>text annotations</em> (floating labels, captions, axis titles). This three-axis decomposition is the shared primitive underlying both data annotation and evaluation: training captions are structural inventories, and benchmark rubrics are structural inventories with human-verified ground truth. <strong>Conjunctive</strong> correctness is enforced during post-training — a generation is only considered correct if it simultaneously satisfies all three axes, preventing partial wins from masking structural failures.</p>
+          <p>We build a large-scale data engine spanning <strong>338,214 arXiv papers (2015–2025)</strong>, producing <strong>661K generation pairs</strong> and <strong>70K editing triplets</strong>. <strong>SciFormaBench-2K</strong> provides 2,000 human-verified benchmark instances across Simple / Medium / Hard difficulty levels, evaluated by a GPT-5.4 judge along the same three axes.</p>
         </div>
         <a class="glightbox" href="assets/figures/figure2_dataset.png">
           <img src="assets/figures/figure2_dataset.png" width="100%" height="auto" style="border:none" loading="lazy" alt="SciFormaData-700K pipeline"/>
         </a>
         <p class="caption">Data construction pipeline: PDF extraction → diagram detection → structured caption generation → quality filtering → editing augmentation.</p>
 
-        <div style="margin-top:2rem">
-          <a class="glightbox" href="assets/figures/structural_inv.png">
-            <img src="assets/figures/structural_inv.png" width="100%" height="auto" style="border:none" loading="lazy" alt="Structural inventory"/>
-          </a>
-          <p class="caption">Structural inventory: from structural primitives (components / arrows / text labels) to a hierarchical per-axis rubric used for both training and evaluation.</p>
-        </div>
       </div>
     </div>
   </div>
@@ -175,6 +168,38 @@
             </div>
           </div>
         </div>
+
+        <!-- M-DPO Collapsible Math -->
+        <details class="mdpo-details">
+          <summary>📐 M-DPO Theoretical Derivations (click to expand)</summary>
+          <div class="mdpo-math-content">
+            <div class="mdpo-tab-row">
+              <button class="mdpo-tab active" onclick="showMDPO('obj')">Objective</button>
+              <button class="mdpo-tab" onclick="showMDPO('grad')">Adaptive Gradient</button>
+              <button class="mdpo-tab" onclick="showMDPO('bt')">Bradley-Terry</button>
+              <button class="mdpo-tab" onclick="showMDPO('infonce')">InfoNCE View</button>
+            </div>
+            <div class="mdpo-panel" id="mdpo-obj">
+              <p><strong>Loss Objective.</strong> For one preference group (winner y⁺, D axis-specific losers {y⁻_d}):</p>
+              <div class="math-block">ℒ<sub>M-DPO</sub> = log(1 + Σ<sub>d=1</sub><sup>D</sup> exp(−β·Δ<sub>d</sub>))</div>
+              <p>where Δ<sub>d</sub> is the implicit reward difference on axis d. When all Δ<sub>d</sub> &gt; 0, the loss → 0 and training naturally terminates.</p>
+            </div>
+            <div class="mdpo-panel" id="mdpo-grad" style="display:none">
+              <p><strong>Adaptive Gradient.</strong> The gradient decomposes as:</p>
+              <div class="math-block">∂ℒ/∂θ = −β Σ<sub>d</sub> w<sub>d</sub> · ∂Δ<sub>d</sub>/∂θ &nbsp;&nbsp; where &nbsp;&nbsp; w<sub>d</sub> = exp(−β·Δ<sub>d</sub>) / (1 + Σ<sub>d'</sub> exp(−β·Δ<sub>d'</sub>))</div>
+              <p><em>Failing axis</em> (Δ<sub>d</sub> &lt; 0): w<sub>d</sub> large → strong gradient. &nbsp;
+              <em>Satisfied axis</em> (Δ<sub>d</sub> ≫ 0): w<sub>d</sub> → 0 → near-zero gradient. &nbsp;
+              <em>All satisfied</em>: Σw<sub>d</sub> → 0 → stops.</p>
+            </div>
+            <div class="mdpo-panel" id="mdpo-bt" style="display:none">
+              <p><strong>Multi-Way Bradley-Terry.</strong> P(y⁺ beats all D losers simultaneously) = exp(r⁺) / (exp(r⁺) + Σ<sub>d</sub> exp(r⁻<sub>d</sub>)). Maximizing log-likelihood yields ℒ<sub>M-DPO</sub>. Conjunctive semantics arise naturally: the model must beat <em>every</em> axis-specific loser, not just their average.</p>
+            </div>
+            <div class="mdpo-panel" id="mdpo-infonce" style="display:none">
+              <p><strong>InfoNCE Equivalence.</strong> Setting f⁺ = 0 and f⁻_d = −β·Δ<sub>d</sub> recovers InfoNCE with D axis-anchored hard negatives. This explains why M-DPO generalizes better than mean-reduction DPO: axis-specific losers are harder (more informative) negatives than random rollouts.</p>
+            </div>
+          </div>
+        </details>
+
       </div>
     </div>
   </div>
@@ -388,33 +413,40 @@ document.addEventListener('DOMContentLoaded', function(){
     el.addEventListener('mouseleave', function(){ clearTimeout(ht); el.classList.remove('zoomed'); });
   });
 
-  // Table sort (MMMG style)
+  // Table sort - MMMG style, fixed double-arrow bug
   ['sfb-table','aib-table'].forEach(function(tableId){
     var table = document.getElementById(tableId);
     if(!table) return;
-    var headers = table.querySelectorAll('thead th');
+    var headers = Array.from(table.querySelectorAll('thead th'));
+    var baseTxts = headers.map(function(h){ return h.textContent.trim(); });
     var activeIdx = -1, activeAsc = true;
     headers.forEach(function(th, idx){
-      th.dataset.base = th.textContent.trim();
       th.addEventListener('click', function(){
         var tbody = table.querySelector('tbody');
         var rows = Array.from(tbody.querySelectorAll('tr'));
         var asc = (activeIdx === idx) ? !activeAsc : true;
         rows.sort(function(a,b){
-          var av = a.children[idx].textContent.trim();
-          var bv = b.children[idx].textContent.trim();
+          var av = a.children[idx] ? a.children[idx].textContent.replace(/[★↑↓]/g,'').trim() : '';
+          var bv = b.children[idx] ? b.children[idx].textContent.replace(/[★↑↓]/g,'').trim() : '';
           var an = parseFloat(av), bn = parseFloat(bv);
           return asc ? (isNaN(an)||isNaN(bn) ? av.localeCompare(bv) : an-bn)
                      : (isNaN(an)||isNaN(bn) ? bv.localeCompare(av) : bn-an);
         });
         rows.forEach(function(r){ tbody.appendChild(r); });
-        headers.forEach(function(h){ h.innerHTML = h.dataset.base; });
-        th.innerHTML = th.dataset.base + (asc ? ' ↑' : ' ↓');
+        headers.forEach(function(h,i){ h.textContent = baseTxts[i]; });
+        th.textContent = baseTxts[idx] + (asc ? ' ↑' : ' ↓');
         activeIdx = idx; activeAsc = asc;
       });
     });
   });
 });
+
+function showMDPO(id){
+  document.querySelectorAll('.mdpo-panel').forEach(function(p){ p.style.display='none'; });
+  document.querySelectorAll('.mdpo-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('mdpo-'+id).style.display='block';
+  event.target.classList.add('active');
+}
 </script>
 
 </body>
