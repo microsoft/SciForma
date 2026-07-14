@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css"/>
@@ -107,8 +107,8 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>Scientific methodology diagrams — flowcharts, pipelines, and architecture figures in academic papers — demand precise structural fidelity: every component, arrow, and text label must be faithfully represented. Existing text-to-image models generate visually appealing outputs but routinely violate structural constraints, rendering them unsuitable for rigorous scientific illustration.</p>
-          <p>We introduce <strong>SciForma</strong>, a 9B-parameter framework that decomposes diagram quality into three independently verifiable axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Built on FLUX.2-klein-base-9B and post-trained with <strong>M-DPO</strong>, SciForma achieves <strong>69.51%</strong> on SciFormaBench-2K, surpassing all open-source baselines and approaching commercial models. On AIBench, SciForma-9B reaches <strong>70.29</strong>, edging human-drawn originals (70.09).</p>
+          <p>Structural fidelity is essential to scientific methodology diagrams. To communicate research logic, these diagrams must faithfully render components, directional relations, and textual annotations. Since a single error — a reversed arrow or an unreadable equation — can invalidate the entire figure, structural fidelity is inherently <em>conjunctive</em>: correctness on one axis cannot compensate for failure on another. Current open-source models fail to satisfy this criterion: SFT learns plausible layouts but cannot reliably ensure structural correctness, while scalar reward-based post-training obscures which structural dimension has failed.</p>
+          <p>To address this, we introduce <strong>SciForma</strong>, a framework for the structure-faithful generation of scientific methodology diagrams. SciForma decomposes diagram quality into three structural axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Built on this foundation, we curate <strong>SciFormaData-700K</strong> for structured training and <strong>SciFormaBench-2K</strong> for logic-verified evaluation. We develop <strong>M-DPO</strong>, which enforces simultaneous correctness across all axes and adaptively routes gradients to the most deficient dimension. SciForma-9B exceeds all open-source baselines and GPT-Image-1.5 on both SciFormaBench-2K and AIBench, bringing open scientific-diagram generation close to proprietary-level structural fidelity.</p>
         </div>
       </div>
     </div>
@@ -127,8 +127,8 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <div class="content has-text-justified">
-          <p><strong>Structural Inventory.</strong> Central to SciForma is the notion of a <em>structural inventory</em> — a structured, per-axis description of a diagram's expected elements. Each inventory explicitly enumerates (1) <em>components</em> (named boxes, nodes, or modules), (2) <em>arrows</em> (directed connections with labels), and (3) <em>text annotations</em> (floating labels, captions, axis titles). This three-axis decomposition is the shared primitive underlying both data annotation and evaluation: training captions are structural inventories, and benchmark rubrics are structural inventories with human-verified ground truth. <strong>Conjunctive</strong> correctness is enforced during post-training — a generation is only considered correct if it simultaneously satisfies all three axes, preventing partial wins from masking structural failures.</p>
-          <p>We build a large-scale data engine spanning <strong>338,214 arXiv papers (2015–2025)</strong>, producing <strong>661K generation pairs</strong> and <strong>70K editing triplets</strong>. <strong>SciFormaBench-2K</strong> provides 2,000 human-verified benchmark instances across Simple / Medium / Hard difficulty levels, evaluated by a GPT-5.4 judge along the same three axes.</p>
+          <p><strong>Structural Inventory.</strong> Scientific methodology diagrams share a structural logic codified in established modeling standards. Adopting this shared grammar, SciForma formalizes diagram content with three independently verifiable primitives: <em>Component</em> for entity identity and spatial layout, <em>Arrow</em> for information topology, and <em>Text</em> for textual annotations. Together, these form the <strong>structural inventory</strong>, a ground-truth checklist that any structurally faithful output must satisfy. Structural fidelity is <strong>conjunctive</strong>: a generation is correct only when all three axes are simultaneously satisfied.</p>
+          <p>We collect 726K methodology diagrams from 593K arXiv LaTeX sources (2015–2025), applying consensus filtering by dual VLM evaluators and pHash deduplication. Each diagram is paired with a structural-inventory caption organized along the Component, Arrow, and Text axes, synthesized from Qwen3-VL analysis integrated with the original paper context and averaging 547 tokens. The dataset is stratified into Low / Medium / High complexity tiers to enable two-stage fine-tuning. The 70K editing triplets are constructed via SAM3-grounded inpainting of 1–3 structural attributes, with all edits verified by OpenAI-o3. <strong>SciFormaBench-2K</strong> holds out 2,000 candidates stratified by complexity: Simple (500) tests single-path block diagrams, Medium (900) introduces multi-branch flows, and Hard (600) presents dense pipeline architectures with subfigures and mathematical formulas. Each instance carries a human-verified structural inventory, evaluated by a GPT-5.4 judge.</p>
         </div>
         <a class="glightbox" href="assets/figures/figure2_dataset.png">
           <img src="assets/figures/figure2_dataset.png" width="100%" height="auto" style="border:none" loading="lazy" alt="SciFormaData-700K pipeline"/>
@@ -169,36 +169,7 @@
           </div>
         </div>
 
-        <!-- M-DPO Collapsible Math -->
-        <details class="mdpo-details">
-          <summary>📐 M-DPO Theoretical Derivations (click to expand)</summary>
-          <div class="mdpo-math-content">
-            <div class="mdpo-tab-row">
-              <button class="mdpo-tab active" onclick="showMDPO('obj')">Objective</button>
-              <button class="mdpo-tab" onclick="showMDPO('grad')">Adaptive Gradient</button>
-              <button class="mdpo-tab" onclick="showMDPO('bt')">Bradley-Terry</button>
-              <button class="mdpo-tab" onclick="showMDPO('infonce')">InfoNCE View</button>
-            </div>
-            <div class="mdpo-panel" id="mdpo-obj">
-              <p><strong>Loss Objective.</strong> For one preference group (winner y⁺, D axis-specific losers {y⁻_d}):</p>
-              <div class="math-block">ℒ<sub>M-DPO</sub> = log(1 + Σ<sub>d=1</sub><sup>D</sup> exp(−β·Δ<sub>d</sub>))</div>
-              <p>where Δ<sub>d</sub> is the implicit reward difference on axis d. When all Δ<sub>d</sub> &gt; 0, the loss → 0 and training naturally terminates.</p>
-            </div>
-            <div class="mdpo-panel" id="mdpo-grad" style="display:none">
-              <p><strong>Adaptive Gradient.</strong> The gradient decomposes as:</p>
-              <div class="math-block">∂ℒ/∂θ = −β Σ<sub>d</sub> w<sub>d</sub> · ∂Δ<sub>d</sub>/∂θ &nbsp;&nbsp; where &nbsp;&nbsp; w<sub>d</sub> = exp(−β·Δ<sub>d</sub>) / (1 + Σ<sub>d'</sub> exp(−β·Δ<sub>d'</sub>))</div>
-              <p><em>Failing axis</em> (Δ<sub>d</sub> &lt; 0): w<sub>d</sub> large → strong gradient. &nbsp;
-              <em>Satisfied axis</em> (Δ<sub>d</sub> ≫ 0): w<sub>d</sub> → 0 → near-zero gradient. &nbsp;
-              <em>All satisfied</em>: Σw<sub>d</sub> → 0 → stops.</p>
-            </div>
-            <div class="mdpo-panel" id="mdpo-bt" style="display:none">
-              <p><strong>Multi-Way Bradley-Terry.</strong> P(y⁺ beats all D losers simultaneously) = exp(r⁺) / (exp(r⁺) + Σ<sub>d</sub> exp(r⁻<sub>d</sub>)). Maximizing log-likelihood yields ℒ<sub>M-DPO</sub>. Conjunctive semantics arise naturally: the model must beat <em>every</em> axis-specific loser, not just their average.</p>
-            </div>
-            <div class="mdpo-panel" id="mdpo-infonce" style="display:none">
-              <p><strong>InfoNCE Equivalence.</strong> Setting f⁺ = 0 and f⁻_d = −β·Δ<sub>d</sub> recovers InfoNCE with D axis-anchored hard negatives. This explains why M-DPO generalizes better than mean-reduction DPO: axis-specific losers are harder (more informative) negatives than random rollouts.</p>
-            </div>
-          </div>
-        </details>
+        
 
       </div>
     </div>
