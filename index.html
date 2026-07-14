@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SciForma: Structure-Faithful Generation of Scientific Diagrams</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════ -->
+<header>
+  <h1>SciForma</h1>
+  <p class="subtitle">
+    Structure-Faithful Generation of Scientific Methodology Diagrams
+  </p>
+
+  <!-- Badges -->
+  <div class="badge-row">
+    <a href="https://arxiv.org/" target="_blank">
+      <img src="https://img.shields.io/badge/arXiv-coming%20soon-b31b1b?logo=arxiv&logoColor=white&style=flat-square" alt="arXiv" />
+    </a>
+    <a href="https://github.com/microsoft/SciForma" target="_blank">
+      <img src="https://img.shields.io/badge/Code-GitHub-181717?logo=github&style=flat-square" alt="GitHub" />
+    </a>
+    <a href="https://huggingface.co/microsoft/SciForma-9B" target="_blank">
+      <img src="https://img.shields.io/badge/%F0%9F%A4%97-SciForma--9B-yellow?style=flat-square" alt="Model" />
+    </a>
+    <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K" target="_blank">
+      <img src="https://img.shields.io/badge/%F0%9F%A4%97-SciFormaData--700K-green?style=flat-square" alt="Dataset" />
+    </a>
+    <a href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank">
+      <img src="https://img.shields.io/badge/%F0%9F%A4%97-SciFormaBench-blue?style=flat-square" alt="Benchmark" />
+    </a>
+  </div>
+
+  <!-- Authors -->
+  <p class="authors">
+    Yuxuan Luo<sup>1</sup> &nbsp;·&nbsp;
+    Peng Zhang<sup>2</sup> &nbsp;·&nbsp;
+    Xinjie Zhang<sup>3✉</sup> &nbsp;·&nbsp;
+    Xun Guo<sup>3</sup> &nbsp;·&nbsp;
+    Zhouhui Lian<sup>1✉</sup> &nbsp;·&nbsp;
+    Yan Lu<sup>3</sup>
+  </p>
+  <p class="affiliations">
+    <sup>1</sup>Peking University &nbsp;&nbsp;
+    <sup>2</sup>Zhejiang University &nbsp;&nbsp;
+    <sup>3</sup>Microsoft Research Asia
+  </p>
+</header>
+
+<!-- ══════════════════════════════════════════════════
+     TEASER
+══════════════════════════════════════════════════ -->
+<div class="teaser">
+  <a href="assets/images/teaser.pdf" target="_blank">
+    <img src="assets/images/teaser.png" alt="SciForma Teaser" />
+  </a>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     ABSTRACT
+══════════════════════════════════════════════════ -->
+<section>
+  <h2>Abstract</h2>
+  <p>
+    Scientific methodology diagrams — flowcharts, pipelines, and architecture figures that appear in academic papers — demand precise structural fidelity: every component, arrow, and text label must be faithfully represented. Existing text-to-image models generate visually appealing outputs but routinely violate structural constraints, rendering them unsuitable for rigorous scientific illustration.
+  </p>
+  <p>
+    We introduce <strong>SciForma</strong>, a 9B-parameter framework that decomposes diagram quality into three independently verifiable axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Built on FLUX.2-klein-base-9B, SciForma is fine-tuned through two SFT stages and post-trained with <strong>Multi-Dimensional Conjunctive Preference Optimization (M-DPO)</strong>, which enforces simultaneous correctness across all three axes and adaptively routes gradients toward the most deficient axis.
+  </p>
+  <p>
+    SciForma achieves <strong>69.51%</strong> on SciFormaBench-2K, surpassing all open-source baselines and approaching commercial models (GPT-Image-1.5: 68.96%). On AIBench, SciForma-9B reaches <strong>70.29</strong> — edging human-drawn originals (70.09) with the largest gain on Topology (+6.19).
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     HIGHLIGHTS
+══════════════════════════════════════════════════ -->
+<section>
+  <h2>Highlights</h2>
+  <div class="highlights">
+    <div class="highlight-card">
+      <h3>🔍 Structural Inventory</h3>
+      <p>Per-axis (Component / Arrow / Text) verification with critical and moderate error severity — replacing single holistic scores with fine-grained structural evaluation.</p>
+    </div>
+    <div class="highlight-card">
+      <h3>⚡ M-DPO</h3>
+      <p>Multi-way Bradley–Terry objective with dimension-anchored preference construction and adaptive gradient reweighting — breaks the SFT plateau where scalar DPO / GDRO / GRPO stagnate.</p>
+    </div>
+    <div class="highlight-card">
+      <h3>🤖 LaTeX-to-Diagram Agent</h3>
+      <p>Generate figures directly from your paper's LaTeX source via a GPT planner + SciForma-9B renderer — closing the loop between paper writing and figure generation.</p>
+    </div>
+    <div class="highlight-card">
+      <h3>📦 Data &amp; Benchmark</h3>
+      <p><strong>SciFormaData-700K</strong>: 661K generation pairs + 70K editing triplets.<br/>
+      <strong>SciFormaBench-2K</strong>: Simple 500 / Medium 900 / Hard 600 with human-verified inventories.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     RESULTS
+══════════════════════════════════════════════════ -->
+<section>
+  <h2>Results</h2>
+  <p>On <strong>SciFormaBench-2K</strong> (GPT-5.4 judge, 2,000 images):</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Average ↑</th>
+        <th>Component ↑</th>
+        <th>Arrow ↑</th>
+        <th>Text ↑</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>GPT-Image-2</td>
+        <td>85.62</td><td>83.34</td><td>89.61</td><td>83.53</td>
+      </tr>
+      <tr>
+        <td>Nano Banana Pro</td>
+        <td>81.34</td><td>81.10</td><td>83.60</td><td>78.70</td>
+      </tr>
+      <tr>
+        <td>GPT-Image-1.5</td>
+        <td>68.96</td><td>75.70</td><td>62.50</td><td>68.20</td>
+      </tr>
+      <tr class="highlight-row">
+        <td>SciForma-9B (+ M-DPO)</td>
+        <td>69.51</td><td>74.49</td><td>66.46</td><td>67.00</td>
+      </tr>
+      <tr class="highlight-row">
+        <td>SciForma-Base (SFT)</td>
+        <td>67.59</td><td>73.52</td><td>64.64</td><td>63.84</td>
+      </tr>
+      <tr>
+        <td>Wan2.7-Image</td>
+        <td>64.71</td><td>73.90</td><td>60.30</td><td>61.10</td>
+      </tr>
+      <tr>
+        <td>FLUX.2-klein-base-9B</td>
+        <td>33.87</td><td>51.50</td><td>25.20</td><td>23.60</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     CITATION
+══════════════════════════════════════════════════ -->
+<section>
+  <h2>Citation</h2>
+  <pre>@article{luo2026sciforma,
+  title   = {SciForma: Structure-Faithful Generation of Scientific Methodology Diagrams},
+  author  = {Luo, Yuxuan and Zhang, Peng and Zhang, Xinjie and Guo, Xun and Lian, Zhouhui and Lu, Yan},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</pre>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    <a href="https://go.microsoft.com/fwlink/?LinkId=521839">Privacy</a> &nbsp;·&nbsp;
+    <a href="https://go.microsoft.com/fwlink/?LinkID=206977">Terms of Use</a> &nbsp;·&nbsp;
+    <a href="https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/">Trademarks</a>
+    &nbsp;·&nbsp; © 2026 Microsoft
+  </p>
+</footer>
+
+</body>
+</html>
