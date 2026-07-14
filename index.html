@@ -170,22 +170,18 @@
         </div>
 
         <!-- M-DPO figure + bullet highlights -->
-        <div class="columns" style="margin-top:2rem;align-items:center">
-          <div class="column is-half">
-            <a class="glightbox" href="assets/figures/ablation.png">
-              <img src="assets/figures/ablation.png" width="100%" height="auto" style="border:none" loading="lazy" alt="M-DPO ablation"/>
-            </a>
-            <p class="fig-caption">M-DPO ablation on SciFormaBench-2K. Text axis benefits most (+3.16 pts).</p>
-          </div>
-          <div class="column is-half">
-            <div class="content">
-              <ul>
-                <li><strong>Conjunctive objective.</strong> Correct only when all three axes improve simultaneously.</li>
-                <li><strong>Adaptive gradient focus.</strong> Failing axes receive concentrated gradient; satisfied axes near-zero, preventing over-optimization.</li>
-                <li><strong>Multi-way Bradley–Terry.</strong> Equivalent to InfoNCE with D axis-anchored hard negatives.</li>
-                <li><strong>Strict DPO generalization.</strong> Reduces to standard DPO when D = 1.</li>
-              </ul>
-            </div>
+        <div style="margin-top:2rem;max-width:860px;margin-left:auto;margin-right:auto">
+          <a class="glightbox" href="assets/figures/ablation.png">
+            <img src="assets/figures/ablation.png" width="100%" height="auto" style="border:none" loading="lazy" alt="M-DPO ablation"/>
+          </a>
+          <p class="fig-caption">M-DPO ablation on SciFormaBench-2K. Text axis benefits most (+3.16 pts).</p>
+          <div class="content" style="margin-top:1rem">
+            <ul>
+              <li><strong>Conjunctive objective.</strong> Correct only when all three axes improve simultaneously.</li>
+              <li><strong>Adaptive gradient focus.</strong> Failing axes receive concentrated gradient; satisfied axes near-zero.</li>
+              <li><strong>Multi-way Bradley–Terry.</strong> Equivalent to InfoNCE with D axis-anchored hard negatives.</li>
+              <li><strong>Strict DPO generalization.</strong> Reduces to standard DPO when D = 1.</li>
+            </ul>
           </div>
         </div>
 
