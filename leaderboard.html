@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SciFormaBench Leaderboard</title>
+
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bulma.min.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bulma.min.js"></script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+    .hero-body { padding: 3rem 1.5rem 2rem; }
+
+    nav.navbar { border-bottom: 1px solid #eee; }
+
+    .tab-buttons { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab-buttons .button.is-active { background: #0078d4; color: #fff; border-color: #0078d4; }
+
+    table.dataTable thead th {
+      background: #0078d4;
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    table.dataTable thead th:hover { background: #005a9e; }
+
+    tr.ours td { font-weight: 700; background: #e8f3fd !important; }
+    tr.ours td:first-child::after { content: " ★"; color: #0078d4; }
+
+    .rank-1 td:nth-child(3) { color: #c00; font-weight: 700; }
+
+    td.best { color: #0078d4; font-weight: 700; }
+
+    .legend { font-size: 0.85rem; color: #666; margin-bottom: 12px; }
+    .legend span.ours-badge {
+      display: inline-block; width: 14px; height: 14px;
+      background: #e8f3fd; border: 1px solid #0078d4;
+      vertical-align: middle; margin-right: 4px;
+    }
+
+    footer.footer { padding: 2rem; background: #fafafa; margin-top: 3rem; }
+
+    .sort-hint { font-size: 0.8rem; color: #999; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar is-light">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="index.html">
+      <strong>SciForma</strong>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="index.html">Home</a>
+      <a class="navbar-item is-active" href="leaderboard.html">Leaderboard</a>
+      <a class="navbar-item" href="https://github.com/microsoft/SciForma" target="_blank">Code</a>
+      <a class="navbar-item" href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank">Dataset</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title is-2">SciFormaBench Leaderboard</h1>
+      <p class="subtitle is-5">
+        2,000 scientific methodology diagrams &nbsp;·&nbsp;
+        3-axis evaluation (Component / Arrow / Text) &nbsp;·&nbsp;
+        GPT-5.4 judge
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Main ── -->
+<section class="section">
+  <div class="container">
+
+    <!-- Tab buttons -->
+    <div class="tab-buttons">
+      <button class="button is-small is-active" onclick="showTable('sciformabench')">SciFormaBench-2K</button>
+      <button class="button is-small" onclick="showTable('aibench')">AIBench</button>
+    </div>
+
+    <!-- SciFormaBench-2K -->
+    <div id="tab-sciformabench">
+      <p class="sort-hint">Click any column header to sort ↕</p>
+      <p class="legend"><span class="ours-badge"></span> = SciForma model (ours)</p>
+      <div class="table-container">
+        <table id="table-sciformabench" class="table is-bordered is-striped is-hoverable is-fullwidth" style="width:100%">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Method</th>
+              <th>Average ↑</th>
+              <th>Simple</th>
+              <th>Medium</th>
+              <th>Hard</th>
+              <th>Component</th>
+              <th>Arrow</th>
+              <th>Text</th>
+              <th>Open?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>GPT-Image-2</td><td>85.62</td><td>88.41</td><td>85.66</td><td>83.26</td><td>83.34</td><td>89.61</td><td>83.53</td><td>❌</td></tr>
+            <tr><td>2</td><td>NanoBananaPro</td><td>81.34</td><td>85.30</td><td>81.70</td><td>77.50</td><td>81.10</td><td>83.60</td><td>78.70</td><td>❌</td></tr>
+            <tr class="ours"><td>3</td><td>SciForma-9B + Edit</td><td>72.40</td><td>79.82</td><td>72.59</td><td>66.01</td><td>76.70</td><td>69.91</td><td>70.14</td><td>✅</td></tr>
+            <tr class="ours"><td>4</td><td>SciForma-9B (M-DPO)</td><td>69.51</td><td>77.20</td><td>69.69</td><td>62.86</td><td>74.49</td><td>66.46</td><td>67.00</td><td>✅</td></tr>
+            <tr><td>5</td><td>GPT-Image-1.5</td><td>68.96</td><td>75.50</td><td>69.60</td><td>62.60</td><td>75.70</td><td>62.50</td><td>68.20</td><td>❌</td></tr>
+            <tr class="ours"><td>6</td><td>SciForma-Base (SFT)</td><td>67.59</td><td>76.01</td><td>67.43</td><td>60.83</td><td>73.52</td><td>64.64</td><td>63.84</td><td>✅</td></tr>
+            <tr><td>7</td><td>Wan2.7-Image</td><td>64.71</td><td>73.90</td><td>65.90</td><td>55.30</td><td>71.90</td><td>60.30</td><td>61.10</td><td>❌</td></tr>
+            <tr><td>8</td><td>SenseNova-U1-8B</td><td>51.14</td><td>59.57</td><td>51.86</td><td>43.02</td><td>61.34</td><td>50.16</td><td>40.37</td><td>❌</td></tr>
+            <tr><td>9</td><td>FLUX.2-dev-32B</td><td>48.81</td><td>57.60</td><td>49.30</td><td>40.80</td><td>62.50</td><td>38.60</td><td>44.60</td><td>✅</td></tr>
+            <tr><td>10</td><td>Qwen-Image-2512</td><td>48.73</td><td>57.50</td><td>49.90</td><td>39.60</td><td>61.20</td><td>46.60</td><td>36.80</td><td>❌</td></tr>
+            <tr><td>11</td><td>Z-Image</td><td>48.50</td><td>57.20</td><td>49.70</td><td>39.40</td><td>58.30</td><td>46.90</td><td>38.50</td><td>❌</td></tr>
+            <tr><td>12</td><td>FLUX.2-klein-base-9B</td><td>33.87</td><td>42.80</td><td>34.20</td><td>26.00</td><td>51.50</td><td>25.20</td><td>23.60</td><td>✅</td></tr>
+            <tr><td>13</td><td>FLUX.1-dev</td><td>20.64</td><td>26.40</td><td>20.70</td><td>15.80</td><td>40.60</td><td>11.20</td><td>8.50</td><td>✅</td></tr>
+            <tr><td>14</td><td>Bagel-7B</td><td>16.31</td><td>18.40</td><td>16.20</td><td>14.70</td><td>35.50</td><td>9.50</td><td>2.20</td><td>✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AIBench -->
+    <div id="tab-aibench" style="display:none">
+      <p class="sort-hint">Click any column header to sort ↕</p>
+      <p class="legend"><span class="ours-badge"></span> = SciForma model (ours)</p>
+      <div class="table-container">
+        <table id="table-aibench" class="table is-bordered is-striped is-hoverable is-fullwidth" style="width:100%">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Method</th>
+              <th>Score ↑</th>
+              <th>Component</th>
+              <th>Topology</th>
+              <th>Phase</th>
+              <th>Semantic</th>
+              <th>Aesthetic</th>
+              <th>Open?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>GPT-Image-2</td><td>80.27</td><td>90.69</td><td>81.77</td><td>84.18</td><td>90.24</td><td>54.49</td><td>❌</td></tr>
+            <tr><td>2</td><td>NanoBananaPro</td><td>77.77</td><td>87.80</td><td>74.81</td><td>82.67</td><td>88.54</td><td>55.04</td><td>❌</td></tr>
+            <tr><td>3</td><td>Seedream 5.0</td><td>73.23</td><td>82.93</td><td>72.81</td><td>72.10</td><td>86.53</td><td>51.78</td><td>❌</td></tr>
+            <tr class="ours"><td>4</td><td>SciForma-9B + Edit</td><td>70.62</td><td>77.86</td><td>64.47</td><td>75.45</td><td>81.20</td><td>54.10</td><td>✅</td></tr>
+            <tr class="ours"><td>5</td><td>SciForma-9B (M-DPO)</td><td>70.29</td><td>77.53</td><td>64.17</td><td>74.71</td><td>80.79</td><td>54.24</td><td>✅</td></tr>
+            <tr class="ours"><td>6</td><td>SciForma-Base (SFT)</td><td>68.61</td><td>76.26</td><td>61.95</td><td>73.26</td><td>78.33</td><td>53.24</td><td>✅</td></tr>
+            <tr><td>7</td><td>Wan2.6</td><td>65.84</td><td>68.60</td><td>56.11</td><td>72.56</td><td>80.43</td><td>51.50</td><td>❌</td></tr>
+            <tr><td>8</td><td>GPT-Image-1.5</td><td>61.62</td><td>66.23</td><td>50.87</td><td>55.95</td><td>77.55</td><td>57.50</td><td>❌</td></tr>
+            <tr><td>9</td><td>Seedream 4.5</td><td>59.68</td><td>67.89</td><td>52.42</td><td>48.14</td><td>74.47</td><td>55.48</td><td>❌</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <a href="https://github.com/microsoft/SciForma">GitHub</a> &nbsp;·&nbsp;
+      <a href="https://huggingface.co/datasets/microsoft/SciFormaBench">HuggingFace</a> &nbsp;·&nbsp;
+      © 2026 Microsoft Research Asia
+    </p>
+  </div>
+</footer>
+
+<script>
+$(document).ready(function () {
+  $('#table-sciformabench').DataTable({
+    paging: false,
+    searching: false,
+    info: false,
+    order: [[2, 'desc']],
+    columnDefs: [{ orderable: false, targets: [0, 9] }]
+  });
+
+  $('#table-aibench').DataTable({
+    paging: false,
+    searching: false,
+    info: false,
+    order: [[2, 'desc']],
+    columnDefs: [{ orderable: false, targets: [0, 8] }]
+  });
+});
+
+function showTable(name) {
+  document.getElementById('tab-sciformabench').style.display = name === 'sciformabench' ? '' : 'none';
+  document.getElementById('tab-aibench').style.display = name === 'aibench' ? '' : 'none';
+  document.querySelectorAll('.tab-buttons .button').forEach((b, i) => {
+    b.classList.toggle('is-active', (i === 0 && name === 'sciformabench') || (i === 1 && name === 'aibench'));
+  });
+}
+</script>
+
+</body>
+</html>
