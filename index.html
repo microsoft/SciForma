@@ -107,8 +107,7 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>Structural fidelity is essential to scientific methodology diagrams. To communicate research logic, these diagrams must faithfully render components, directional relations, and textual annotations. Since a single error — a reversed arrow or an unreadable equation — can invalidate the entire figure, structural fidelity is inherently <em>conjunctive</em>: correctness on one axis cannot compensate for failure on another. Current open-source models fail to satisfy this criterion: SFT learns plausible layouts but cannot reliably ensure structural correctness, while scalar reward-based post-training obscures which structural dimension has failed.</p>
-          <p>To address this, we introduce <strong>SciForma</strong>, a framework for the structure-faithful generation of scientific methodology diagrams. SciForma decomposes diagram quality into three structural axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Built on this foundation, we curate <strong>SciFormaData-700K</strong> for structured training and <strong>SciFormaBench-2K</strong> for logic-verified evaluation. We develop <strong>M-DPO</strong>, which enforces simultaneous correctness across all axes and adaptively routes gradients to the most deficient dimension. SciForma-9B exceeds all open-source baselines and GPT-Image-1.5 on both SciFormaBench-2K and AIBench, bringing open scientific-diagram generation close to proprietary-level structural fidelity.</p>
+          <p>Structural fidelity in scientific diagrams is inherently <em>conjunctive</em>: a single reversed arrow or missing label invalidates the entire figure. We introduce <strong>SciForma</strong>, which decomposes diagram quality into three axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — via a <em>structural inventory</em>, and post-trains with <strong>M-DPO</strong> to enforce simultaneous correctness. SciForma-9B exceeds all open-source baselines and GPT-Image-1.5 on SciFormaBench-2K and AIBench.</p>
         </div>
       </div>
     </div>
@@ -127,8 +126,8 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <div class="content has-text-justified">
-          <p><strong>Structural Inventory.</strong> Scientific methodology diagrams share a structural logic codified in established modeling standards. Adopting this shared grammar, SciForma formalizes diagram content with three independently verifiable primitives: <em>Component</em> for entity identity and spatial layout, <em>Arrow</em> for information topology, and <em>Text</em> for textual annotations. Together, these form the <strong>structural inventory</strong>, a ground-truth checklist that any structurally faithful output must satisfy. Structural fidelity is <strong>conjunctive</strong>: a generation is correct only when all three axes are simultaneously satisfied.</p>
-          <p>We collect 726K methodology diagrams from 593K arXiv LaTeX sources (2015–2025) via consensus filtering and pHash deduplication. Each diagram is paired with a structural-inventory caption averaging 547 tokens, synthesized from Qwen3-VL analysis of the image and its source paper. The 70K editing triplets apply SAM3-grounded inpainting of 1–3 structural attributes, all verified by OpenAI-o3. <strong>SciFormaBench-2K</strong> holds out 2,000 complexity-stratified instances — Simple (500), Medium (900), and Hard (600) — each carrying a human-verified structural inventory evaluated by a GPT-5.4 judge.</p>
+          <p><strong>Structural Inventory.</strong> SciForma formalizes diagrams with three universal primitives: <em>Component</em> (entities), <em>Arrow</em> (topology), and <em>Text</em> (annotations). These form the <strong>structural inventory</strong> — a ground-truth checklist shared by training captions and benchmark rubrics. Correctness is <strong>conjunctive</strong>: all three axes must be satisfied simultaneously.</p>
+          <p>726K methodology diagrams from 593K arXiv sources (2015–2025), each paired with a structural-inventory caption (547 tokens avg). Editing triplets (70K) are SAM3-grounded, OpenAI-o3-verified edits of 1–3 structural attributes. <strong>SciFormaBench-2K</strong>: 2,000 human-verified instances across Simple / Medium / Hard, judged by GPT-5.4.</p>
         </div>
         <a class="glightbox" href="assets/figures/figure2_dataset.png">
           <img src="assets/figures/figure2_dataset.png" width="100%" height="auto" style="border:none" loading="lazy" alt="SciFormaData-700K pipeline"/>
@@ -159,12 +158,12 @@
         <div class="columns" style="margin-top:1.5rem">
           <div class="column">
             <div class="content has-text-justified">
-              <p><strong>Two-Stage SFT.</strong> SciForma fine-tunes FLUX.2-klein-base-9B in two stages. Stage 1 covers the full 661K generation pairs across 768px and 1024px resolution tracks. Stage 2 focuses on a curated 244K high-quality subset, refining structural fidelity on more complex diagrams. All training captions are structural inventories, explicitly encoding Component, Arrow, and Text axes.</p>
+              <p><strong>Two-Stage SFT.</strong> Stage 1: full 661K pairs at 768–1024px. Stage 2: curated 244K high-complexity subset. All captions are structural inventories encoding Component, Arrow, and Text.</p>
             </div>
           </div>
           <div class="column">
             <div class="content has-text-justified">
-              <p><strong>M-DPO: Multi-Dimensional Conjunctive Preference Optimization.</strong> Standard DPO conflates all quality dimensions into one scalar reward signal. M-DPO constructs a multi-way preference group per sample: one winner and three axis-specific losers for Component, Arrow, and Text failures independently. A multi-way Bradley–Terry objective enforces <em>conjunctive correctness</em> — the update is positive only when the winner beats <em>every</em> axis-specific loser simultaneously. Adaptive gradient reweighting concentrates effort on failing axes and contributes near-zero gradient to already-satisfied dimensions.</p>
+              <p><strong>M-DPO: Multi-Dimensional Conjunctive Preference Optimization.</strong> One winner vs. three axis-specific losers (C, A, T) per sample. A multi-way Bradley–Terry objective enforces <em>conjunctive correctness</em>: the update is positive only when the winner beats every loser simultaneously. Adaptive gradient reweighting concentrates effort on failing axes.</p>
             </div>
           </div>
         </div>
@@ -194,7 +193,7 @@
         <a class="glightbox" href="assets/figures/supp_editing_details.png">
           <img src="assets/figures/supp_editing_details.png" width="100%" height="auto" style="border:none" loading="lazy" alt="Editing pipeline"/>
         </a>
-        <p class="fig-caption">Closed-loop editor: a critic-guided localizer identifies structural defects, produces a priority-ranked edit plan (Text → Module Structure → Arrows), and SciForma-9B applies targeted inpainting. Global verification gates each step until the structural inventory is satisfied.</p>
+        <p class="fig-caption">Closed-loop editor: defect detection → priority-ranked edit plan → SciForma-9B targeted inpainting → global verification. Loop terminates when the structural inventory is satisfied.</p>
 
       </div>
     </div>
@@ -215,7 +214,7 @@
 
         <!-- SciFormaBench-2K -->
         <h2 class="title is-4">SciFormaBench-2K</h2>
-        <p>Below is the leaderboard for <strong>SciFormaBench-2K</strong> across prevalent image generation models. GPT-5.4 judge · Click column to sort.</p>
+<p style="font-size:.82rem;color:#888;text-align:center">GPT-5.4 judge &nbsp;·&nbsp; Click column to sort</p>
         <div class="table-container m-2">
           <table class="table is-striped is-hoverable is-fullwidth" id="sfb-table">
             <thead>
