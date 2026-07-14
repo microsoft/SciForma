@@ -107,7 +107,8 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>Structural fidelity in scientific diagrams is inherently <em>conjunctive</em>: a single reversed arrow or missing label invalidates the entire figure. We introduce <strong>SciForma</strong>, which decomposes diagram quality into three axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — via a <em>structural inventory</em>, and post-trains with <strong>M-DPO</strong> to enforce simultaneous correctness. SciForma-9B exceeds all open-source baselines and GPT-Image-1.5 on SciFormaBench-2K and AIBench.</p>
+          <p>Structural fidelity is essential to scientific methodology diagrams. These diagrams must faithfully render components, directional relations, and textual annotations. Since a single error, such as a reversed arrow or an unreadable equation, can invalidate the entire figure, structural fidelity is inherently <em>conjunctive</em>: correctness on one axis cannot compensate for failure on another.</p>
+          <p>We introduce <strong>SciForma</strong>, a framework that decomposes diagram quality into three structural axes, <em>Component</em>, <em>Arrow</em>, and <em>Text</em>, guided by a <em>structural inventory</em>. We curate <strong>SciFormaData-700K</strong> for structured training and <strong>SciFormaBench-2K</strong> for logic-verified evaluation, and develop <strong>M-DPO</strong> to enforce simultaneous correctness across all axes. SciForma-9B exceeds all open-source baselines and GPT-Image-1.5 on SciFormaBench-2K and AIBench.</p>
         </div>
       </div>
     </div>
@@ -158,7 +159,7 @@
         <div class="columns" style="margin-top:1.5rem">
           <div class="column">
             <div class="content has-text-justified">
-              <p><strong>Two-Stage SFT.</strong> Stage 1: full 661K pairs at 768–1024px. Stage 2: curated 244K high-complexity subset. All captions are structural inventories encoding Component, Arrow, and Text.</p>
+              <p><strong>Two-Stage SFT.</strong> SciForma fine-tunes FLUX.2-klein-base-9B in two stages. Stage 1 trains on the full 661K generation pairs at 768px and 1024px resolution. Stage 2 focuses on 244K high-quality pairs with richer structural complexity. All captions are structural inventories encoding Component, Arrow, and Text axes.</p>
             </div>
           </div>
           <div class="column">

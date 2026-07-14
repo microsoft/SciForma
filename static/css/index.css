@@ -83,7 +83,7 @@ body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; color:var(--text-pr
 
 /* ── Figure ── */
 .fig-img { width:100%; border-radius:var(--radius); box-shadow:var(--shadow-md); }
-.fig-caption { text-align:center; font-size:.83rem; color:var(--text-secondary); margin-top:8px; }
+.fig-caption { text-align:center; font-size:.83rem; color:#666; margin-top:8px; }
 
 /* ── M-DPO collapsible ── */
 .mdpo-details { border:1px solid #ddd; border-radius:10px; margin-top:1.5rem; overflow:hidden; }
