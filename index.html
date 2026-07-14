@@ -24,16 +24,28 @@
 <button class="scroll-to-top" onclick="scrollToTop()" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
 
 <!-- ══ § 1  HERO ══ -->
-<section class="hero">
-<div class="hero-body" style="padding:3.5rem 1.5rem 2rem">
+<section class="hero hero-impact">
+<div class="hero-body" style="padding:4rem 1.5rem 2.5rem">
 <div class="container is-max-desktop">
 <div class="columns is-centered">
 <div class="column has-text-centered">
 
+  <div class="hero-tag">MSRA &nbsp;·&nbsp; PKU &nbsp;·&nbsp; ZJU</div>
   <h1 class="title is-1 publication-title">SciForma</h1>
-  <p class="is-size-4" style="color:#555;margin-bottom:1rem;font-weight:500">Structure-Faithful Generation of Scientific Methodology Diagrams</p>
+  <p class="hero-desc">Structure-Faithful Generation of Scientific Methodology Diagrams</p>
 
-  <div class="is-size-5 publication-authors">
+  <!-- Key numbers -->
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-num">69.51</span><span class="hero-lbl">SciFormaBench-2K</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="hero-num">70.29</span><span class="hero-lbl">AIBench</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="hero-num">700K</span><span class="hero-lbl">Training Pairs</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="hero-num">9B</span><span class="hero-lbl">Parameters</span></div>
+  </div>
+
+  <div class="is-size-5 publication-authors" style="margin-bottom:.3rem">
     <span class="author-block"><a href="https://loyuxr.github.io/" target="_blank">Yuxuan Luo</a><sup>1</sup>,</span>
     <span class="author-block">Peng Zhang<sup>2</sup>,</span>
     <span class="author-block">Xinjie Zhang<sup>3✉</sup>,</span>
@@ -41,13 +53,12 @@
     <span class="author-block">Zhouhui Lian<sup>1✉</sup>,</span>
     <span class="author-block">Yan Lu<sup>3</sup></span>
   </div>
-  <div class="is-size-6 publication-authors" style="color:#777;margin-top:.3rem">
+  <div class="is-size-6 publication-authors" style="color:#888;margin-bottom:1.2rem">
     <sup>1</sup>Wangxuan Institute of Computer Technology, Peking University &nbsp;
     <sup>2</sup>Zhejiang University &nbsp;
     <sup>3</sup>Microsoft Research Asia
   </div>
 
-  <div class="column has-text-centered" style="margin-top:1rem">
   <div class="publication-links">
     <span class="link-block"><a href="https://arxiv.org/" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></a></span>
     <span class="link-block"><a href="https://github.com/microsoft/SciForma" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a></span>
@@ -55,7 +66,6 @@
     <span class="link-block"><a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon">🤗</span><span>Dataset</span></a></span>
     <span class="link-block"><a href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon">🤗</span><span>Benchmark</span></a></span>
     <span class="link-block"><a href="leaderboard.html" class="external-link button is-normal is-rounded is-dark"><span class="icon">🏆</span><span>Leaderboard</span></a></span>
-  </div>
   </div>
 
 </div></div></div>
@@ -88,7 +98,7 @@
 <section class="section hero is-light" style="padding:3rem 0">
 <div class="container is-max-widescreen">
   <h2 class="section-heading">SciFormaData-700K &amp; SciFormaBench</h2>
-  <p class="has-text-centered" style="color:#555;max-width:780px;margin:0 auto 1.5rem;line-height:1.7">
+  <p style="color:#555;max-width:780px;margin:0 auto 1.5rem;line-height:1.7;text-align:left">
     We build a large-scale data engine spanning <strong>338,214 arXiv papers (2015–2025)</strong>,
     producing <strong>661K generation pairs</strong> and <strong>70K editing triplets</strong>.
     The dataset is organized around a structural primitive: a per-axis inventory of components, arrows, and text labels.
@@ -123,26 +133,25 @@
     <p class="fig-caption">SciForma training pipeline overview.</p>
   </div>
 
-  <div class="columns is-max-desktop" style="max-width:860px;margin:0 auto">
+  <div class="columns" style="max-width:940px;margin:0 auto">
     <div class="column">
-      <p style="line-height:1.8;color:#333">
+      <p style="line-height:1.8;color:#333;text-align:left">
         <strong>Two-Stage SFT.</strong>
         SciForma is built on FLUX.2-klein-base-9B and fine-tuned in two stages.
         Stage 1 trains on the full 661K generation pairs across diverse resolution tracks (768px and 1024px),
-        establishing a broad layout and structural understanding.
-        Stage 2 focuses on a high-quality 244K subset with richer structural complexity,
+        establishing broad layout and structural understanding.
+        Stage 2 focuses on a curated 244K high-quality subset with richer structural complexity,
         sharpening the model's ability to faithfully reproduce component topology and text alignment.
+        Each training sample is paired with a structured caption derived from the structural inventory,
+        explicitly describing components, arrows, and text labels so the model learns to follow structural constraints.
       </p>
     </div>
     <div class="column">
-      <p style="line-height:1.8;color:#333">
-        <strong>M-DPO.</strong>
-        After SFT, we apply Multi-Dimensional Conjunctive Preference Optimization.
-        For each training sample we construct a multi-way preference group: one winner and three axis-specific losers
-        targeting Component, Arrow, and Text independently.
-        A Bradley–Terry objective enforces simultaneous correctness across all axes,
-        while adaptive gradient reweighting routes optimization effort toward the weakest axis at each step.
-        This breaks the SFT plateau where scalar DPO and GRPO stagnate.
+      <p style="line-height:1.8;color:#333;text-align:left">
+        <strong>M-DPO: Multi-Dimensional Conjunctive Preference Optimization.</strong>
+        Standard DPO trains on a single winner–loser pair per sample, conflating all quality dimensions into one scalar preference signal. M-DPO instead constructs a multi-way preference group: one winner (correct on all axes) and three axis-specific losers targeting Component, Arrow, and Text failures independently.
+        The training objective enforces <em>conjunctive correctness</em> — a model update is positive only when the winner is preferred over <em>every</em> axis-specific loser simultaneously.
+        Crucially, an <strong>adaptive gradient reweighting</strong> mechanism detects which axes are still failing and concentrates optimization effort there, contributing near-zero gradient to already-satisfied dimensions. This prevents over-optimization of easy axes and breaks the SFT plateau where scalar DPO, GDRO, and GRPO all stagnate.
       </p>
     </div>
   </div>
@@ -230,27 +239,7 @@
 </div>
 </section>
 
-<!-- ══ § 6  BULLETIN ══ -->
-<section class="section" style="padding:3rem 0">
-<div class="container is-max-widescreen">
-  <h2 class="section-heading">Gallery</h2>
-  <p class="has-text-centered" style="color:#777;margin-bottom:1.5rem;font-size:.9rem">
-    SciForma-9B results, score ≥ 0.90 · Click any image to expand full-size
-  </p>
-  <!-- Bulletin images: put your chosen PNGs in assets/bulletin/
-       named img01.png … imgNN.png, wide edge fills container width -->
-  <div id="results-carousel" class="carousel results-carousel">
-    <div class="item"><a class="glightbox" href="assets/bulletin/img01.png" data-gallery="bulletin"><img src="assets/bulletin/img01.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img02.png" data-gallery="bulletin"><img src="assets/bulletin/img02.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img03.png" data-gallery="bulletin"><img src="assets/bulletin/img03.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img04.png" data-gallery="bulletin"><img src="assets/bulletin/img04.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img05.png" data-gallery="bulletin"><img src="assets/bulletin/img05.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img06.png" data-gallery="bulletin"><img src="assets/bulletin/img06.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img07.png" data-gallery="bulletin"><img src="assets/bulletin/img07.png" loading="lazy" alt=""/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img08.png" data-gallery="bulletin"><img src="assets/bulletin/img08.png" loading="lazy" alt=""/></a></div>
-  </div>
-</div>
-</section>
+
 
 <!-- ══ § 7  QUALITATIVE COMPARISONS (4-panel flipper) ══ -->
 <section class="section hero is-light" style="padding:3rem 0">
@@ -260,10 +249,10 @@
   <!-- Tab pills -->
   <div class="has-text-centered" style="margin-bottom:1rem">
     <div class="qual-tabs">
-      <button class="qual-tab active" onclick="showQual(0)">vs. Proprietary Models</button>
-      <button class="qual-tab" onclick="showQual(1)">vs. Open-Source Models</button>
-      <button class="qual-tab" onclick="showQual(2)">SciForma-Base vs. 9B</button>
-      <button class="qual-tab" onclick="showQual(3)">Editing &amp; Refinement</button>
+      <button class="qual-tab active" onclick="showQual(0,true)">vs. Proprietary Models</button>
+      <button class="qual-tab" onclick="showQual(1,true)">vs. Open-Source Models</button>
+      <button class="qual-tab" onclick="showQual(2,true)">SciForma-Base vs. 9B</button>
+      <button class="qual-tab" onclick="showQual(3,true)">Editing &amp; Refinement</button>
     </div>
   </div>
 
@@ -374,13 +363,24 @@ function showTab(name){
   });
 }
 
-// Qual tabs
-function showQual(idx){
+// Qual tabs with auto-flip every 6s
+var qualIdx = 0;
+var qualTotal = 4;
+var qualTimer = null;
+
+function showQual(idx, manual){
+  if(manual) { clearInterval(qualTimer); startQualTimer(); }
+  qualIdx = (idx + qualTotal) % qualTotal;
   [0,1,2,3].forEach(function(i){
-    document.getElementById('qp'+i).style.display = i===idx ? '' : 'none';
+    document.getElementById('qp'+i).style.display = i===qualIdx ? '' : 'none';
   });
-  document.querySelectorAll('.qual-tab').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.qual-tab').forEach(function(b,i){ b.classList.toggle('active', i===qualIdx); });
 }
+function startQualTimer(){
+  qualTimer = setInterval(function(){ showQual(qualIdx+1, false); }, 6000);
+}
+// start auto-flip after 3s
+setTimeout(startQualTimer, 3000);
 
 // Sliders
 var SL = {};

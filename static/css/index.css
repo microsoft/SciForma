@@ -118,7 +118,21 @@ body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; color:var(--text-pr
 .tab-btns .button:not(.is-active):hover { border-color:#1a1a2e; color:#1a1a2e; }
 
 
-/* ── Stats bar ── */
+/* ── Impact Hero ── */
+.hero-impact { background: linear-gradient(160deg, #0a0a1a 0%, #0d1b3e 50%, #0a1628 100%); }
+.hero-impact .publication-title { color:#fff!important; font-size:3.2rem!important; letter-spacing:-1px; }
+.hero-impact .publication-authors { color:#ccc; }
+.hero-impact .publication-authors a { color:#60a5fa!important; }
+.hero-impact .publication-authors sup { color:#93c5fd; }
+.hero-tag { display:inline-block; background:rgba(255,255,255,.1); color:#93c5fd; font-size:.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:5px 14px; border-radius:999px; margin-bottom:1rem; border:1px solid rgba(255,255,255,.15); }
+.hero-desc { font-size:1.25rem; color:#94a3b8; font-weight:500; margin-bottom:1.8rem; }
+.hero-stats { display:inline-flex; align-items:center; gap:0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:16px 28px; margin-bottom:1.8rem; }
+.hero-stat { text-align:center; padding:0 20px; }
+.hero-num { display:block; font-size:1.9rem; font-weight:800; color:#fff; line-height:1; }
+.hero-lbl { display:block; font-size:.72rem; color:#64748b; margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
+.hero-stat-div { width:1px; height:40px; background:rgba(255,255,255,.15); }
+.hero-impact .button.is-dark { background:rgba(255,255,255,.12)!important; border:1px solid rgba(255,255,255,.2)!important; color:#fff!important; }
+.hero-impact .button.is-dark:hover { background:rgba(255,255,255,.22)!important; }
 .stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:1.5rem; }
 .stat-card { background:var(--bg-accent); border-radius:var(--radius); padding:18px; text-align:center; border:1px solid var(--border-color); }
 .stat-card .num { font-size:1.8rem; font-weight:800; color:var(--primary-color); line-height:1; }
