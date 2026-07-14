@@ -1,43 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>SciForma: Structure-Faithful Generation of Scientific Diagrams</title>
-  <link rel="stylesheet" href="css/main.css" />
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"/>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- GLightbox -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css"/>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bulma.min.css"/>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bulma.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
+
+  <style>
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body { font-family: "Segoe UI", system-ui, sans-serif; color: #1a1a1a; }
+
+    /* ── Hero ── */
+    .hero-paper { background: linear-gradient(135deg, #f0f4ff 0%, #fff 60%); }
+    .paper-title { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+    .paper-subtitle { font-size: 1.1rem; color: #555; margin: 0.6rem 0 1.2rem; }
+    .author-list { font-size: 0.97rem; margin-bottom: 0.3rem; }
+    .author-list sup { color: #0078d4; }
+    .affiliations { font-size: 0.85rem; color: #777; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 1.2rem; }
+    .badge-row a img { height: 22px; }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 1.7rem; font-weight: 700;
+      border-bottom: 3px solid #0078d4;
+      padding-bottom: 8px; margin-bottom: 1.2rem;
+    }
+
+    /* ── Teaser grid ── */
+    .teaser-wrap { width: 100%; max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 5px; }
+    .teaser-top {
+      display: grid;
+      grid-template-columns: 1273.9fr 1523.15fr 800.62fr;
+      grid-template-rows: calc(var(--u)*609.26) calc(var(--u)*650.80);
+      gap: 5px;
+      --total: 3597.67;
+      --u: calc(min(100vw - 48px, 1100px) / var(--total));
+    }
+    .teaser-row3 { display: grid; grid-template-columns: 2030.1fr 1631.33fr; gap: 5px; }
+    .t-item { overflow: hidden; border-radius: 5px; cursor: zoom-in; position: relative; }
+    .t-item img { width:100%; height:100%; object-fit:cover; display:block; transition: transform 0.4s ease, box-shadow 0.35s ease; }
+    .t-item:hover img { transform: scale(1.035); box-shadow: 0 6px 28px rgba(0,0,0,0.18); }
+    .t-item.zoomed img { transform: scale(1.10); box-shadow: 0 10px 40px rgba(0,0,0,0.28); }
+    .t-item-3 { grid-column:3; grid-row:1/3; }
+
+    /* ── Highlights ── */
+    .highlight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+    .h-card { background: #f5f8ff; border: 1px solid #dce8ff; border-radius: 10px; padding: 20px; }
+    .h-card h3 { font-size:1rem; font-weight:700; color:#0078d4; margin-bottom:6px; }
+    .h-card p { font-size:0.88rem; color:#444; }
+
+    /* ── Results tables ── */
+    .tab-btns { display:flex; gap:8px; margin-bottom:16px; }
+    .tab-btns .button.is-active { background:#0078d4; color:#fff; border-color:#0078d4; }
+    table.dataTable thead th { background:#0078d4; color:#fff; cursor:pointer; white-space:nowrap; }
+    table.dataTable thead th:hover { background:#005fa3; }
+    tr.ours td { font-weight:700; background:#e8f3fd !important; }
+    tr.ours td:nth-child(2)::after { content:" ★"; color:#0078d4; }
+
+    /* ── Figure images ── */
+    .fig-img { width:100%; border-radius:8px; box-shadow:0 2px 16px rgba(0,0,0,0.1); }
+    .fig-caption { text-align:center; font-size:0.83rem; color:#666; margin-top:8px; }
+
+    /* ── Comparison slider ── */
+    .compare-slider { position:relative; overflow:hidden; border-radius:8px; }
+    .compare-slides { display:flex; transition: transform 0.45s cubic-bezier(.4,0,.2,1); }
+    .compare-slides img { width:100%; flex-shrink:0; display:block; }
+    .slider-btn {
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,0.45); color:#fff; border:none;
+      width:38px; height:38px; border-radius:50%; font-size:1rem;
+      cursor:pointer; z-index:5; transition:background 0.2s;
+    }
+    .slider-btn:hover { background:rgba(0,120,212,0.8); }
+    .slider-prev { left:10px; }
+    .slider-next { right:10px; }
+    .slider-dots { text-align:center; margin-top:8px; }
+    .slider-dots span { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ccc; margin:0 3px; cursor:pointer; transition:background 0.2s; }
+    .slider-dots span.active { background:#0078d4; }
+
+    /* ── Iterative refinement auto-slider ── */
+    .auto-slider .compare-slides { animation: slide-auto 8s infinite; }
+
+    /* ── Two-col layout ── */
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media(max-width:768px){ .two-col { grid-template-columns:1fr; } }
+
+    /* ── Authors ── */
+    .author-grid { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+    .author-card { text-align:center; width:140px; }
+    .author-card img { width:80px; height:80px; border-radius:50%; object-fit:cover; background:#ddd; margin-bottom:8px; }
+    .author-card .name { font-size:0.9rem; font-weight:600; }
+    .author-card .aff  { font-size:0.75rem; color:#777; }
+
+    /* ── BibTeX ── */
+    .bibtex-box { background:#f4f4f4; border:1px solid #ddd; border-radius:8px; padding:18px; font-size:0.82rem; overflow-x:auto; position:relative; }
+    .copy-btn { position:absolute; top:10px; right:10px; font-size:0.75rem; }
+
+    /* ── Responsible AI ── */
+    .resp-ai { background:#fffbf0; border:1px solid #ffe58f; border-radius:8px; padding:16px; font-size:0.85rem; color:#555; }
+
+    /* ── Footer ── */
+    footer { border-top:1px solid #eee; padding:20px; text-align:center; font-size:0.82rem; color:#999; }
+    footer a { color:#999; }
+  </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════
-     HEADER
-══════════════════════════════════════════════════ -->
-<header>
-  <h1>SciForma</h1>
-  <p class="subtitle">
-    Structure-Faithful Generation of Scientific Methodology Diagrams
-  </p>
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero hero-paper">
+<div class="hero-body">
+<div class="container has-text-centered">
+  <p class="paper-title">SciForma</p>
+  <p class="paper-subtitle">Structure-Faithful Generation of Scientific Methodology Diagrams</p>
 
-  <!-- Badges -->
   <div class="badge-row">
-    <a href="https://arxiv.org/" target="_blank">
-      <img src="https://img.shields.io/badge/arXiv-coming%20soon-b31b1b?logo=arxiv&logoColor=white&style=flat-square" alt="arXiv" />
-    </a>
-    <a href="https://github.com/microsoft/SciForma" target="_blank">
-      <img src="https://img.shields.io/badge/Code-GitHub-181717?logo=github&style=flat-square" alt="GitHub" />
-    </a>
-    <a href="https://huggingface.co/microsoft/SciForma-9B" target="_blank">
-      <img src="https://img.shields.io/badge/%F0%9F%A4%97-SciForma--9B-yellow?style=flat-square" alt="Model" />
-    </a>
-    <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K" target="_blank">
-      <img src="https://img.shields.io/badge/%F0%9F%A4%97-SciFormaData--700K-green?style=flat-square" alt="Dataset" />
-    </a>
-    <a href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank">
-      <img src="https://img.shields.io/badge/%F0%9F%A4%97-SciFormaBench-blue?style=flat-square" alt="Benchmark" />
-    </a>
+    <a href="https://arxiv.org/" target="_blank"><img src="https://img.shields.io/badge/arXiv-coming%20soon-b31b1b?logo=arxiv&logoColor=white&style=flat-square"/></a>
+    <a href="https://github.com/microsoft/SciForma" target="_blank"><img src="https://img.shields.io/badge/Code-GitHub-181717?logo=github&style=flat-square"/></a>
+    <a href="https://huggingface.co/microsoft/SciForma-9B" target="_blank"><img src="https://img.shields.io/badge/%F0%9F%A4%97-SciForma--9B-yellow?style=flat-square"/></a>
+    <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K" target="_blank"><img src="https://img.shields.io/badge/%F0%9F%A4%97-SciFormaData--700K-green?style=flat-square"/></a>
+    <a href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank"><img src="https://img.shields.io/badge/%F0%9F%A4%97-SciFormaBench-blue?style=flat-square"/></a>
+    <a href="leaderboard.html"><img src="https://img.shields.io/badge/🏆-Leaderboard-orange?style=flat-square"/></a>
   </div>
 
-  <!-- Authors -->
-  <p class="authors">
+  <p class="author-list" style="margin-top:1rem">
     Yuxuan Luo<sup>1</sup> &nbsp;·&nbsp;
     Peng Zhang<sup>2</sup> &nbsp;·&nbsp;
     Xinjie Zhang<sup>3✉</sup> &nbsp;·&nbsp;
@@ -50,132 +150,412 @@
     <sup>2</sup>Zhejiang University &nbsp;&nbsp;
     <sup>3</sup>Microsoft Research Asia
   </p>
-</header>
-
-<!-- ══════════════════════════════════════════════════
-     TEASER
-══════════════════════════════════════════════════ -->
-<div class="teaser">
-  <a href="assets/images/teaser.pdf" target="_blank">
-    <img src="assets/images/teaser.png" alt="SciForma Teaser" />
-  </a>
 </div>
-
-<!-- ══════════════════════════════════════════════════
-     ABSTRACT
-══════════════════════════════════════════════════ -->
-<section>
-  <h2>Abstract</h2>
-  <p>
-    Scientific methodology diagrams — flowcharts, pipelines, and architecture figures that appear in academic papers — demand precise structural fidelity: every component, arrow, and text label must be faithfully represented. Existing text-to-image models generate visually appealing outputs but routinely violate structural constraints, rendering them unsuitable for rigorous scientific illustration.
-  </p>
-  <p>
-    We introduce <strong>SciForma</strong>, a 9B-parameter framework that decomposes diagram quality into three independently verifiable axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Built on FLUX.2-klein-base-9B, SciForma is fine-tuned through two SFT stages and post-trained with <strong>Multi-Dimensional Conjunctive Preference Optimization (M-DPO)</strong>, which enforces simultaneous correctness across all three axes and adaptively routes gradients toward the most deficient axis.
-  </p>
-  <p>
-    SciForma achieves <strong>69.51%</strong> on SciFormaBench-2K, surpassing all open-source baselines and approaching commercial models (GPT-Image-1.5: 68.96%). On AIBench, SciForma-9B reaches <strong>70.29</strong> — edging human-drawn originals (70.09) with the largest gain on Topology (+6.19).
-  </p>
+</div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     HIGHLIGHTS
-══════════════════════════════════════════════════ -->
-<section>
-  <h2>Highlights</h2>
-  <div class="highlights">
-    <div class="highlight-card">
-      <h3>🔍 Structural Inventory</h3>
-      <p>Per-axis (Component / Arrow / Text) verification with critical and moderate error severity — replacing single holistic scores with fine-grained structural evaluation.</p>
+<!-- ══════════════ TEASER ══════════════ -->
+<section class="section" style="padding-bottom:1rem">
+<div class="container">
+  <div class="teaser-wrap">
+    <div class="teaser-top">
+      <div class="t-item"><a class="glightbox" href="assets/images/teaser/img1.png" data-gallery="teaser"><img src="assets/images/teaser/img1.png" alt="" loading="lazy"/></a></div>
+      <div class="t-item"><a class="glightbox" href="assets/images/teaser/img2.png" data-gallery="teaser"><img src="assets/images/teaser/img2.png" alt="" loading="lazy"/></a></div>
+      <div class="t-item t-item-3"><a class="glightbox" href="assets/images/teaser/img3.png" data-gallery="teaser"><img src="assets/images/teaser/img3.png" alt="" loading="lazy"/></a></div>
+      <div class="t-item"><a class="glightbox" href="assets/images/teaser/img4.png" data-gallery="teaser"><img src="assets/images/teaser/img4.png" alt="" loading="lazy"/></a></div>
+      <div class="t-item"><a class="glightbox" href="assets/images/teaser/img5.png" data-gallery="teaser"><img src="assets/images/teaser/img5.png" alt="" loading="lazy"/></a></div>
     </div>
-    <div class="highlight-card">
-      <h3>⚡ M-DPO</h3>
-      <p>Multi-way Bradley–Terry objective with dimension-anchored preference construction and adaptive gradient reweighting — breaks the SFT plateau where scalar DPO / GDRO / GRPO stagnate.</p>
-    </div>
-    <div class="highlight-card">
-      <h3>🤖 LaTeX-to-Diagram Agent</h3>
-      <p>Generate figures directly from your paper's LaTeX source via a GPT planner + SciForma-9B renderer — closing the loop between paper writing and figure generation.</p>
-    </div>
-    <div class="highlight-card">
-      <h3>📦 Data &amp; Benchmark</h3>
-      <p><strong>SciFormaData-700K</strong>: 661K generation pairs + 70K editing triplets.<br/>
-      <strong>SciFormaBench-2K</strong>: Simple 500 / Medium 900 / Hard 600 with human-verified inventories.</p>
+    <div class="teaser-row3">
+      <div class="t-item"><a class="glightbox" href="assets/images/teaser/img6.png" data-gallery="teaser"><img src="assets/images/teaser/img6.png" alt="" loading="lazy"/></a></div>
+      <div class="t-item"><a class="glightbox" href="assets/images/teaser/img7.png" data-gallery="teaser"><img src="assets/images/teaser/img7.png" alt="" loading="lazy"/></a></div>
     </div>
   </div>
+  <p class="fig-caption" style="margin-top:10px">SciForma-9B generated scientific methodology diagrams. Hover 3s to zoom · Click to expand.</p>
+</div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     RESULTS
-══════════════════════════════════════════════════ -->
-<section>
-  <h2>Results</h2>
-  <p>On <strong>SciFormaBench-2K</strong> (GPT-5.4 judge, 2,000 images):</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Method</th>
-        <th>Average ↑</th>
-        <th>Component ↑</th>
-        <th>Arrow ↑</th>
-        <th>Text ↑</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>GPT-Image-2</td>
-        <td>85.62</td><td>83.34</td><td>89.61</td><td>83.53</td>
-      </tr>
-      <tr>
-        <td>Nano Banana Pro</td>
-        <td>81.34</td><td>81.10</td><td>83.60</td><td>78.70</td>
-      </tr>
-      <tr>
-        <td>GPT-Image-1.5</td>
-        <td>68.96</td><td>75.70</td><td>62.50</td><td>68.20</td>
-      </tr>
-      <tr class="highlight-row">
-        <td>SciForma-9B (+ M-DPO)</td>
-        <td>69.51</td><td>74.49</td><td>66.46</td><td>67.00</td>
-      </tr>
-      <tr class="highlight-row">
-        <td>SciForma-Base (SFT)</td>
-        <td>67.59</td><td>73.52</td><td>64.64</td><td>63.84</td>
-      </tr>
-      <tr>
-        <td>Wan2.7-Image</td>
-        <td>64.71</td><td>73.90</td><td>60.30</td><td>61.10</td>
-      </tr>
-      <tr>
-        <td>FLUX.2-klein-base-9B</td>
-        <td>33.87</td><td>51.50</td><td>25.20</td><td>23.60</td>
-      </tr>
-    </tbody>
-  </table>
+<!-- ══════════════ ABSTRACT ══════════════ -->
+<section class="section">
+<div class="container" style="max-width:860px">
+  <h2 class="section-title">Abstract</h2>
+  <p style="line-height:1.8; color:#333">
+    Scientific methodology diagrams — flowcharts, pipelines, and architecture figures in academic papers — demand precise structural fidelity: every component, arrow, and text label must be faithfully represented. Existing text-to-image models generate visually appealing outputs but routinely violate structural constraints, rendering them unsuitable for rigorous scientific illustration.
+  </p>
+  <p style="line-height:1.8; color:#333; margin-top:0.8rem">
+    We introduce <strong>SciForma</strong>, a 9B-parameter framework that decomposes diagram quality into three independently verifiable axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Built on FLUX.2-klein-base-9B, SciForma is fine-tuned through two SFT stages and post-trained with <strong>Multi-Dimensional Conjunctive Preference Optimization (M-DPO)</strong>, which enforces simultaneous correctness across all axes and adaptively routes gradients toward the most deficient axis. SciForma achieves <strong>69.51%</strong> on SciFormaBench-2K, surpassing all open-source baselines and approaching commercial models (GPT-Image-1.5: 68.96%). On AIBench, SciForma-9B reaches <strong>70.29</strong> — edging human-drawn originals (70.09).
+  </p>
+</div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     CITATION
-══════════════════════════════════════════════════ -->
-<section>
-  <h2>Citation</h2>
-  <pre>@article{luo2026sciforma,
+<!-- ══════════════ HIGHLIGHTS ══════════════ -->
+<section class="section" style="background:#fafbff; padding-top:2rem; padding-bottom:2rem">
+<div class="container">
+  <h2 class="section-title">Highlights</h2>
+  <div class="highlight-grid">
+    <div class="h-card">
+      <h3>🔍 Structural Inventory</h3>
+      <p>Per-axis (Component / Arrow / Text) verification with critical and moderate error severity, replacing single holistic scores with fine-grained structural evaluation.</p>
+    </div>
+    <div class="h-card">
+      <h3>⚡ M-DPO</h3>
+      <p>Multi-way Bradley–Terry objective with dimension-anchored preference construction and adaptive gradient reweighting. Breaks the SFT plateau where scalar DPO / GDRO / GRPO stagnate.</p>
+    </div>
+    <div class="h-card">
+      <h3>🤖 LaTeX-to-Diagram Agent</h3>
+      <p>Generate figures directly from your paper's LaTeX source via a GPT planner + SciForma-9B renderer, closing the loop between paper writing and figure generation.</p>
+    </div>
+    <div class="h-card">
+      <h3>📦 Data &amp; Benchmark</h3>
+      <p><strong>SciFormaData-700K</strong>: 661K generation pairs + 70K editing triplets.<br/>
+      <strong>SciFormaBench-2K</strong>: Simple/Medium/Hard with human-verified structural inventories.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ RESULTS ══════════════ -->
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Results</h2>
+  <div class="tab-btns">
+    <button class="button is-small is-active" onclick="showTab('sciformabench')">SciFormaBench-2K</button>
+    <button class="button is-small" onclick="showTab('aibench')">AIBench</button>
+  </div>
+
+  <!-- SciFormaBench -->
+  <div id="tab-sciformabench">
+    <p style="font-size:0.85rem;color:#666;margin-bottom:8px">GPT-5.4 judge · 2,000 diagrams (Simple 500 / Medium 900 / Hard 600) · Click column to sort</p>
+    <div class="table-container">
+    <table id="t-sfb" class="table is-bordered is-striped is-hoverable is-fullwidth" style="width:100%">
+      <thead><tr><th>#</th><th>Method</th><th>Avg ↑</th><th>Simple</th><th>Medium</th><th>Hard</th><th>Comp.</th><th>Arrow</th><th>Text</th><th>Open</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>GPT-Image-2</td><td>85.62</td><td>88.41</td><td>85.66</td><td>83.26</td><td>83.34</td><td>89.61</td><td>83.53</td><td>❌</td></tr>
+        <tr><td>2</td><td>NanoBananaPro</td><td>81.34</td><td>85.30</td><td>81.70</td><td>77.50</td><td>81.10</td><td>83.60</td><td>78.70</td><td>❌</td></tr>
+        <tr class="ours"><td>3</td><td>SciForma-9B + Edit</td><td>72.40</td><td>79.82</td><td>72.59</td><td>66.01</td><td>76.70</td><td>69.91</td><td>70.14</td><td>✅</td></tr>
+        <tr class="ours"><td>4</td><td>SciForma-9B (M-DPO)</td><td>69.51</td><td>77.20</td><td>69.69</td><td>62.86</td><td>74.49</td><td>66.46</td><td>67.00</td><td>✅</td></tr>
+        <tr><td>5</td><td>GPT-Image-1.5</td><td>68.96</td><td>75.50</td><td>69.60</td><td>62.60</td><td>75.70</td><td>62.50</td><td>68.20</td><td>❌</td></tr>
+        <tr class="ours"><td>6</td><td>SciForma-Base (SFT)</td><td>67.59</td><td>76.01</td><td>67.43</td><td>60.83</td><td>73.52</td><td>64.64</td><td>63.84</td><td>✅</td></tr>
+        <tr><td>7</td><td>Wan2.7-Image</td><td>64.71</td><td>73.90</td><td>65.90</td><td>55.30</td><td>71.90</td><td>60.30</td><td>61.10</td><td>❌</td></tr>
+        <tr><td>8</td><td>SenseNova-U1-8B</td><td>51.14</td><td>59.57</td><td>51.86</td><td>43.02</td><td>61.34</td><td>50.16</td><td>40.37</td><td>❌</td></tr>
+        <tr><td>9</td><td>FLUX.2-dev-32B</td><td>48.81</td><td>57.60</td><td>49.30</td><td>40.80</td><td>62.50</td><td>38.60</td><td>44.60</td><td>✅</td></tr>
+        <tr><td>10</td><td>Qwen-Image-2512</td><td>48.73</td><td>57.50</td><td>49.90</td><td>39.60</td><td>61.20</td><td>46.60</td><td>36.80</td><td>❌</td></tr>
+        <tr><td>11</td><td>Z-Image</td><td>48.50</td><td>57.20</td><td>49.70</td><td>39.40</td><td>58.30</td><td>46.90</td><td>38.50</td><td>❌</td></tr>
+        <tr><td>12</td><td>FLUX.2-klein-base-9B</td><td>33.87</td><td>42.80</td><td>34.20</td><td>26.00</td><td>51.50</td><td>25.20</td><td>23.60</td><td>✅</td></tr>
+        <tr><td>13</td><td>FLUX.1-dev</td><td>20.64</td><td>26.40</td><td>20.70</td><td>15.80</td><td>40.60</td><td>11.20</td><td>8.50</td><td>✅</td></tr>
+        <tr><td>14</td><td>Bagel-7B</td><td>16.31</td><td>18.40</td><td>16.20</td><td>14.70</td><td>35.50</td><td>9.50</td><td>2.20</td><td>✅</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- AIBench -->
+  <div id="tab-aibench" style="display:none">
+    <p style="font-size:0.85rem;color:#666;margin-bottom:8px">AIBench evaluation · Click column to sort</p>
+    <div class="table-container">
+    <table id="t-ai" class="table is-bordered is-striped is-hoverable is-fullwidth" style="width:100%">
+      <thead><tr><th>#</th><th>Method</th><th>Score ↑</th><th>Comp.</th><th>Topo.</th><th>Phase</th><th>Semantic</th><th>Aesthetic</th><th>Open</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>GPT-Image-2</td><td>80.27</td><td>90.69</td><td>81.77</td><td>84.18</td><td>90.24</td><td>54.49</td><td>❌</td></tr>
+        <tr><td>2</td><td>NanoBananaPro</td><td>77.77</td><td>87.80</td><td>74.81</td><td>82.67</td><td>88.54</td><td>55.04</td><td>❌</td></tr>
+        <tr><td>3</td><td>Seedream 5.0</td><td>73.23</td><td>82.93</td><td>72.81</td><td>72.10</td><td>86.53</td><td>51.78</td><td>❌</td></tr>
+        <tr class="ours"><td>4</td><td>SciForma-9B + Edit</td><td>70.62</td><td>77.86</td><td>64.47</td><td>75.45</td><td>81.20</td><td>54.10</td><td>✅</td></tr>
+        <tr class="ours"><td>5</td><td>SciForma-9B (M-DPO)</td><td>70.29</td><td>77.53</td><td>64.17</td><td>74.71</td><td>80.79</td><td>54.24</td><td>✅</td></tr>
+        <tr class="ours"><td>6</td><td>SciForma-Base (SFT)</td><td>68.61</td><td>76.26</td><td>61.95</td><td>73.26</td><td>78.33</td><td>53.24</td><td>✅</td></tr>
+        <tr><td>7</td><td>Wan2.6</td><td>65.84</td><td>68.60</td><td>56.11</td><td>72.56</td><td>80.43</td><td>51.50</td><td>❌</td></tr>
+        <tr><td>8</td><td>GPT-Image-1.5</td><td>61.62</td><td>66.23</td><td>50.87</td><td>55.95</td><td>77.55</td><td>57.50</td><td>❌</td></tr>
+        <tr><td>9</td><td>Seedream 4.5</td><td>59.68</td><td>67.89</td><td>52.42</td><td>48.14</td><td>74.47</td><td>55.48</td><td>❌</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ COMPARISONS ══════════════ -->
+<section class="section" style="background:#fafbff; padding-top:2rem">
+<div class="container">
+  <h2 class="section-title">Qualitative Comparisons</h2>
+
+  <!-- Proprietary models -->
+  <h3 class="title is-5" style="margin-bottom:0.5rem">vs. Proprietary Models</h3>
+  <div class="compare-slider" id="slider-prop">
+    <div class="compare-slides" id="slides-prop">
+      <img src="assets/figures/proprietary_p1.png" alt="Proprietary comparison page 1" loading="lazy"/>
+      <img src="assets/figures/proprietary_p2.png" alt="Proprietary comparison page 2" loading="lazy"/>
+    </div>
+    <button class="slider-btn slider-prev" onclick="slide('prop',-1)">&#8249;</button>
+    <button class="slider-btn slider-next" onclick="slide('prop',+1)">&#8250;</button>
+  </div>
+  <div class="slider-dots" id="dots-prop">
+    <span class="active" onclick="goSlide('prop',0)"></span>
+    <span onclick="goSlide('prop',1)"></span>
+  </div>
+
+  <!-- Open-source models -->
+  <h3 class="title is-5" style="margin-top:2rem; margin-bottom:0.5rem">vs. Open-Source Models</h3>
+  <div class="compare-slider" id="slider-open">
+    <div class="compare-slides" id="slides-open">
+      <img src="assets/figures/opensource_p1.png" alt="Open-source comparison page 1" loading="lazy"/>
+      <img src="assets/figures/opensource_p2.png" alt="Open-source comparison page 2" loading="lazy"/>
+    </div>
+    <button class="slider-btn slider-prev" onclick="slide('open',-1)">&#8249;</button>
+    <button class="slider-btn slider-next" onclick="slide('open',+1)">&#8250;</button>
+  </div>
+  <div class="slider-dots" id="dots-open">
+    <span class="active" onclick="goSlide('open',0)"></span>
+    <span onclick="goSlide('open',1)"></span>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ ITERATIVE REFINEMENT ══════════════ -->
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Iterative Refinement via Editing</h2>
+  <p style="margin-bottom:1rem; color:#444">SciForma supports iterative refinement through its editing module. Starting from an initial generation, the model progressively refines structure, arrows, and text alignment through directed edit instructions.</p>
+  <img src="assets/figures/iterative_ref.png" class="fig-img" alt="Iterative refinement cases" loading="lazy"/>
+  <p class="fig-caption">Five cases showing iterative structural refinement. Each row: initial output → refined result.</p>
+</div>
+</section>
+
+<!-- ══════════════ METHOD OVERVIEW ══════════════ -->
+<section class="section" style="background:#fafbff; padding-top:2rem">
+<div class="container">
+  <h2 class="section-title">Method Overview</h2>
+  <img src="assets/figures/figure3_overview.png" class="fig-img" alt="SciForma pipeline overview" loading="lazy"/>
+  <p class="fig-caption">SciForma training pipeline: (1) two-stage SFT on SciFormaData-700K, followed by (2) M-DPO post-training with per-axis preference pairs.</p>
+</div>
+</section>
+
+<!-- ══════════════ SCIFORMADATA-700K ══════════════ -->
+<section class="section">
+<div class="container">
+  <h2 class="section-title">SciFormaData-700K</h2>
+  <div class="columns is-vcentered">
+    <div class="column is-two-thirds">
+      <p style="color:#444; line-height:1.8; margin-bottom:1rem">
+        SciFormaData-700K is a large-scale dataset of scientific methodology diagrams curated from <strong>338,214 arXiv papers</strong> spanning 2015–2025. It contains <strong>661,660 generation pairs</strong> (image + structured caption) across two resolution tracks (768px and 1024px), and <strong>70,866 editing triplets</strong> (source image + edit instruction + target image).
+      </p>
+      <div class="columns is-multiline">
+        <div class="column is-half">
+          <div class="h-card">
+            <h3>661K Generation Pairs</h3>
+            <p>Paired diagram images with structured captions describing components, arrows, and text labels.</p>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="h-card">
+            <h3>70K Editing Triplets</h3>
+            <p>Source → edit instruction → target image triples enabling diagram editing fine-tuning.</p>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="h-card">
+            <h3>338K Papers</h3>
+            <p>Sourced from 10 years of arXiv preprints across CS, EE, and interdisciplinary fields.</p>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="h-card">
+            <h3>36.9% High Quality</h3>
+            <p>244K high-quality subset used for stage 2 SFT, filtered by structural complexity and quality tier.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <img src="assets/figures/figure2_dataset.png" class="fig-img" alt="SciFormaData-700K visualization" loading="lazy" style="max-width:100%; overflow:hidden"/>
+      <p class="fig-caption">Dataset pipeline: paper PDF extraction → diagram detection → caption generation → quality filtering.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ SCIFORMABENCH ══════════════ -->
+<section class="section" style="background:#fafbff; padding-top:2rem">
+<div class="container">
+  <h2 class="section-title">SciFormaBench-2K</h2>
+  <div class="columns is-vcentered">
+    <div class="column">
+      <img src="assets/figures/structural_inv.png" class="fig-img" alt="Structural inventory" loading="lazy"/>
+      <p class="fig-caption">Structural inventory: per-axis rubrics with critical and moderate error annotations.</p>
+    </div>
+    <div class="column">
+      <p style="color:#444; line-height:1.8; margin-bottom:1rem">
+        SciFormaBench-2K consists of <strong>2,000 scientific methodology diagrams</strong> across three difficulty levels: <em>Simple</em> (500), <em>Medium</em> (900), and <em>Hard</em> (600). Each diagram is annotated with a <strong>structural inventory</strong> — a structured description of expected components, arrow connections, and text labels — enabling automatic axis-level scoring via a GPT-5.4 judge.
+      </p>
+      <div class="columns is-multiline">
+        <div class="column is-half"><div class="h-card"><h3>2,000 Diagrams</h3><p>3 difficulty splits: Simple (500), Medium (900), Hard (600).</p></div></div>
+        <div class="column is-half"><div class="h-card"><h3>3-Axis Scoring</h3><p>Component / Arrow / Text scores, each with critical and moderate error levels.</p></div></div>
+        <div class="column is-half"><div class="h-card"><h3>Human-Verified</h3><p>All 2,000 structural inventories manually verified for accuracy.</p></div></div>
+        <div class="column is-half"><div class="h-card"><h3>GPT-5.4 Judge</h3><p>Automated evaluation via structured GPT-5.4 rubric scoring.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ M-DPO + ABLATION ══════════════ -->
+<section class="section">
+<div class="container">
+  <h2 class="section-title">M-DPO &amp; Ablation</h2>
+  <div class="columns">
+    <div class="column">
+      <p style="color:#444; line-height:1.8; margin-bottom:1rem">
+        <strong>Multi-Dimensional Conjunctive Preference Optimization (M-DPO)</strong> extends standard DPO to the multi-axis setting. For each sample, we construct a multi-way preference group: one winner and three axis-specific losers (component-specific, arrow-specific, text-specific). The training objective enforces <em>conjunctive correctness</em> — the model must simultaneously satisfy all three axes. An adaptive gradient reweighting mechanism routes optimization effort toward the weakest axis.
+      </p>
+      <img src="assets/figures/ablation.png" class="fig-img" alt="M-DPO ablation" loading="lazy"/>
+      <p class="fig-caption">Ablation: each M-DPO component contributes incremental gain, with Text axis benefiting most (+3.16 pts).</p>
+    </div>
+    <div class="column">
+      <h3 class="title is-6">Ablation — SciFormaBench-2K</h3>
+      <table class="table is-bordered is-striped is-fullwidth" style="font-size:0.88rem">
+        <thead><tr><th>Method</th><th>Avg</th><th>Comp.</th><th>Arrow</th><th>Text</th></tr></thead>
+        <tbody>
+          <tr><td>SciForma (SFT)</td><td>67.59</td><td>73.52</td><td>64.64</td><td>63.84</td></tr>
+          <tr><td>+ DPO</td><td>68.42 <span style="color:#0a0;font-size:0.75rem">+0.83</span></td><td>74.14</td><td>65.32</td><td>65.08</td></tr>
+          <tr><td>+ DPO (Pareto)</td><td>68.55 <span style="color:#0a0;font-size:0.75rem">+0.96</span></td><td>74.48</td><td>65.57</td><td>64.83</td></tr>
+          <tr><td>+ M-DPO (mean)</td><td>69.31 <span style="color:#0a0;font-size:0.75rem">+1.72</span></td><td>74.54</td><td>66.28</td><td>66.47</td></tr>
+          <tr class="ours"><td><strong>+ M-DPO (ours)</strong></td><td><strong>69.51</strong> <span style="color:#0a0;font-size:0.75rem">+1.92</span></td><td>74.49</td><td>66.46</td><td><strong>67.00</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="title is-6" style="margin-top:1.5rem">User Study</h3>
+      <img src="assets/figures/user_study.png" class="fig-img" alt="User study" loading="lazy"/>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ AUTHORS ══════════════ -->
+<section class="section" style="background:#fafbff; padding-top:2rem">
+<div class="container has-text-centered">
+  <h2 class="section-title">Authors</h2>
+  <div class="author-grid">
+    <div class="author-card">
+      <img src="assets/images/authors/yuxuan.jpg" alt="Yuxuan Luo" onerror="this.src='https://via.placeholder.com/80'"/>
+      <div class="name">Yuxuan Luo</div>
+      <div class="aff">Peking University</div>
+    </div>
+    <div class="author-card">
+      <img src="assets/images/authors/peng.jpg" alt="Peng Zhang" onerror="this.src='https://via.placeholder.com/80'"/>
+      <div class="name">Peng Zhang</div>
+      <div class="aff">Zhejiang University</div>
+    </div>
+    <div class="author-card">
+      <img src="assets/images/authors/xinjie.jpg" alt="Xinjie Zhang" onerror="this.src='https://via.placeholder.com/80'"/>
+      <div class="name">Xinjie Zhang ✉</div>
+      <div class="aff">Microsoft Research Asia</div>
+    </div>
+    <div class="author-card">
+      <img src="assets/images/authors/xun.jpg" alt="Xun Guo" onerror="this.src='https://via.placeholder.com/80'"/>
+      <div class="name">Xun Guo</div>
+      <div class="aff">Microsoft Research Asia</div>
+    </div>
+    <div class="author-card">
+      <img src="assets/images/authors/zhouhui.jpg" alt="Zhouhui Lian" onerror="this.src='https://via.placeholder.com/80'"/>
+      <div class="name">Zhouhui Lian ✉</div>
+      <div class="aff">Peking University</div>
+    </div>
+    <div class="author-card">
+      <img src="assets/images/authors/yan.jpg" alt="Yan Lu" onerror="this.src='https://via.placeholder.com/80'"/>
+      <div class="name">Yan Lu</div>
+      <div class="aff">Microsoft Research Asia</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ CITATION ══════════════ -->
+<section class="section">
+<div class="container" style="max-width:780px">
+  <h2 class="section-title">Citation</h2>
+  <div class="bibtex-box">
+    <button class="button is-small copy-btn" onclick="copyBib()">Copy</button>
+<pre id="bibtex-text">@article{luo2026sciforma,
   title   = {SciForma: Structure-Faithful Generation of Scientific Methodology Diagrams},
-  author  = {Luo, Yuxuan and Zhang, Peng and Zhang, Xinjie and Guo, Xun and Lian, Zhouhui and Lu, Yan},
+  author  = {Luo, Yuxuan and Zhang, Peng and Zhang, Xinjie and
+             Guo, Xun and Lian, Zhouhui and Lu, Yan},
   journal = {arXiv preprint},
   year    = {2026}
 }</pre>
+  </div>
+</div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════════════ -->
+<!-- ══════════════ RESPONSIBLE AI ══════════════ -->
+<section class="section" style="padding-top:1rem">
+<div class="container" style="max-width:860px">
+  <h2 class="section-title">Responsible AI Considerations</h2>
+  <div class="resp-ai">
+    <p>SciForma is a research project. Datasets used are sourced from publicly available arXiv preprints and have been reviewed to ensure no personally identifiable information or harmful content. The model is intended for academic diagram generation only and is not designed for commercial deployment without further safety review.</p>
+    <p style="margin-top:0.6rem"><strong>Material Disclaimer:</strong> Materials on this page are provided solely for academic and research purposes. If you believe any content infringes your intellectual property rights, please contact the corresponding authors.</p>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
 <footer>
   <p>
     <a href="https://go.microsoft.com/fwlink/?LinkId=521839">Privacy</a> &nbsp;·&nbsp;
     <a href="https://go.microsoft.com/fwlink/?LinkID=206977">Terms of Use</a> &nbsp;·&nbsp;
     <a href="https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/">Trademarks</a>
-    &nbsp;·&nbsp; © 2026 Microsoft
+    &nbsp;·&nbsp; © 2026 Microsoft &nbsp;·&nbsp;
+    Built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a>
   </p>
 </footer>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+// Lightbox
+const lb = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+
+// Teaser hover 3s zoom
+let hoverTimer = null;
+document.querySelectorAll('.t-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { hoverTimer = setTimeout(() => el.classList.add('zoomed'), 3000); });
+  el.addEventListener('mouseleave', () => { clearTimeout(hoverTimer); el.classList.remove('zoomed'); });
+});
+
+// DataTables
+$(document).ready(function(){
+  $('#t-sfb').DataTable({ paging:false, searching:false, info:false, order:[[2,'desc']], columnDefs:[{orderable:false,targets:[0,9]}] });
+  $('#t-ai').DataTable({  paging:false, searching:false, info:false, order:[[2,'desc']], columnDefs:[{orderable:false,targets:[0,8]}] });
+});
+
+// Tab switch
+function showTab(name) {
+  document.getElementById('tab-sciformabench').style.display = name==='sciformabench' ? '' : 'none';
+  document.getElementById('tab-aibench').style.display       = name==='aibench'       ? '' : 'none';
+  document.querySelectorAll('.tab-btns .button').forEach((b,i) => {
+    b.classList.toggle('is-active', (i===0&&name==='sciformabench')||(i===1&&name==='aibench'));
+  });
+}
+
+// Manual slider
+const sliders = {};
+function initSlider(id, total) {
+  sliders[id] = { cur: 0, total };
+}
+initSlider('prop', 2); initSlider('open', 2);
+
+function goSlide(id, idx) {
+  sliders[id].cur = idx;
+  document.getElementById('slides-'+id).style.transform = `translateX(-${idx*100}%)`;
+  document.querySelectorAll('#dots-'+id+' span').forEach((d,i) => d.classList.toggle('active', i===idx));
+}
+function slide(id, dir) {
+  const s = sliders[id];
+  goSlide(id, (s.cur + dir + s.total) % s.total);
+}
+
+// Copy bibtex
+function copyBib() {
+  navigator.clipboard.writeText(document.getElementById('bibtex-text').innerText);
+  document.querySelector('.copy-btn').innerText = 'Copied!';
+  setTimeout(() => document.querySelector('.copy-btn').innerText = 'Copy', 2000);
+}
+</script>
 
 </body>
 </html>
