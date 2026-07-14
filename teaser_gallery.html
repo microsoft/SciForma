@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SciForma Teaser Gallery</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8f8f8; display: flex; justify-content: center; padding: 32px 16px; }
+
+    /* ── Outer container ── */
+    .teaser-wrap {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    /* ── Row 1 + Row 2 share a 3-column grid ── */
+    .teaser-top {
+      display: grid;
+      /* col proportions: 1273.9 : 1523.15 : 800.62 */
+      grid-template-columns: 1273.9fr 1523.15fr 800.62fr;
+      grid-template-rows:
+        calc(var(--unit) * 609.26)   /* row1 height */
+        calc(var(--unit) * 650.80);  /* row2 height */
+      gap: 5px;
+      /* --unit maps 3597.67pt → container width */
+      --total-w: 3597.67;
+      --unit: calc((100vw - 32px) / var(--total-w));
+    }
+
+    @media (min-width: 1232px) {
+      .teaser-top { --unit: calc(1200px / var(--total-w)); }
+    }
+
+    /* img3 spans both rows */
+    .item-3 { grid-column: 3; grid-row: 1 / 3; }
+
+    /* ── Row 3 ── */
+    .teaser-row3 {
+      display: grid;
+      /* col proportions: 2030.1 : 1631.33 */
+      grid-template-columns: 2030.1fr 1631.33fr;
+      gap: 5px;
+    }
+
+    /* ── Each cell ── */
+    .teaser-item {
+      overflow: hidden;
+      border-radius: 4px;
+      cursor: zoom-in;
+      position: relative;
+    }
+
+    .teaser-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    /* hover: slight lift */
+    .teaser-item:hover img {
+      transform: scale(1.03);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    /* auto-expand class (added after 3s hover via JS) */
+    .teaser-item.auto-zoom img {
+      transform: scale(1.12);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.35);
+      z-index: 10;
+    }
+
+    /* small label */
+    .teaser-item .label {
+      position: absolute;
+      bottom: 6px; left: 8px;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.85);
+      background: rgba(0,0,0,0.4);
+      padding: 2px 7px;
+      border-radius: 10px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .teaser-item:hover .label { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="teaser-wrap">
+
+  <!-- ── Rows 1 + 2 ── -->
+  <div class="teaser-top">
+
+    <!-- Row 1, col 1 -->
+    <div class="teaser-item item-1">
+      <a class="glightbox" href="assets/images/teaser/img1.png" data-gallery="teaser" data-title="SciForma Result 1">
+        <img src="assets/images/teaser/img1.png" alt="Teaser 1" loading="lazy"/>
+      </a>
+      <span class="label">1</span>
+    </div>
+
+    <!-- Row 1, col 2 -->
+    <div class="teaser-item item-2">
+      <a class="glightbox" href="assets/images/teaser/img2.png" data-gallery="teaser" data-title="SciForma Result 2">
+        <img src="assets/images/teaser/img2.png" alt="Teaser 2" loading="lazy"/>
+      </a>
+      <span class="label">2</span>
+    </div>
+
+    <!-- col 3, spans row 1+2 -->
+    <div class="teaser-item item-3">
+      <a class="glightbox" href="assets/images/teaser/img3.png" data-gallery="teaser" data-title="SciForma Result 3">
+        <img src="assets/images/teaser/img3.png" alt="Teaser 3" loading="lazy"/>
+      </a>
+      <span class="label">3</span>
+    </div>
+
+    <!-- Row 2, col 1 -->
+    <div class="teaser-item item-4">
+      <a class="glightbox" href="assets/images/teaser/img4.png" data-gallery="teaser" data-title="SciForma Result 4">
+        <img src="assets/images/teaser/img4.png" alt="Teaser 4" loading="lazy"/>
+      </a>
+      <span class="label">4</span>
+    </div>
+
+    <!-- Row 2, col 2 -->
+    <div class="teaser-item item-5">
+      <a class="glightbox" href="assets/images/teaser/img5.png" data-gallery="teaser" data-title="SciForma Result 5">
+        <img src="assets/images/teaser/img5.png" alt="Teaser 5" loading="lazy"/>
+      </a>
+      <span class="label">5</span>
+    </div>
+
+  </div>
+
+  <!-- ── Row 3 ── -->
+  <div class="teaser-row3">
+
+    <div class="teaser-item item-6">
+      <a class="glightbox" href="assets/images/teaser/img6.png" data-gallery="teaser" data-title="SciForma Result 6">
+        <img src="assets/images/teaser/img6.png" alt="Teaser 6" loading="lazy"/>
+      </a>
+      <span class="label">6</span>
+    </div>
+
+    <div class="teaser-item item-7">
+      <a class="glightbox" href="assets/images/teaser/img7.png" data-gallery="teaser" data-title="SciForma Result 7">
+        <img src="assets/images/teaser/img7.png" alt="Teaser 7" loading="lazy"/>
+      </a>
+      <span class="label">7</span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // GLightbox: click to open full-size
+  const lightbox = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+
+  // 3s hover → auto-zoom
+  let hoverTimer = null;
+  document.querySelectorAll('.teaser-item').forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      hoverTimer = setTimeout(() => item.classList.add('auto-zoom'), 3000);
+    });
+    item.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimer);
+      item.classList.remove('auto-zoom');
+    });
+  });
+</script>
+
+</body>
+</html>

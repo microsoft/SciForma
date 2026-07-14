@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Gallery Demo</title>
+
+  <!-- GLightbox -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
+
+  <style>
+    body { background: #111; margin: 0; padding: 24px; font-family: sans-serif; }
+
+    .gallery-grid {
+      columns: 3 280px;      /* masonry: 3列，每列最小280px */
+      column-gap: 10px;
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 6px;
+      cursor: zoom-in;
+    }
+
+    /* 保持原始宽高比 */
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(1.1);
+    }
+
+    /* hover 时显示分数 */
+    .gallery-item .score-badge {
+      position: absolute;
+      bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font-size: 0.78rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .gallery-item:hover .score-badge { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="gallery-grid" id="gallery">
+
+  <!-- 示例条目：替换 src 和 data-title -->
+  <!-- 格式：<a class="glightbox" href="原图路径" data-title="分数/描述"> -->
+
+  <div class="gallery-item">
+    <a class="glightbox" href="assets/gallery/1.000_hard_0042.png" data-title="Score: 1.000 · Hard #0042">
+      <img src="assets/gallery/1.000_hard_0042.png" style="aspect-ratio:1472/704" loading="lazy"/>
+    </a>
+    <span class="score-badge">1.000</span>
+  </div>
+
+  <div class="gallery-item">
+    <a class="glightbox" href="assets/gallery/0.952_hard_0010.png" data-title="Score: 0.952 · Hard #0010">
+      <img src="assets/gallery/0.952_hard_0010.png" style="aspect-ratio:1344/768" loading="lazy"/>
+    </a>
+    <span class="score-badge">0.952</span>
+  </div>
+
+  <!-- 更多条目由脚本生成 -->
+
+</div>
+
+<script>
+  GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true });
+</script>
+</body>
+</html>
