@@ -85,14 +85,38 @@ body { font-family: 'Inter','Segoe UI',system-ui,sans-serif; color:var(--text-pr
 .fig-img { width:100%; border-radius:var(--radius); box-shadow:var(--shadow-md); }
 .fig-caption { text-align:center; font-size:.83rem; color:var(--text-secondary); margin-top:8px; }
 
-/* ── Results tables ── */
-.tab-btns { display:flex; gap:8px; margin-bottom:16px; justify-content:center; }
-.tab-btns .button.is-active { background:var(--primary-color)!important; color:#fff; border-color:var(--primary-color); }
-table.leaderboard thead th { background:var(--primary-color); color:#fff; white-space:nowrap; text-align:center; padding:10px 12px; }
-table.leaderboard tbody td { text-align:center; padding:8px 12px; }
-table.leaderboard tbody tr:nth-child(even) { background:#f8fafc; }
-tr.ours td { font-weight:700; background:#e8f3fd!important; }
-tr.ours td:nth-child(2)::after { content:" ★"; color:var(--primary-color); }
+/* ── MMMG-style leaderboard ── */
+.lb-table { font-size:.88rem; border-collapse:collapse; }
+.lb-table thead tr { background:#1a1a2e; }
+.lb-table thead th { color:#fff; padding:12px 14px; text-align:center; font-weight:600; border:none; white-space:nowrap; }
+.lb-table thead th.lb-rank { width:40px; }
+.lb-table thead th.lb-model { text-align:left; min-width:180px; }
+.lb-table thead th.lb-score { min-width:80px; }
+.lb-table thead th.lb-open { width:60px; }
+.lb-table tbody tr { border-bottom:1px solid #f0f0f0; transition:background .15s; }
+.lb-table tbody tr:hover { background:#f8fbff!important; }
+.lb-table tbody td { padding:10px 14px; text-align:center; color:#333; }
+.lb-table tbody td:nth-child(2) { text-align:left; font-weight:500; }
+.score-cell { font-weight:700; font-size:.95rem; }
+.score-cell.top1 { color:#c8940a; }
+.score-cell.top2 { color:#6b7280; }
+.lb-table tr.ours { background:#f0f7ff; }
+.lb-table tr.ours td { color:#1a1a1a; }
+.score-cell.ours-score { color:#0078d4; }
+
+/* ── Qual tabs (pill style) ── */
+.qual-tabs { display:inline-flex; background:#f0f0f0; border-radius:999px; padding:4px; gap:2px; flex-wrap:wrap; justify-content:center; }
+.qual-tab { background:transparent; border:none; border-radius:999px; padding:8px 18px; font-size:.88rem; font-weight:600; color:#555; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.qual-tab.active { background:#fff; color:#0078d4; box-shadow:0 1px 6px rgba(0,0,0,.12); }
+.qual-tab:hover:not(.active) { color:#333; }
+.qual-panel { animation:fadeIn .25s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+/* ── Leaderboard tab buttons ── */
+.tab-btns .button.is-active { background:#1a1a2e!important; color:#fff!important; border-color:#1a1a2e!important; }
+.tab-btns .button:not(.is-active) { background:#fff; border:1px solid #ddd; color:#555; }
+.tab-btns .button:not(.is-active):hover { border-color:#1a1a2e; color:#1a1a2e; }
+
 
 /* ── Stats bar ── */
 .stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:1.5rem; }

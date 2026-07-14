@@ -3,9 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <meta name="title" content="SciForma - Yuxuan Luo, Peng Zhang, Xinjie Zhang, Xun Guo, Zhouhui Lian, Yan Lu"/>
-  <meta name="description" content="SciForma: Structure-Faithful Generation of Scientific Methodology Diagrams. 9B model with M-DPO achieving 69.51% on SciFormaBench-2K."/>
-  <meta name="keywords" content="scientific diagram generation, text-to-image, M-DPO, SciFormaBench, diffusion model"/>
+  <meta name="description" content="SciForma: Structure-Faithful Generation of Scientific Methodology Diagrams. 9B model with M-DPO, 69.51% on SciFormaBench-2K."/>
   <title>SciForma: Structure-Faithful Scientific Diagram Generation</title>
 
   <link rel="stylesheet" href="static/css/bulma.min.css"/>
@@ -14,26 +12,18 @@
   <link rel="stylesheet" href="static/css/academicons.min.css"/>
   <link rel="stylesheet" href="static/css/index.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-
-  <!-- GLightbox for click-to-enlarge -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css"/>
-  <!-- DataTables -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bulma.min.css"/>
 
-  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="static/js/bulma-carousel.min.js"></script>
-  <script defer src="static/js/index.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
-  <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  <script defer src="https://cdn.datatables.net/1.13.7/js/dataTables.bulma.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
 </head>
 <body>
 
 <button class="scroll-to-top" onclick="scrollToTop()" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
 
-<!-- ══════════════════════════════════════════
-     § 1  HERO
-══════════════════════════════════════════ -->
+<!-- ══ § 1  HERO ══ -->
 <section class="hero">
 <div class="hero-body" style="padding:3.5rem 1.5rem 2rem">
 <div class="container is-max-desktop">
@@ -41,11 +31,8 @@
 <div class="column has-text-centered">
 
   <h1 class="title is-1 publication-title">SciForma</h1>
-  <p class="is-size-4" style="color:#555;margin-bottom:1rem;font-weight:500">
-    Structure-Faithful Generation of Scientific Methodology Diagrams
-  </p>
+  <p class="is-size-4" style="color:#555;margin-bottom:1rem;font-weight:500">Structure-Faithful Generation of Scientific Methodology Diagrams</p>
 
-  <!-- Authors -->
   <div class="is-size-5 publication-authors">
     <span class="author-block"><a href="https://loyuxr.github.io/" target="_blank">Yuxuan Luo</a><sup>1</sup>,</span>
     <span class="author-block">Peng Zhang<sup>2</sup>,</span>
@@ -55,32 +42,19 @@
     <span class="author-block">Yan Lu<sup>3</sup></span>
   </div>
   <div class="is-size-6 publication-authors" style="color:#777;margin-top:.3rem">
-    <span class="author-block"><sup>1</sup>Wangxuan Institute of Computer Technology, Peking University</span>
-    <span class="author-block" style="margin-left:1rem"><sup>2</sup>Zhejiang University</span>
-    <span class="author-block" style="margin-left:1rem"><sup>3</sup>Microsoft Research Asia</span>
+    <sup>1</sup>Wangxuan Institute of Computer Technology, Peking University &nbsp;
+    <sup>2</sup>Zhejiang University &nbsp;
+    <sup>3</sup>Microsoft Research Asia
   </div>
 
-  <!-- Link buttons -->
   <div class="column has-text-centered" style="margin-top:1rem">
   <div class="publication-links">
-    <span class="link-block">
-      <a href="https://arxiv.org/" target="_blank" class="external-link button is-normal is-rounded is-dark">
-        <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></a></span>
-    <span class="link-block">
-      <a href="https://github.com/microsoft/SciForma" target="_blank" class="external-link button is-normal is-rounded is-dark">
-        <span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a></span>
-    <span class="link-block">
-      <a href="https://huggingface.co/microsoft/SciForma-9B" target="_blank" class="external-link button is-normal is-rounded is-dark">
-        <span class="icon">🤗</span><span>SciForma-9B</span></a></span>
-    <span class="link-block">
-      <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K" target="_blank" class="external-link button is-normal is-rounded is-dark">
-        <span class="icon">🤗</span><span>Dataset</span></a></span>
-    <span class="link-block">
-      <a href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank" class="external-link button is-normal is-rounded is-dark">
-        <span class="icon">🤗</span><span>Benchmark</span></a></span>
-    <span class="link-block">
-      <a href="leaderboard.html" class="external-link button is-normal is-rounded is-dark">
-        <span class="icon">🏆</span><span>Leaderboard</span></a></span>
+    <span class="link-block"><a href="https://arxiv.org/" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></a></span>
+    <span class="link-block"><a href="https://github.com/microsoft/SciForma" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a></span>
+    <span class="link-block"><a href="https://huggingface.co/microsoft/SciForma-9B" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon">🤗</span><span>SciForma-9B</span></a></span>
+    <span class="link-block"><a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon">🤗</span><span>Dataset</span></a></span>
+    <span class="link-block"><a href="https://huggingface.co/datasets/microsoft/SciFormaBench" target="_blank" class="external-link button is-normal is-rounded is-dark"><span class="icon">🤗</span><span>Benchmark</span></a></span>
+    <span class="link-block"><a href="leaderboard.html" class="external-link button is-normal is-rounded is-dark"><span class="icon">🏆</span><span>Leaderboard</span></a></span>
   </div>
   </div>
 
@@ -88,9 +62,7 @@
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 2  TEASER
-══════════════════════════════════════════ -->
+<!-- ══ § 2  TEASER ══ -->
 <section class="hero teaser">
 <div class="container is-max-widescreen">
 <div class="hero-body">
@@ -107,251 +79,248 @@
       <div class="t-item"><a class="glightbox" href="assets/images/teaser/img7.png" data-gallery="teaser"><img src="assets/images/teaser/img7.png" alt="" loading="lazy"/></a></div>
     </div>
   </div>
-  <p class="fig-caption" style="margin-top:10px;font-size:.9rem">SciForma-9B generated scientific methodology diagrams &nbsp;·&nbsp; Hover 3s to zoom &nbsp;·&nbsp; Click to expand</p>
+  <p class="fig-caption" style="margin-top:10px">SciForma-9B generated scientific methodology diagrams &nbsp;·&nbsp; Hover 3s to zoom &nbsp;·&nbsp; Click to expand</p>
 </div>
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 3  ABSTRACT
-══════════════════════════════════════════ -->
+<!-- ══ § 3  DATA & BENCHMARK ══ -->
 <section class="section hero is-light" style="padding:3rem 0">
-<div class="container is-max-desktop">
-<div class="columns is-centered has-text-centered">
-<div class="column is-four-fifths">
-  <h2 class="title is-3">Abstract</h2>
-  <div class="content has-text-justified">
-    <p>Scientific methodology diagrams — flowcharts, pipelines, and architecture figures that appear in academic papers — demand precise structural fidelity: every component, arrow, and text label must be faithfully represented. Existing text-to-image models generate visually appealing outputs but routinely violate structural constraints.</p>
-    <p>We introduce <strong>SciForma</strong>, a 9B-parameter framework that decomposes diagram quality into three independently verifiable axes — <em>Component</em>, <em>Arrow</em>, and <em>Text</em> — guided by a <em>structural inventory</em>. Post-trained with <strong>M-DPO</strong>, SciForma achieves <strong>69.51%</strong> on SciFormaBench-2K — surpassing all open-source models and approaching GPT-Image-1.5 (68.96%). On AIBench, SciForma-9B reaches <strong>70.29</strong>, edging human-drawn originals (70.09).</p>
+<div class="container is-max-widescreen">
+  <h2 class="section-heading">SciFormaData-700K &amp; SciFormaBench</h2>
+  <p class="has-text-centered" style="color:#555;max-width:780px;margin:0 auto 1.5rem;line-height:1.7">
+    We build a large-scale data engine spanning <strong>338,214 arXiv papers (2015–2025)</strong>,
+    producing <strong>661K generation pairs</strong> and <strong>70K editing triplets</strong>.
+    The dataset is organized around a structural primitive: a per-axis inventory of components, arrows, and text labels.
+    <strong>SciFormaBench-2K</strong> provides 2,000 human-verified benchmark instances across three difficulty levels,
+    evaluated by a GPT-5.4 judge along the same three axes.
+  </p>
+  <div style="overflow-x:auto">
+    <a class="glightbox" href="assets/figures/figure2_dataset.png">
+      <img src="assets/figures/figure2_dataset.png" class="fig-img" loading="lazy" alt="SciFormaData-700K pipeline" style="min-width:600px"/>
+    </a>
+  </div>
+  <p class="fig-caption">Data construction pipeline: PDF extraction → diagram detection → structured caption generation → quality filtering → editing augmentation.</p>
+
+  <div style="max-width:900px;margin:2rem auto 0">
+    <a class="glightbox" href="assets/figures/structural_inv.png">
+      <img src="assets/figures/structural_inv.png" class="fig-img" loading="lazy" alt="Structural inventory"/>
+    </a>
+    <p class="fig-caption">Structural inventory: from structural primitives (components / arrows / text labels) to a hierarchical per-axis rubric used for both training and evaluation.</p>
   </div>
 </div>
-</div>
-</div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 4  BULLETIN CAROUSEL (Score > 0.9)
-══════════════════════════════════════════ -->
+<!-- ══ § 4  METHOD ══ -->
 <section class="section" style="padding:3rem 0">
-<div class="container">
-  <h2 class="section-heading">SciForma-9B Gallery</h2>
-  <p class="has-text-centered" style="color:#777;margin-bottom:1.5rem;font-size:.9rem">Score ≥ 0.90 on SciFormaBench-2K Hard split · Click any image to expand</p>
+<div class="container is-max-widescreen">
+  <h2 class="section-heading">Method</h2>
 
-  <div id="results-carousel" class="carousel results-carousel">
-    <!-- Images injected by build script; fallback shown here -->
-    <div class="item"><a class="glightbox" href="assets/bulletin/img01.png" data-gallery="bulletin"><img src="assets/bulletin/img01.png" alt="Gallery 1" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img02.png" data-gallery="bulletin"><img src="assets/bulletin/img02.png" alt="Gallery 2" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img03.png" data-gallery="bulletin"><img src="assets/bulletin/img03.png" alt="Gallery 3" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img04.png" data-gallery="bulletin"><img src="assets/bulletin/img04.png" alt="Gallery 4" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img05.png" data-gallery="bulletin"><img src="assets/bulletin/img05.png" alt="Gallery 5" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img06.png" data-gallery="bulletin"><img src="assets/bulletin/img06.png" alt="Gallery 6" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img07.png" data-gallery="bulletin"><img src="assets/bulletin/img07.png" alt="Gallery 7" loading="lazy"/></a></div>
-    <div class="item"><a class="glightbox" href="assets/bulletin/img08.png" data-gallery="bulletin"><img src="assets/bulletin/img08.png" alt="Gallery 8" loading="lazy"/></a></div>
+  <div style="max-width:1000px;margin:0 auto 1.5rem">
+    <a class="glightbox" href="assets/figures/figure3_method.png">
+      <img src="assets/figures/figure3_method.png" class="fig-img" loading="lazy" alt="SciForma method overview"/>
+    </a>
+    <p class="fig-caption">SciForma training pipeline overview.</p>
+  </div>
+
+  <div class="columns is-max-desktop" style="max-width:860px;margin:0 auto">
+    <div class="column">
+      <p style="line-height:1.8;color:#333">
+        <strong>Two-Stage SFT.</strong>
+        SciForma is built on FLUX.2-klein-base-9B and fine-tuned in two stages.
+        Stage 1 trains on the full 661K generation pairs across diverse resolution tracks (768px and 1024px),
+        establishing a broad layout and structural understanding.
+        Stage 2 focuses on a high-quality 244K subset with richer structural complexity,
+        sharpening the model's ability to faithfully reproduce component topology and text alignment.
+      </p>
+    </div>
+    <div class="column">
+      <p style="line-height:1.8;color:#333">
+        <strong>M-DPO.</strong>
+        After SFT, we apply Multi-Dimensional Conjunctive Preference Optimization.
+        For each training sample we construct a multi-way preference group: one winner and three axis-specific losers
+        targeting Component, Arrow, and Text independently.
+        A Bradley–Terry objective enforces simultaneous correctness across all axes,
+        while adaptive gradient reweighting routes optimization effort toward the weakest axis at each step.
+        This breaks the SFT plateau where scalar DPO and GRPO stagnate.
+      </p>
+    </div>
   </div>
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 5  RESULTS
-══════════════════════════════════════════ -->
+<!-- ══ § 5  LEADERBOARD ══ -->
 <section class="section hero is-light" style="padding:3rem 0">
 <div class="container">
-  <h2 class="section-heading">Benchmark Results</h2>
-  <div class="tab-btns">
-    <button class="button is-small is-active" onclick="showTab('sfb')">SciFormaBench-2K</button>
-    <button class="button is-small" onclick="showTab('aib')">AIBench</button>
+  <h2 class="section-heading">Leaderboard</h2>
+
+  <!-- Tab buttons -->
+  <div class="has-text-centered" style="margin-bottom:1.2rem">
+    <div class="tab-btns" style="justify-content:center">
+      <button class="button is-rounded is-active" id="btn-sfb" onclick="showTab('sfb')">SciFormaBench-2K</button>
+      <button class="button is-rounded" id="btn-aib" onclick="showTab('aib')">AIBench</button>
+    </div>
+    <p id="tab-desc-sfb" style="font-size:.82rem;color:#888;margin-top:4px">GPT-5.4 judge · 2,000 diagrams (Simple 500 / Medium 900 / Hard 600) · Click column to sort ↕</p>
+    <p id="tab-desc-aib" style="font-size:.82rem;color:#888;margin-top:4px;display:none">AIBench evaluation · 5 axes</p>
   </div>
 
   <!-- SciFormaBench -->
   <div id="tab-sfb">
-    <p class="has-text-centered" style="font-size:.82rem;color:#888;margin-bottom:8px">GPT-5.4 judge · 2,000 diagrams · Click column header to sort</p>
-    <div class="table-container">
-    <table id="t-sfb" class="table is-bordered is-striped is-hoverable is-fullwidth leaderboard" style="width:100%">
-      <thead><tr><th>#</th><th>Method</th><th>Avg ↑</th><th>Simple</th><th>Medium</th><th>Hard</th><th>Comp.</th><th>Arrow</th><th>Text</th><th>Open</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>GPT-Image-2</td><td>85.62</td><td>88.41</td><td>85.66</td><td>83.26</td><td>83.34</td><td>89.61</td><td>83.53</td><td>❌</td></tr>
-        <tr><td>2</td><td>NanoBananaPro</td><td>81.34</td><td>85.30</td><td>81.70</td><td>77.50</td><td>81.10</td><td>83.60</td><td>78.70</td><td>❌</td></tr>
-        <tr class="ours"><td>3</td><td>SciForma-9B + Edit</td><td>72.40</td><td>79.82</td><td>72.59</td><td>66.01</td><td>76.70</td><td>69.91</td><td>70.14</td><td>✅</td></tr>
-        <tr class="ours"><td>4</td><td>SciForma-9B (M-DPO)</td><td>69.51</td><td>77.20</td><td>69.69</td><td>62.86</td><td>74.49</td><td>66.46</td><td>67.00</td><td>✅</td></tr>
-        <tr><td>5</td><td>GPT-Image-1.5</td><td>68.96</td><td>75.50</td><td>69.60</td><td>62.60</td><td>75.70</td><td>62.50</td><td>68.20</td><td>❌</td></tr>
-        <tr class="ours"><td>6</td><td>SciForma-Base (SFT)</td><td>67.59</td><td>76.01</td><td>67.43</td><td>60.83</td><td>73.52</td><td>64.64</td><td>63.84</td><td>✅</td></tr>
-        <tr><td>7</td><td>Wan2.7-Image</td><td>64.71</td><td>73.90</td><td>65.90</td><td>55.30</td><td>71.90</td><td>60.30</td><td>61.10</td><td>❌</td></tr>
-        <tr><td>8</td><td>SenseNova-U1-8B</td><td>51.14</td><td>59.57</td><td>51.86</td><td>43.02</td><td>61.34</td><td>50.16</td><td>40.37</td><td>❌</td></tr>
-        <tr><td>9</td><td>FLUX.2-dev-32B</td><td>48.81</td><td>57.60</td><td>49.30</td><td>40.80</td><td>62.50</td><td>38.60</td><td>44.60</td><td>✅</td></tr>
-        <tr><td>10</td><td>Qwen-Image-2512</td><td>48.73</td><td>57.50</td><td>49.90</td><td>39.60</td><td>61.20</td><td>46.60</td><td>36.80</td><td>❌</td></tr>
-        <tr><td>11</td><td>Z-Image</td><td>48.50</td><td>57.20</td><td>49.70</td><td>39.40</td><td>58.30</td><td>46.90</td><td>38.50</td><td>❌</td></tr>
-        <tr><td>12</td><td>FLUX.2-klein-base-9B</td><td>33.87</td><td>42.80</td><td>34.20</td><td>26.00</td><td>51.50</td><td>25.20</td><td>23.60</td><td>✅</td></tr>
-        <tr><td>13</td><td>FLUX.1-dev</td><td>20.64</td><td>26.40</td><td>20.70</td><td>15.80</td><td>40.60</td><td>11.20</td><td>8.50</td><td>✅</td></tr>
-        <tr><td>14</td><td>Bagel-7B</td><td>16.31</td><td>18.40</td><td>16.20</td><td>14.70</td><td>35.50</td><td>9.50</td><td>2.20</td><td>✅</td></tr>
-      </tbody>
-    </table>
-    </div>
+  <div class="table-container">
+  <table class="table is-fullwidth lb-table" id="t-sfb">
+    <thead>
+      <tr>
+        <th class="lb-rank">#</th>
+        <th class="lb-model">Model</th>
+        <th class="lb-score">Avg ↑</th>
+        <th>Simple</th><th>Medium</th><th>Hard</th>
+        <th>Component</th><th>Arrow</th><th>Text</th>
+        <th class="lb-open">Open?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>GPT-Image-2</td><td class="score-cell top1">85.62</td><td>88.41</td><td>85.66</td><td>83.26</td><td>83.34</td><td>89.61</td><td>83.53</td><td>❌</td></tr>
+      <tr><td>2</td><td>NanoBananaPro</td><td class="score-cell top2">81.34</td><td>85.30</td><td>81.70</td><td>77.50</td><td>81.10</td><td>83.60</td><td>78.70</td><td>❌</td></tr>
+      <tr class="ours"><td>3</td><td>SciForma-9B + Edit ★</td><td class="score-cell ours-score">72.40</td><td>79.82</td><td>72.59</td><td>66.01</td><td>76.70</td><td>69.91</td><td>70.14</td><td>✅</td></tr>
+      <tr class="ours"><td>4</td><td>SciForma-9B (M-DPO) ★</td><td class="score-cell ours-score">69.51</td><td>77.20</td><td>69.69</td><td>62.86</td><td>74.49</td><td>66.46</td><td>67.00</td><td>✅</td></tr>
+      <tr><td>5</td><td>GPT-Image-1.5</td><td class="score-cell">68.96</td><td>75.50</td><td>69.60</td><td>62.60</td><td>75.70</td><td>62.50</td><td>68.20</td><td>❌</td></tr>
+      <tr class="ours"><td>6</td><td>SciForma-Base (SFT) ★</td><td class="score-cell ours-score">67.59</td><td>76.01</td><td>67.43</td><td>60.83</td><td>73.52</td><td>64.64</td><td>63.84</td><td>✅</td></tr>
+      <tr><td>7</td><td>Wan2.7-Image</td><td class="score-cell">64.71</td><td>73.90</td><td>65.90</td><td>55.30</td><td>71.90</td><td>60.30</td><td>61.10</td><td>❌</td></tr>
+      <tr><td>8</td><td>SenseNova-U1-8B</td><td class="score-cell">51.14</td><td>59.57</td><td>51.86</td><td>43.02</td><td>61.34</td><td>50.16</td><td>40.37</td><td>❌</td></tr>
+      <tr><td>9</td><td>FLUX.2-dev-32B</td><td class="score-cell">48.81</td><td>57.60</td><td>49.30</td><td>40.80</td><td>62.50</td><td>38.60</td><td>44.60</td><td>✅</td></tr>
+      <tr><td>10</td><td>Qwen-Image-2512</td><td class="score-cell">48.73</td><td>57.50</td><td>49.90</td><td>39.60</td><td>61.20</td><td>46.60</td><td>36.80</td><td>❌</td></tr>
+      <tr><td>11</td><td>Z-Image</td><td class="score-cell">48.50</td><td>57.20</td><td>49.70</td><td>39.40</td><td>58.30</td><td>46.90</td><td>38.50</td><td>❌</td></tr>
+      <tr><td>12</td><td>FLUX.2-klein-base-9B</td><td class="score-cell">33.87</td><td>42.80</td><td>34.20</td><td>26.00</td><td>51.50</td><td>25.20</td><td>23.60</td><td>✅</td></tr>
+      <tr><td>13</td><td>FLUX.1-dev</td><td class="score-cell">20.64</td><td>26.40</td><td>20.70</td><td>15.80</td><td>40.60</td><td>11.20</td><td>8.50</td><td>✅</td></tr>
+      <tr><td>14</td><td>Bagel-7B</td><td class="score-cell">16.31</td><td>18.40</td><td>16.20</td><td>14.70</td><td>35.50</td><td>9.50</td><td>2.20</td><td>✅</td></tr>
+    </tbody>
+  </table>
+  </div>
   </div>
 
   <!-- AIBench -->
   <div id="tab-aib" style="display:none">
-    <div class="table-container">
-    <table id="t-aib" class="table is-bordered is-striped is-hoverable is-fullwidth leaderboard" style="width:100%">
-      <thead><tr><th>#</th><th>Method</th><th>Score ↑</th><th>Comp.</th><th>Topo.</th><th>Phase</th><th>Semantic</th><th>Aesthetic</th><th>Open</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>GPT-Image-2</td><td>80.27</td><td>90.69</td><td>81.77</td><td>84.18</td><td>90.24</td><td>54.49</td><td>❌</td></tr>
-        <tr><td>2</td><td>NanoBananaPro</td><td>77.77</td><td>87.80</td><td>74.81</td><td>82.67</td><td>88.54</td><td>55.04</td><td>❌</td></tr>
-        <tr><td>3</td><td>Seedream 5.0</td><td>73.23</td><td>82.93</td><td>72.81</td><td>72.10</td><td>86.53</td><td>51.78</td><td>❌</td></tr>
-        <tr class="ours"><td>4</td><td>SciForma-9B + Edit</td><td>70.62</td><td>77.86</td><td>64.47</td><td>75.45</td><td>81.20</td><td>54.10</td><td>✅</td></tr>
-        <tr class="ours"><td>5</td><td>SciForma-9B (M-DPO)</td><td>70.29</td><td>77.53</td><td>64.17</td><td>74.71</td><td>80.79</td><td>54.24</td><td>✅</td></tr>
-        <tr class="ours"><td>6</td><td>SciForma-Base (SFT)</td><td>68.61</td><td>76.26</td><td>61.95</td><td>73.26</td><td>78.33</td><td>53.24</td><td>✅</td></tr>
-        <tr><td>7</td><td>Wan2.6</td><td>65.84</td><td>68.60</td><td>56.11</td><td>72.56</td><td>80.43</td><td>51.50</td><td>❌</td></tr>
-        <tr><td>8</td><td>GPT-Image-1.5</td><td>61.62</td><td>66.23</td><td>50.87</td><td>55.95</td><td>77.55</td><td>57.50</td><td>❌</td></tr>
-        <tr><td>9</td><td>Seedream 4.5</td><td>59.68</td><td>67.89</td><td>52.42</td><td>48.14</td><td>74.47</td><td>55.48</td><td>❌</td></tr>
-      </tbody>
-    </table>
-    </div>
+  <div class="table-container">
+  <table class="table is-fullwidth lb-table" id="t-aib">
+    <thead>
+      <tr>
+        <th class="lb-rank">#</th>
+        <th class="lb-model">Model</th>
+        <th class="lb-score">Score ↑</th>
+        <th>Comp.</th><th>Topology</th><th>Phase</th><th>Semantic</th><th>Aesthetic</th>
+        <th class="lb-open">Open?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>GPT-Image-2</td><td class="score-cell top1">80.27</td><td>90.69</td><td>81.77</td><td>84.18</td><td>90.24</td><td>54.49</td><td>❌</td></tr>
+      <tr><td>2</td><td>NanoBananaPro</td><td class="score-cell top2">77.77</td><td>87.80</td><td>74.81</td><td>82.67</td><td>88.54</td><td>55.04</td><td>❌</td></tr>
+      <tr><td>3</td><td>Seedream 5.0</td><td class="score-cell">73.23</td><td>82.93</td><td>72.81</td><td>72.10</td><td>86.53</td><td>51.78</td><td>❌</td></tr>
+      <tr class="ours"><td>4</td><td>SciForma-9B + Edit ★</td><td class="score-cell ours-score">70.62</td><td>77.86</td><td>64.47</td><td>75.45</td><td>81.20</td><td>54.10</td><td>✅</td></tr>
+      <tr class="ours"><td>5</td><td>SciForma-9B (M-DPO) ★</td><td class="score-cell ours-score">70.29</td><td>77.53</td><td>64.17</td><td>74.71</td><td>80.79</td><td>54.24</td><td>✅</td></tr>
+      <tr class="ours"><td>6</td><td>SciForma-Base (SFT) ★</td><td class="score-cell ours-score">68.61</td><td>76.26</td><td>61.95</td><td>73.26</td><td>78.33</td><td>53.24</td><td>✅</td></tr>
+      <tr><td>7</td><td>Wan2.6</td><td class="score-cell">65.84</td><td>68.60</td><td>56.11</td><td>72.56</td><td>80.43</td><td>51.50</td><td>❌</td></tr>
+      <tr><td>8</td><td>GPT-Image-1.5</td><td class="score-cell">61.62</td><td>66.23</td><td>50.87</td><td>55.95</td><td>77.55</td><td>57.50</td><td>❌</td></tr>
+      <tr><td>9</td><td>Seedream 4.5</td><td class="score-cell">59.68</td><td>67.89</td><td>52.42</td><td>48.14</td><td>74.47</td><td>55.48</td><td>❌</td></tr>
+    </tbody>
+  </table>
   </div>
+  </div>
+
+  <p class="has-text-centered" style="font-size:.8rem;color:#aaa;margin-top:.8rem">★ = SciForma (ours)</p>
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 6  QUALITATIVE COMPARISONS
-══════════════════════════════════════════ -->
+<!-- ══ § 6  BULLETIN ══ -->
 <section class="section" style="padding:3rem 0">
-<div class="container">
-  <h2 class="section-heading">Qualitative Comparisons</h2>
-
-  <p class="has-text-centered" style="font-weight:600;color:#333;margin-bottom:.5rem;font-size:1.05rem">vs. Proprietary Models</p>
-  <div class="compare-slider" id="sl-prop">
-    <div class="compare-slides" id="sli-prop">
-      <img src="assets/figures/proprietary_p1.png" loading="lazy" alt="vs Proprietary p1"/>
-      <img src="assets/figures/proprietary_p2.png" loading="lazy" alt="vs Proprietary p2"/>
-    </div>
-    <button class="slider-btn slider-prev" onclick="slide('prop',-1)">&#8249;</button>
-    <button class="slider-btn slider-next" onclick="slide('prop',+1)">&#8250;</button>
+<div class="container is-max-widescreen">
+  <h2 class="section-heading">Gallery</h2>
+  <p class="has-text-centered" style="color:#777;margin-bottom:1.5rem;font-size:.9rem">
+    SciForma-9B results, score ≥ 0.90 · Click any image to expand full-size
+  </p>
+  <!-- Bulletin images: put your chosen PNGs in assets/bulletin/
+       named img01.png … imgNN.png, wide edge fills container width -->
+  <div id="results-carousel" class="carousel results-carousel">
+    <div class="item"><a class="glightbox" href="assets/bulletin/img01.png" data-gallery="bulletin"><img src="assets/bulletin/img01.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img02.png" data-gallery="bulletin"><img src="assets/bulletin/img02.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img03.png" data-gallery="bulletin"><img src="assets/bulletin/img03.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img04.png" data-gallery="bulletin"><img src="assets/bulletin/img04.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img05.png" data-gallery="bulletin"><img src="assets/bulletin/img05.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img06.png" data-gallery="bulletin"><img src="assets/bulletin/img06.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img07.png" data-gallery="bulletin"><img src="assets/bulletin/img07.png" loading="lazy" alt=""/></a></div>
+    <div class="item"><a class="glightbox" href="assets/bulletin/img08.png" data-gallery="bulletin"><img src="assets/bulletin/img08.png" loading="lazy" alt=""/></a></div>
   </div>
-  <div class="slider-dots" id="dot-prop"><span class="active" onclick="goSlide('prop',0)"></span><span onclick="goSlide('prop',1)"></span></div>
-
-  <p class="has-text-centered" style="font-weight:600;color:#333;margin:.5rem 0 .5rem;font-size:1.05rem;margin-top:2rem">vs. Open-Source Models</p>
-  <div class="compare-slider" id="sl-open">
-    <div class="compare-slides" id="sli-open">
-      <img src="assets/figures/opensource_p1.png" loading="lazy" alt="vs Open-source p1"/>
-      <img src="assets/figures/opensource_p2.png" loading="lazy" alt="vs Open-source p2"/>
-    </div>
-    <button class="slider-btn slider-prev" onclick="slide('open',-1)">&#8249;</button>
-    <button class="slider-btn slider-next" onclick="slide('open',+1)">&#8250;</button>
-  </div>
-  <div class="slider-dots" id="dot-open"><span class="active" onclick="goSlide('open',0)"></span><span onclick="goSlide('open',1)"></span></div>
-
-  <!-- SFT vs M-DPO qualitative -->
-  <p class="has-text-centered" style="font-weight:600;color:#333;margin-top:2.5rem;margin-bottom:.5rem;font-size:1.05rem">SciForma-Base vs. SciForma-9B (+M-DPO)</p>
-  <a class="glightbox" href="assets/figures/iterative_ref_5cases.png">
-    <img src="assets/figures/iterative_ref_5cases.png" class="fig-img" loading="lazy" alt="SFT vs M-DPO comparison"/>
-  </a>
-  <p class="fig-caption">5 cases showing improvement from SFT baseline to M-DPO. C/A/T scores shown on right.</p>
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 7  METHOD
-══════════════════════════════════════════ -->
+<!-- ══ § 7  QUALITATIVE COMPARISONS (4-panel flipper) ══ -->
 <section class="section hero is-light" style="padding:3rem 0">
-<div class="container">
-  <h2 class="section-heading">Method</h2>
+<div class="container is-max-widescreen">
+  <h2 class="section-heading">Qualitative Analysis</h2>
 
-  <!-- Pipeline overview -->
-  <a class="glightbox" href="assets/figures/figure3_overview.png">
-    <img src="assets/figures/figure3_overview.png" class="fig-img" loading="lazy" alt="SciForma pipeline"/>
-  </a>
-  <p class="fig-caption" style="margin-bottom:2rem">SciForma pipeline: two-stage SFT on SciFormaData-700K → M-DPO post-training with per-axis preference pairs.</p>
-
-  <!-- Editing pipeline -->
-  <p class="has-text-centered" style="font-weight:600;font-size:1.05rem;margin-bottom:.5rem;color:#333">Editing &amp; Iterative Refinement</p>
-  <a class="glightbox" href="assets/figures/editing_compact.png">
-    <img src="assets/figures/editing_compact.png" class="fig-img" loading="lazy" alt="Editing pipeline"/>
-  </a>
-  <p class="fig-caption">Source image → LLM Edit Plan → Targeted Edit → Structural Inventory verification.</p>
-</div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     § 8  DATA & BENCHMARK
-══════════════════════════════════════════ -->
-<section class="section" style="padding:3rem 0">
-<div class="container">
-  <h2 class="section-heading">Data &amp; Benchmark</h2>
-
-  <div class="columns">
-    <div class="column">
-      <p class="has-text-centered" style="font-weight:600;margin-bottom:.5rem;color:#333">SciFormaData-700K</p>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="num">661K</div><div class="lbl">Generation Pairs</div></div>
-        <div class="stat-card"><div class="num">70K</div><div class="lbl">Editing Triplets</div></div>
-        <div class="stat-card"><div class="num">338K</div><div class="lbl">arXiv Papers</div></div>
-        <div class="stat-card"><div class="num">36.9%</div><div class="lbl">High Quality</div></div>
-      </div>
-      <a class="glightbox" href="assets/figures/figure2_dataset.png">
-        <img src="assets/figures/figure2_dataset.png" class="fig-img" loading="lazy" alt="SciFormaData-700K pipeline"/>
-      </a>
-      <p class="fig-caption">Dataset construction pipeline: PDF extraction → diagram detection → caption generation → quality filtering.</p>
-    </div>
-    <div class="column">
-      <p class="has-text-centered" style="font-weight:600;margin-bottom:.5rem;color:#333">SciFormaBench-2K</p>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="num">2K</div><div class="lbl">Diagrams</div></div>
-        <div class="stat-card"><div class="num">3</div><div class="lbl">Difficulty Levels</div></div>
-        <div class="stat-card"><div class="num">3-Axis</div><div class="lbl">C / A / T Scoring</div></div>
-        <div class="stat-card"><div class="num">100%</div><div class="lbl">Human-Verified</div></div>
-      </div>
-      <a class="glightbox" href="assets/figures/structural_inv.png">
-        <img src="assets/figures/structural_inv.png" class="fig-img" loading="lazy" alt="Structural inventory"/>
-      </a>
-      <p class="fig-caption">Per-axis structural inventory with critical and moderate error severity annotations.</p>
+  <!-- Tab pills -->
+  <div class="has-text-centered" style="margin-bottom:1rem">
+    <div class="qual-tabs">
+      <button class="qual-tab active" onclick="showQual(0)">vs. Proprietary Models</button>
+      <button class="qual-tab" onclick="showQual(1)">vs. Open-Source Models</button>
+      <button class="qual-tab" onclick="showQual(2)">SciForma-Base vs. 9B</button>
+      <button class="qual-tab" onclick="showQual(3)">Editing &amp; Refinement</button>
     </div>
   </div>
-</div>
-</section>
 
-<!-- ══════════════════════════════════════════
-     § 9  M-DPO & ABLATION
-══════════════════════════════════════════ -->
-<section class="section hero is-light" style="padding:3rem 0">
-<div class="container">
-  <h2 class="section-heading">M-DPO &amp; Ablation</h2>
-  <div class="columns is-vcentered">
-    <div class="column is-half">
-      <a class="glightbox" href="assets/figures/ablation.png">
-        <img src="assets/figures/ablation.png" class="fig-img" loading="lazy" alt="Ablation study"/>
-      </a>
-      <p class="fig-caption">M-DPO training curve. Each component adds incremental gain; Text axis benefits most (+3.16 pts).</p>
-    </div>
-    <div class="column is-half">
-      <table class="table is-bordered is-striped is-fullwidth" style="font-size:.88rem">
-        <thead><tr style="background:#0078d4;color:#fff"><th>Method</th><th>Avg</th><th>C.</th><th>A.</th><th>T.</th></tr></thead>
-        <tbody>
-          <tr><td>SciForma (SFT)</td><td>67.59</td><td>73.52</td><td>64.64</td><td>63.84</td></tr>
-          <tr><td>+ DPO</td><td>68.42<span style="color:#080;font-size:.75rem"> +0.83</span></td><td>74.14</td><td>65.32</td><td>65.08</td></tr>
-          <tr><td>+ DPO (Pareto)</td><td>68.55<span style="color:#080;font-size:.75rem"> +0.96</span></td><td>74.48</td><td>65.57</td><td>64.83</td></tr>
-          <tr><td>+ M-DPO (mean)</td><td>69.31<span style="color:#080;font-size:.75rem"> +1.72</span></td><td>74.54</td><td>66.28</td><td>66.47</td></tr>
-          <tr class="ours"><td><b>+ M-DPO (ours)</b></td><td><b>69.51</b><span style="color:#080;font-size:.75rem"> +1.92</span></td><td>74.49</td><td>66.46</td><td><b>67.00</b></td></tr>
-        </tbody>
-      </table>
-      <div style="margin-top:1.5rem">
-        <a class="glightbox" href="assets/figures/user_study.png">
-          <img src="assets/figures/user_study.png" class="fig-img" loading="lazy" alt="User study"/>
-        </a>
-        <p class="fig-caption">User study results.</p>
+  <!-- 4 panels, only one visible at a time -->
+  <div class="qual-panel active" id="qp0">
+    <div class="compare-slider" id="sl-prop">
+      <div class="compare-slides" id="sli-prop">
+        <img src="assets/figures/proprietary_p1.png" loading="lazy" alt="vs Proprietary p1"/>
+        <img src="assets/figures/proprietary_p2.png" loading="lazy" alt="vs Proprietary p2"/>
       </div>
+      <button class="slider-btn slider-prev" onclick="slide('prop',-1)">&#8249;</button>
+      <button class="slider-btn slider-next" onclick="slide('prop',+1)">&#8250;</button>
+    </div>
+    <div class="slider-dots" id="dot-prop">
+      <span class="active" onclick="goSlide('prop',0)"></span>
+      <span onclick="goSlide('prop',1)"></span>
     </div>
   </div>
+
+  <div class="qual-panel" id="qp1" style="display:none">
+    <div class="compare-slider" id="sl-open">
+      <div class="compare-slides" id="sli-open">
+        <img src="assets/figures/opensource_p1.png" loading="lazy" alt="vs Open-source p1"/>
+        <img src="assets/figures/opensource_p2.png" loading="lazy" alt="vs Open-source p2"/>
+      </div>
+      <button class="slider-btn slider-prev" onclick="slide('open',-1)">&#8249;</button>
+      <button class="slider-btn slider-next" onclick="slide('open',+1)">&#8250;</button>
+    </div>
+    <div class="slider-dots" id="dot-open">
+      <span class="active" onclick="goSlide('open',0)"></span>
+      <span onclick="goSlide('open',1)"></span>
+    </div>
+  </div>
+
+  <div class="qual-panel" id="qp2" style="display:none">
+    <a class="glightbox" href="assets/figures/sft_vs_mdpo.png">
+      <img src="assets/figures/sft_vs_mdpo.png" class="fig-img" loading="lazy" alt="SFT vs M-DPO"/>
+    </a>
+    <p class="fig-caption">SciForma-Base (SFT) vs. SciForma-9B (+M-DPO). C/A/T axis scores shown on right.</p>
+  </div>
+
+  <div class="qual-panel" id="qp3" style="display:none">
+    <a class="glightbox" href="assets/figures/editing_flowchart.png">
+      <img src="assets/figures/editing_flowchart.png" class="fig-img" loading="lazy" alt="Editing pipeline"/>
+    </a>
+    <p class="fig-caption">Editing pipeline: Source → LLM Edit Plan → Targeted Edit → Structural Inventory verification.</p>
+  </div>
+
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     § 10  BIBTEX
-══════════════════════════════════════════ -->
+<!-- ══ § 8  BIBTEX ══ -->
 <section class="section" id="BibTeX">
 <div class="container is-max-desktop content">
   <div class="bibtex-header">
     <h2 class="title">BibTeX</h2>
-    <button class="copy-bibtex-btn" onclick="copyBibTeX()">
-      <i class="fas fa-copy"></i><span class="copy-text">Copy</span></button>
+    <button class="copy-bibtex-btn" onclick="copyBibTeX()"><i class="fas fa-copy"></i><span class="copy-text">Copy</span></button>
   </div>
   <pre id="bibtex-code"><code>@article{luo2026sciforma,
   title   = {SciForma: Structure-Faithful Generation of Scientific Methodology Diagrams},
@@ -363,39 +332,22 @@
 </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
+<!-- ══ FOOTER ══ -->
 <footer class="footer">
-<div class="container">
-<div class="columns is-centered">
-<div class="column is-8">
-<div class="content has-text-centered">
-  <p>
-    This page was built using the
-    <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>
-    adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-    &nbsp;·&nbsp;
-    <a href="https://go.microsoft.com/fwlink/?LinkId=521839" target="_blank">Privacy</a>
-    &nbsp;·&nbsp; © 2026 Microsoft Research Asia
-  </p>
+<div class="container"><div class="columns is-centered"><div class="column is-8">
+<div class="content has-text-centered" style="font-size:.85rem;color:#999">
+  <p>Built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> (Nerfies).
+  &nbsp;·&nbsp; <a href="https://go.microsoft.com/fwlink/?LinkId=521839" target="_blank">Privacy</a>
+  &nbsp;·&nbsp; © 2026 Microsoft Research Asia</p>
 </div>
-</div>
-</div>
-</div>
+</div></div></div>
 </footer>
 
-<!-- ══ Scripts ══ -->
+<!-- ══ SCRIPTS ══ -->
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  // GLightbox
-  if(typeof GLightbox !== 'undefined') GLightbox({ selector:'.glightbox', touchNavigation:true, loop:true });
-
-  // DataTables
-  if(typeof $ !== 'undefined' && $.fn.DataTable){
-    $('#t-sfb').DataTable({ paging:false, searching:false, info:false, order:[[2,'desc']], columnDefs:[{orderable:false,targets:[0,9]}] });
-    $('#t-aib').DataTable({ paging:false, searching:false, info:false, order:[[2,'desc']], columnDefs:[{orderable:false,targets:[0,8]}] });
-  }
+  // Lightbox
+  GLightbox({ selector:'.glightbox', touchNavigation:true, loop:true });
 
   // Teaser hover 3s
   var ht = null;
@@ -403,15 +355,31 @@ document.addEventListener('DOMContentLoaded', function(){
     el.addEventListener('mouseenter', function(){ ht = setTimeout(function(){ el.classList.add('zoomed'); }, 3000); });
     el.addEventListener('mouseleave', function(){ clearTimeout(ht); el.classList.remove('zoomed'); });
   });
+
+  // Sort leaderboard tables by score col on click
+  document.querySelectorAll('.lb-table thead th').forEach(function(th, i){
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', function(){
+      sortTable(th.closest('table'), i);
+    });
+  });
 });
 
-// Tab switch
+// Tab switch (leaderboard)
 function showTab(name){
-  document.getElementById('tab-sfb').style.display = name==='sfb' ? '' : 'none';
-  document.getElementById('tab-aib').style.display = name==='aib' ? '' : 'none';
-  document.querySelectorAll('.tab-btns .button').forEach(function(b,i){
-    b.classList.toggle('is-active', (i===0&&name==='sfb')||(i===1&&name==='aib'));
+  ['sfb','aib'].forEach(function(n){
+    document.getElementById('tab-'+n).style.display = n===name ? '' : 'none';
+    document.getElementById('tab-desc-'+n).style.display = n===name ? '' : 'none';
+    document.getElementById('btn-'+n).classList.toggle('is-active', n===name);
   });
+}
+
+// Qual tabs
+function showQual(idx){
+  [0,1,2,3].forEach(function(i){
+    document.getElementById('qp'+i).style.display = i===idx ? '' : 'none';
+  });
+  document.querySelectorAll('.qual-tab').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
 }
 
 // Sliders
@@ -425,6 +393,21 @@ function goSlide(id, idx){
 function slide(id, dir){
   if(!SL[id]) SL[id]={cur:0,total:2};
   goSlide(id, (SL[id].cur+dir+SL[id].total)%SL[id].total);
+}
+
+// Simple table sort
+function sortTable(table, col){
+  var tbody = table.querySelector('tbody');
+  var rows = Array.from(tbody.rows);
+  var asc = table.dataset.sortCol==col && table.dataset.sortDir=='asc';
+  rows.sort(function(a,b){
+    var av = parseFloat(a.cells[col].textContent)||a.cells[col].textContent;
+    var bv = parseFloat(b.cells[col].textContent)||b.cells[col].textContent;
+    return asc ? (av>bv?1:-1) : (av<bv?1:-1);
+  });
+  rows.forEach(function(r){ tbody.appendChild(r); });
+  table.dataset.sortCol = col;
+  table.dataset.sortDir = asc ? 'desc' : 'asc';
 }
 </script>
 
