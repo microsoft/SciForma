@@ -94,7 +94,7 @@
             <div class="t-item"><a class="glightbox" href="assets/images/teaser/img7.png" data-gallery="teaser"><img src="assets/images/teaser/img7.png" alt="" loading="lazy"/></a></div>
           </div>
         </div>
-        <p class="caption" style="margin-top:10px">SciForma-9B generated scientific methodology diagrams. Hover 3s to zoom · Click to expand.</p>
+        <p class="caption" style="margin-top:10px">SciForma-9B generated scientific methodology diagrams. Click to expand.</p>
       </div>
     </div>
   </div>
@@ -107,8 +107,8 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>Structural fidelity is essential to scientific methodology diagrams. These diagrams must faithfully render components, directional relations, and textual annotations. Since a single error, such as a reversed arrow or an unreadable equation, can invalidate the entire figure, structural fidelity is inherently <em>conjunctive</em>: correctness on one axis cannot compensate for failure on another.</p>
-          <p>We introduce <strong>SciForma</strong>, a framework that decomposes diagram quality into three structural axes, <em>Component</em>, <em>Arrow</em>, and <em>Text</em>, guided by a <em>structural inventory</em>. We curate <strong>SciFormaData-700K</strong> for structured training and <strong>SciFormaBench-2K</strong> for logic-verified evaluation, and develop <strong>M-DPO</strong> to enforce simultaneous correctness across all axes. SciForma-9B exceeds all open-source baselines and GPT-Image-1.5 on SciFormaBench-2K and AIBench.</p>
+          <p>Structural fidelity is the core bottleneck of scientific diagram generation. We introduce <strong>SciForma</strong>, a structure-faithful framework built on three universal primitives: <strong>Component</strong>, <strong>Arrow</strong>, and <strong>Text (C/A/T)</strong>. Powered by a scale-up dataset and our <strong>Multi-Dimensional Conjunctive Preference Optimization (M-DPO)</strong>, SciForma-9B successfully enforces simultaneous correctness across all axes, matching or exceeding proprietary-level generation models.
+          </p>
         </div>
       </div>
     </div>
