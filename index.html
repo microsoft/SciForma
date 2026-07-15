@@ -108,7 +108,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-          We introduce <strong>SciForma</strong>, a structure-faithful framework for scientific diagram generation built on three universal primitives: <strong>Component, Arrow, and Text (C/A/T)</strong>. Driven by a scaled-up dataset, <strong>Multi-Dimensional Conjunctive Preference Optimization (MD-CPO)</strong>, and iterative refinement, it enforces simultaneous correctness across layout, topology, and typography, matching or outperforming leading proprietary models.
+          We introduce <strong>SciForma</strong>, a structure-faithful framework for scientific diagram generation built on three universal primitives: <strong>Component, Arrow, and Text (C/A/T)</strong>. Driven by a scaled-up dataset, Multi-Dimensional Conjunctive Preference Optimization (M-DPO), and iterative refinement, it enforces simultaneous correctness across layout, topology, and typography, matching or outperforming leading proprietary models.
           </p>
         </div>
       </div>
@@ -121,61 +121,77 @@
 <!-- ══ HIGHLIGHTS ══ -->
 <section class="section" style="padding:2.5rem 0">
 <div class="container is-max-desktop">
-  <div class="columns is-variable is-4">
+  <div class="feature-container">
 
-    <div class="column">
-      <div class="highlight-card" id="card-0" onclick="toggleCard(0)">
-        <div class="highlight-card-header">
-          <span class="highlight-icon">🔍</span>
-          <span class="highlight-title">Structural Inventory</span>
-          <span class="highlight-arrow" id="arrow-0">▾</span>
-        </div>
-        <p class="highlight-sub">Universal structural primitives</p>
+    <div class="feature-tabs">
+      <div class="feature-tab" data-color="blue" onclick="showFeature(0,'blue',event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.2"/>
+          <path d="M14 6h6M14 9h4"/>
+          <path d="M6.5 14v6M3.5 17h6"/>
+          <path d="M15 14l5 5M20 14l-5 5"/>
+        </svg>
+        <span>Structural Inventory</span>
       </div>
-      <div class="highlight-body" id="body-0" style="display:none">
-        <p style="font-size:.88rem;line-height:1.7;margin-bottom:.8rem">Three independently verifiable primitives: <em>Component</em>, <em>Arrow</em>, <em>Text</em>. These form the <strong>structural inventory</strong>, shared by training captions and benchmark rubrics. Correctness is <strong>conjunctive</strong>.</p>
-        <a class="glightbox" href="assets/figures/features/structural primitives.png" data-gallery="hl">
-          <img src="assets/figures/features/structural primitives.png" width="100%" style="border:none;border-radius:6px" loading="lazy"/>
-        </a>
+
+      <div class="feature-tab" data-color="amber" onclick="showFeature(1,'amber',event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="8" ry="2.6"/>
+          <path d="M4 5v6c0 1.44 3.58 2.6 8 2.6s8-1.16 8-2.6V5"/>
+          <path d="M4 11v6c0 1.44 3.58 2.6 8 2.6s8-1.16 8-2.6v-6"/>
+        </svg>
+        <span>SciFormaData-700K</span>
+      </div>
+
+      <div class="feature-tab" data-color="purple" onclick="showFeature(2,'purple',event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 20l4-1 12-12-3-3L5 16l-1 4z"/>
+          <path d="M8 8l3 3M11 5l3 3M6 11l3 3"/>
+        </svg>
+        <span>SciFormaBench-2K</span>
       </div>
     </div>
 
-    <div class="column">
-      <div class="highlight-card" id="card-1" onclick="toggleCard(1)">
-        <div class="highlight-card-header">
-          <span class="highlight-icon">📦</span>
-          <span class="highlight-title">SciFormaData-700K</span>
-          <span class="highlight-arrow" id="arrow-1">▾</span>
-        </div>
-        <p class="highlight-sub">661K pairs · 70K triplets · 338K papers</p>
-      </div>
-      <div class="highlight-body" id="body-1" style="display:none">
-        <p style="font-size:.88rem;line-height:1.7;margin-bottom:.8rem">726K diagrams from 593K arXiv sources (2015–2025), dual-VLM filtered. Captions are structural inventories (547 tokens avg). 70K editing triplets via SAM3-grounded inpainting, verified by OpenAI-o3.</p>
-        <a class="glightbox" href="assets/figures/figure2_dataset.png" data-gallery="hl">
-          <img src="assets/figures/figure2_dataset.png" width="100%" style="border:none;border-radius:6px" loading="lazy"/>
-        </a>
-        <p class="fig-caption">Data pipeline: extraction → detection → caption generation → filtering → editing augmentation.</p>
-      </div>
-    </div>
+    <div class="feature-content-wrapper">
 
-    <div class="column">
-      <div class="highlight-card" id="card-2" onclick="toggleCard(2)">
-        <div class="highlight-card-header">
-          <span class="highlight-icon">📐</span>
-          <span class="highlight-title">SciFormaBench-2K</span>
-          <span class="highlight-arrow" id="arrow-2">▾</span>
-        </div>
-        <p class="highlight-sub">2K diagrams · S/M/H · GPT-5.4 judge</p>
-      </div>
-      <div class="highlight-body" id="body-2" style="display:none">
-        <p style="font-size:.88rem;line-height:1.7;margin-bottom:.8rem">2,000 human-verified instances: Simple (500), Medium (900), Hard (600). Each carries a structural inventory evaluated by GPT-5.4 along Component, Arrow, and Text axes.</p>
-        <a class="glightbox" href="assets/figures/structural_inv.png" data-gallery="hl">
-          <img src="assets/figures/structural_inv.png" width="100%" style="border:none;border-radius:6px" loading="lazy"/>
+      <div class="feature-panel" data-color="blue">
+        <div class="feature-panel-title">Structural Inventory</div>
+        <p class="feature-panel-text">Much like UML and BPMN give software and process diagrams a compact vocabulary of typed nodes and edges, SciForma formalizes scientific figures as a <strong>structural inventory</strong> over three independently verifiable primitives, <em>Component</em>, <em>Arrow</em>, and <em>Text</em> (C/A/T). The same inventory drives training captions and benchmark rubrics, so what the model is asked to draw is exactly what the judge scores.</p>
+        <p class="feature-panel-text">Correctness is <strong>conjunctive</strong>, meaning a figure counts as correct only when all three axes are simultaneously right. A missing arrow or mislabelled block is not offset by a clean layout, so the model cannot coast on averaged scores and must render every axis faithfully.</p>
+        <a class="glightbox feature-panel-img" href="assets/figures/features/structural primitives.png" data-gallery="hl">
+          <img src="assets/figures/features/structural primitives.png" width="100%" loading="lazy"/>
         </a>
-        <p class="fig-caption">Per-axis rubric with critical and moderate error annotations.</p>
       </div>
-    </div>
 
+      <div class="feature-panel" data-color="amber">
+        <div class="feature-panel-title">SciFormaData-700K</div>
+        <p class="feature-panel-text">726K methodology diagrams from 593K arXiv LaTeX sources (2015–2025), kept after consensus filtering by Qwen3-VL and OpenAI-o3. Each figure carries a structured dense description covering global layout, module attributes, and topological dependencies. 71K editing triplets are mined by SAM3 element segmentation with OpenAI-o3 written grounded instructions.</p>
+        <div class="feature-stats">
+          <div class="feature-stat"><div class="feature-stat-num">656K</div><div class="feature-stat-lbl">Generation Pairs</div></div>
+          <div class="feature-stat"><div class="feature-stat-num">71K</div><div class="feature-stat-lbl">Editing Triplets</div></div>
+          <div class="feature-stat"><div class="feature-stat-num">344K</div><div class="feature-stat-lbl">arXiv Papers</div></div>
+        </div>
+        <a class="glightbox feature-panel-img" href="assets/figures/figure2_dataset.png" data-gallery="hl">
+          <img src="assets/figures/figure2_dataset.png" width="100%" loading="lazy"/>
+        </a>
+        <p class="feature-panel-cap">Data pipeline: extraction → detection → caption generation → filtering → editing augmentation.</p>
+      </div>
+
+      <div class="feature-panel" data-color="purple">
+        <div class="feature-panel-title">SciFormaBench-2K</div>
+        <p class="feature-panel-text">2,000 held-out prompts stratified by structural complexity and deliberately weighted toward Medium and Hard, where dense multi-branch diagrams remain the real challenge. Each sample carries an element checklist extracted by GPT-5.4 and corrected by human annotators, then scored on the C/A/T axes with severity-weighted error counting.</p>
+        <div class="feature-stats">
+          <div class="feature-stat"><div class="feature-stat-num">500</div><div class="feature-stat-lbl">Simple</div></div>
+          <div class="feature-stat"><div class="feature-stat-num">900</div><div class="feature-stat-lbl">Medium</div></div>
+          <div class="feature-stat"><div class="feature-stat-num">600</div><div class="feature-stat-lbl">Hard</div></div>
+        </div>
+        <a class="glightbox feature-panel-img" href="assets/figures/structural_inv.png" data-gallery="hl">
+          <img src="assets/figures/structural_inv.png" width="100%" loading="lazy"/>
+        </a>
+        <p class="feature-panel-cap">Per-axis rubric with critical and moderate error annotations.</p>
+      </div>
+
+    </div>
   </div>
 </div>
 </section>
@@ -188,49 +204,81 @@
 </section>
 
 <section class="section">
-  <div class="container" style="margin-bottom:2vh">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <a class="glightbox" href="assets/figures/figure3_method.png">
-          <img src="assets/figures/figure3_method.png" width="100%" height="auto" style="border:none" loading="lazy" alt="SciForma method overview"/>
-        </a>
-        <p class="caption">SciForma training pipeline overview.</p>
+  <div class="container is-max-desktop" style="margin-bottom:2vh">
 
-        <div class="columns" style="margin-top:1.5rem">
-          <div class="column">
-            <div class="content has-text-justified">
-              <p><strong>Two-Stage SFT.</strong> SciForma fine-tunes FLUX.2-klein-base-9B in two stages. Stage 1 trains on the full 661K generation pairs at 768px and 1024px resolution. Stage 2 focuses on 244K high-quality pairs with richer structural complexity. All captions are structural inventories encoding Component, Arrow, and Text axes.</p>
-            </div>
-          </div>
-          <div class="column">
-            <div class="content has-text-justified">
-              <p><strong>M-DPO: Multi-Dimensional Conjunctive Preference Optimization.</strong> One winner vs. three axis-specific losers (C, A, T) per sample. A multi-way Bradley–Terry objective enforces <em>conjunctive correctness</em>: the update is positive only when the winner beats every loser simultaneously. Adaptive gradient reweighting concentrates effort on failing axes.</p>
-            </div>
+    <div style="max-width:960px;margin:0 auto 2rem">
+      <a class="glightbox" href="assets/figures/figure3_method.png">
+        <img src="assets/figures/figure3_method.png" width="100%" height="auto" style="border:none" loading="lazy" alt="SciForma method overview"/>
+      </a>
+      <p class="caption">SciForma training pipeline overview.</p>
+    </div>
+
+    <div class="feature-container">
+
+      <div class="feature-tabs">
+        <div class="feature-tab" data-color="teal" onclick="showFeature(0,'teal',event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7l9-4 9 4-9 4-9-4z"/>
+            <path d="M3 12l9 4 9-4"/>
+            <path d="M3 17l9 4 9-4"/>
+          </svg>
+          <span>Two-Stage SFT</span>
+        </div>
+
+        <div class="feature-tab" data-color="rose" onclick="showFeature(1,'rose',event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+          </svg>
+          <span>M-DPO</span>
+        </div>
+
+        <div class="feature-tab" data-color="indigo" onclick="showFeature(2,'indigo',event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12a8 8 0 1 1-2.34-5.66"/>
+            <path d="M20 4v5h-5"/>
+          </svg>
+          <span>Iterative Refinement</span>
+        </div>
+      </div>
+
+      <div class="feature-content-wrapper">
+
+        <div class="feature-panel" data-color="teal">
+          <div class="feature-panel-title">Two-Stage SFT</div>
+          <p class="feature-panel-text">SciForma fine-tunes FLUX.2-klein-base-9B on SciFormaPile in two stages. Stage 1 trains all 9B parameters on the full 656K generation pairs with resolution bucketing to keep batches spatially homogeneous across widely varying aspect ratios. Stage 2 initializes from Stage-1 EMA weights and co-trains on 244K High-quality pairs together with the 71K editing triplets, so a single checkpoint serves both generation and editing through a concat-then-prune design that adds no new parameters.</p>
+          <div class="feature-stats">
+            <div class="feature-stat"><div class="feature-stat-num">656K</div><div class="feature-stat-lbl">Stage 1 Pairs</div></div>
+            <div class="feature-stat"><div class="feature-stat-num">244K&nbsp;+&nbsp;71K</div><div class="feature-stat-lbl">Stage 2 Gen + Edit</div></div>
+            <div class="feature-stat"><div class="feature-stat-num">140K&nbsp;/&nbsp;90K</div><div class="feature-stat-lbl">Stage 1 / 2 Steps</div></div>
           </div>
         </div>
 
-        <!-- M-DPO figure + bullet highlights -->
-        <div style="margin-top:2rem;max-width:860px;margin-left:auto;margin-right:auto">
-          <a class="glightbox" href="assets/figures/ablation.png">
-            <img src="assets/figures/ablation.png" width="100%" height="auto" style="border:none" loading="lazy" alt="M-DPO ablation"/>
+        <div class="feature-panel" data-color="rose">
+          <div class="feature-panel-title">Multi-Dimensional Direct Preference Optimization</div>
+          <p class="feature-panel-text">SFT leaves axis-specific artifacts such as missing components, garbled labels, and broken arrows, and these failure modes are near-independent across the three axes (inter-axis <em>ρ</em> &lt; 0.2). MD³PO pairs each winner with dimension-anchored losers, one per axis, and couples them through an InfoNCE-style contrastive objective. The loss only vanishes when the policy prefers the winner on every axis simultaneously, and a softmax over per-axis reward gaps automatically concentrates gradient on whichever dimension is currently weakest.</p>
+          <a class="glightbox feature-panel-img" href="assets/figures/ablation.png" data-gallery="method">
+            <img src="assets/figures/ablation.png" width="100%" loading="lazy" alt="M-DPO ablation"/>
           </a>
-          <p class="fig-caption">M-DPO ablation on SciFormaBench-2K. Text axis benefits most (+3.16 pts).</p>
-          <div class="content" style="margin-top:1rem">
+          <p class="feature-panel-cap">M-DPO ablation on SciFormaBench-2K. Text axis benefits most (+3.16 pts).</p>
+          <div class="content" style="margin-top:1rem;font-size:.92rem">
             <ul>
-              <li><strong>Conjunctive objective.</strong> Correct only when all three axes improve simultaneously.</li>
-              <li><strong>Adaptive gradient focus.</strong> Failing axes receive concentrated gradient; satisfied axes near-zero.</li>
-              <li><strong>Multi-way Bradley–Terry.</strong> Equivalent to InfoNCE with D axis-anchored hard negatives.</li>
-              <li><strong>Strict DPO generalization.</strong> Reduces to standard DPO when D = 1.</li>
+              <li><strong>Conjunctive objective.</strong> Loss only vanishes when the winner beats every axis-anchored loser at once.</li>
+              <li><strong>Auto-focusing gradient.</strong> A softmax over per-axis logits sends the largest update to the failing axis.</li>
+              <li><strong>InfoNCE view.</strong> Equivalent to InfoNCE with <em>D</em> axis-anchored hard negatives.</li>
+              <li><strong>Standard DPO limit.</strong> Reduces exactly to standard DPO when <em>D</em> = 1.</li>
             </ul>
           </div>
         </div>
 
-        <!-- Iterative Refinement -->
-        <h3 class="title is-5" style="margin-top:2.5rem">Iterative Refinement via Editing</h3>
-        <a class="glightbox" href="assets/figures/supp_editing_details.png">
-          <img src="assets/figures/supp_editing_details.png" width="100%" height="auto" style="border:none" loading="lazy" alt="Editing pipeline"/>
-        </a>
-        <p class="fig-caption">Closed-loop editor: defect detection → priority-ranked edit plan → SciForma-9B targeted inpainting → global verification. Loop terminates when the structural inventory is satisfied.</p>
+        <div class="feature-panel" data-color="indigo">
+          <div class="feature-panel-title">Iterative Refinement via Editing</div>
+          <p class="feature-panel-text">At inference time a VLM critic inspects the generated diagram against its structural inventory and flags concrete defects, which are compiled into a priority-ranked edit plan. SciForma-9B applies each atomic edit through the same editing branch trained in Stage 2, and the loop repeats for a fixed number of rounds or stops early once the critic reports no remaining structural errors, yielding the closed-loop refinement shown below.</p>
+          <a class="glightbox feature-panel-img" href="assets/figures/supp_editing_details.png" data-gallery="method">
+            <img src="assets/figures/supp_editing_details.png" width="100%" loading="lazy" alt="Editing pipeline"/>
+          </a>
+          <p class="feature-panel-cap">Closed-loop editor. Defect detection, priority-ranked edit plan, SciForma-9B targeted inpainting, global verification. The loop terminates when the structural inventory is satisfied.</p>
+        </div>
 
       </div>
     </div>
@@ -480,20 +528,28 @@ function showMDPO(id){
   event.target.classList.add('active');
 }
 
-function toggleCard(idx){
-  [0,1,2].forEach(function(i){
-    var body = document.getElementById('body-'+i);
-    var card = document.getElementById('card-'+i);
-    if(i === idx){
-      var isOpen = body.style.display !== 'none';
-      body.style.display = isOpen ? 'none' : 'block';
-      card.classList.toggle('open', !isOpen);
-    } else {
-      body.style.display = 'none';
-      card.classList.remove('open');
-    }
-  });
+function showFeature(idx, color, ev){
+  var container = ev && ev.currentTarget ? ev.currentTarget.closest('.feature-container') : document.querySelector('.feature-container');
+  if(!container) return;
+  var tabs = container.querySelectorAll('.feature-tab');
+  var panels = container.querySelectorAll('.feature-panel');
+  tabs.forEach(function(t){ t.classList.remove('active-blue','active-amber','active-purple','active-teal','active-rose','active-indigo'); });
+  panels.forEach(function(p){ p.classList.remove('active'); });
+  if(tabs[idx]) tabs[idx].classList.add('active-'+color);
+  if(panels[idx]) panels[idx].classList.add('active');
 }
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.feature-container').forEach(function(c){
+    var first = c.querySelector('.feature-tab');
+    if(!first) return;
+    var color = first.getAttribute('data-color') || 'blue';
+    c.querySelectorAll('.feature-tab').forEach(function(t){ t.classList.remove('active-blue','active-amber','active-purple','active-teal','active-rose','active-indigo'); });
+    c.querySelectorAll('.feature-panel').forEach(function(p){ p.classList.remove('active'); });
+    first.classList.add('active-'+color);
+    var firstPanel = c.querySelector('.feature-panel');
+    if(firstPanel) firstPanel.classList.add('active');
+  });
+});
 </script>
 
 </body>
