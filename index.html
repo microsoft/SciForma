@@ -107,7 +107,8 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>Structural fidelity is the core bottleneck of scientific diagram generation. We introduce <strong>SciForma</strong>, a structure-faithful framework built on three universal primitives: <strong>Component</strong>, <strong>Arrow</strong>, and <strong>Text (C/A/T)</strong>. Powered by a scale-up dataset and our <strong>Multi-Dimensional Conjunctive Preference Optimization (M-DPO)</strong>, SciForma-9B successfully enforces simultaneous correctness across all axes, matching or exceeding proprietary-level generation models.
+          <p>
+          We introduce <strong>SciForma</strong>, a structure-faithful framework for scientific diagram generation built on three universal primitives: <strong>Component, Arrow, and Text (C/A/T)</strong>. Driven by a scaled-up dataset, <strong>Multi-Dimensional Conjunctive Preference Optimization (MD-CPO)</strong>, and iterative refinement, it enforces simultaneous correctness across layout, topology, and typography, matching or outperforming leading proprietary models.
           </p>
         </div>
       </div>
@@ -115,29 +116,68 @@
   </div>
 </section>
 
-<!-- ══ DATA & BENCHMARK ══ -->
-<section class="hero is-light is-small">
-  <div class="hero-body has-text-centered">
-    <h1 class="title is-2">SciFormaData-700K</h1>
-  </div>
-</section>
 
-<section class="section">
-  <div class="container" style="margin-bottom:2vh">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <div class="content has-text-justified">
-          <p><strong>Structural Inventory.</strong> SciForma formalizes diagrams with three universal primitives: <em>Component</em> (entities), <em>Arrow</em> (topology), and <em>Text</em> (annotations). These form the <strong>structural inventory</strong> — a ground-truth checklist shared by training captions and benchmark rubrics. Correctness is <strong>conjunctive</strong>: all three axes must be satisfied simultaneously.</p>
-          <p>726K methodology diagrams from 593K arXiv sources (2015–2025), each paired with a structural-inventory caption (547 tokens avg). Editing triplets (70K) are SAM3-grounded, OpenAI-o3-verified edits of 1–3 structural attributes. <strong>SciFormaBench-2K</strong>: 2,000 human-verified instances across Simple / Medium / Hard, judged by GPT-5.4.</p>
+
+<!-- ══ HIGHLIGHTS ══ -->
+<section class="section" style="padding:2.5rem 0">
+<div class="container is-max-desktop">
+  <div class="columns is-variable is-4">
+
+    <div class="column">
+      <div class="highlight-card" id="card-0" onclick="toggleCard(0)">
+        <div class="highlight-card-header">
+          <span class="highlight-icon">🔍</span>
+          <span class="highlight-title">Structural Inventory</span>
+          <span class="highlight-arrow" id="arrow-0">▾</span>
         </div>
-        <a class="glightbox" href="assets/figures/figure2_dataset.png">
-          <img src="assets/figures/figure2_dataset.png" width="100%" height="auto" style="border:none" loading="lazy" alt="SciFormaData-700K pipeline"/>
+        <p class="highlight-sub">Universal structural primitives</p>
+      </div>
+      <div class="highlight-body" id="body-0" style="display:none">
+        <p style="font-size:.88rem;line-height:1.7;margin-bottom:.8rem">Three independently verifiable primitives: <em>Component</em>, <em>Arrow</em>, <em>Text</em>. These form the <strong>structural inventory</strong>, shared by training captions and benchmark rubrics. Correctness is <strong>conjunctive</strong>.</p>
+        <a class="glightbox" href="assets/figures/features/structural primitives.png" data-gallery="hl">
+          <img src="assets/figures/features/structural primitives.png" width="100%" style="border:none;border-radius:6px" loading="lazy"/>
         </a>
-        <p class="caption">Data construction pipeline: PDF extraction → diagram detection → structured caption generation → quality filtering → editing augmentation.</p>
-
       </div>
     </div>
+
+    <div class="column">
+      <div class="highlight-card" id="card-1" onclick="toggleCard(1)">
+        <div class="highlight-card-header">
+          <span class="highlight-icon">📦</span>
+          <span class="highlight-title">SciFormaData-700K</span>
+          <span class="highlight-arrow" id="arrow-1">▾</span>
+        </div>
+        <p class="highlight-sub">661K pairs · 70K triplets · 338K papers</p>
+      </div>
+      <div class="highlight-body" id="body-1" style="display:none">
+        <p style="font-size:.88rem;line-height:1.7;margin-bottom:.8rem">726K diagrams from 593K arXiv sources (2015–2025), dual-VLM filtered. Captions are structural inventories (547 tokens avg). 70K editing triplets via SAM3-grounded inpainting, verified by OpenAI-o3.</p>
+        <a class="glightbox" href="assets/figures/figure2_dataset.png" data-gallery="hl">
+          <img src="assets/figures/figure2_dataset.png" width="100%" style="border:none;border-radius:6px" loading="lazy"/>
+        </a>
+        <p class="fig-caption">Data pipeline: extraction → detection → caption generation → filtering → editing augmentation.</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="highlight-card" id="card-2" onclick="toggleCard(2)">
+        <div class="highlight-card-header">
+          <span class="highlight-icon">📐</span>
+          <span class="highlight-title">SciFormaBench-2K</span>
+          <span class="highlight-arrow" id="arrow-2">▾</span>
+        </div>
+        <p class="highlight-sub">2K diagrams · S/M/H · GPT-5.4 judge</p>
+      </div>
+      <div class="highlight-body" id="body-2" style="display:none">
+        <p style="font-size:.88rem;line-height:1.7;margin-bottom:.8rem">2,000 human-verified instances: Simple (500), Medium (900), Hard (600). Each carries a structural inventory evaluated by GPT-5.4 along Component, Arrow, and Text axes.</p>
+        <a class="glightbox" href="assets/figures/structural_inv.png" data-gallery="hl">
+          <img src="assets/figures/structural_inv.png" width="100%" style="border:none;border-radius:6px" loading="lazy"/>
+        </a>
+        <p class="fig-caption">Per-axis rubric with critical and moderate error annotations.</p>
+      </div>
+    </div>
+
   </div>
+</div>
 </section>
 
 <!-- ══ METHOD ══ -->
@@ -438,6 +478,21 @@ function showMDPO(id){
   document.querySelectorAll('.mdpo-tab').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('mdpo-'+id).style.display='block';
   event.target.classList.add('active');
+}
+
+function toggleCard(idx){
+  [0,1,2].forEach(function(i){
+    var body = document.getElementById('body-'+i);
+    var card = document.getElementById('card-'+i);
+    if(i === idx){
+      var isOpen = body.style.display !== 'none';
+      body.style.display = isOpen ? 'none' : 'block';
+      card.classList.toggle('open', !isOpen);
+    } else {
+      body.style.display = 'none';
+      card.classList.remove('open');
+    }
+  });
 }
 </script>
 
