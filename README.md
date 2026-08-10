@@ -5,6 +5,8 @@
 <p>
   <a href="https://arxiv.org/abs/2607.18091"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2607.18091-b31b1b?logo=arxiv&logoColor=white" height="22" /></a>
   &nbsp;
+  <a href="https://microsoft.github.io/SciForma/"><img alt="Project Page" src="https://img.shields.io/badge/Project-Page-2ea44f?logo=githubpages&logoColor=white" height="22" /></a>
+  &nbsp;
   <a href="https://huggingface.co/microsoft/SciForma-9B"><img alt="Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97-Models-yellow" height="22" /></a>
   &nbsp;
   <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K"><img alt="Dataset" src="https://img.shields.io/badge/%F0%9F%A4%97-Dataset-green" height="22" /></a>
