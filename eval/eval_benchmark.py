@@ -1806,10 +1806,12 @@ def main():
     #   Paper scores (67.59% SciForma-Base, 69.51% SciForma-9B) were obtained
     #   with split_dims=True.
     #
-    # --rubrics_suffix "" (default: empty, loads benchmark_*_rubrics.json)
-    #   The official eval uses benchmark_{level}_rubrics.json (no suffix).
-    #   A _final variant exists but was created after the paper eval was run;
-    #   using _final gives slightly different inventory lists and incomparable scores.
+    # --rubrics_suffix "" (default: empty, loads the packaged rubric files).
+    #   The packaged eval/rubrics/{simple,medium,hard}.json files contain the
+    #   paper-final benchmark_*_rubrics_final.json content; their public names
+    #   intentionally remain suffix-free.
+    #   The older source files without _final contain an earlier inventory and
+    #   must not be used to reproduce the reported paper scores.
     parser.add_argument("--split_dims", action="store_true", default=True,
                         help="[FIXED=True] Evaluate each axis with a separate GPT call. "
                              "Must be True to reproduce paper scores.")
