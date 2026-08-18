@@ -1020,7 +1020,7 @@ def load_benchmark_entries_from_hf(
 
         gen_level_dir = None
         gen_dir_path = Path(gen_dir)
-        for alias in [level, "easy"] + [f"{level}_{n}" for n in [500, 900, 600, 800, 1000]]:
+        for alias in [level] + [f"{level}_{n}" for n in [500, 900, 600, 800, 1000]]:
             for cfg in ["cfg_4.0", "cfg_3.5", ""]:
                 c = gen_dir_path / alias / cfg if cfg else gen_dir_path / alias
                 if c.exists() and any(c.iterdir()):
@@ -1112,13 +1112,12 @@ def load_benchmark_entries(
     for level in levels:
         # Support two directory layouts:
         #   1. New layout (SciForma repo):  prompts/{level}.json + rubrics/{level}.json
-        #      where level names are: easy / medium / hard
+        #      where level names are: simple / medium / hard
         #   2. Legacy layout (benchmark_final): benchmark_{level}.json + benchmark_{level}_rubrics.json
         #      where level names are: simple / medium / hard
 
-        # Level name alias: "easy" == "simple"
-        bench_name  = "simple" if level == "easy" else level
-        display_lvl = level   # keep original name for output keys
+        bench_name  = level
+        display_lvl = level
 
         # Try new layout first, fall back to legacy
         new_bench  = bench_dir / "prompts" / f"{level}.json"
@@ -1185,10 +1184,8 @@ def load_benchmark_entries(
             local_indices = list(range(len(prompts)))
 
         # Detect gen image naming — try multiple level dir aliases
-        # Covers: simple, simple_500, simple_600, easy, etc.
+        # Covers: simple, simple_500, simple_600, etc.
         level_aliases = [level, f"{level}_{len(prompts)}"]
-        if level == "simple":
-            level_aliases.append("easy")
         # Also try old benchmark sizes (600/1000/800) for backward compat
         _OLD_SIZES = {"simple": [600], "medium": [1000], "hard": [800]}
         for old_n in _OLD_SIZES.get(level, []):

@@ -375,7 +375,7 @@ Evaluation benchmark — [`microsoft/SciFormaBench`](https://huggingface.co/data
 
 | Split         | Size |
 | ------------- | ---- |
-| Simple (easy) | 500  |
+| Simple        | 500  |
 | Medium        | 900  |
 | Hard          | 600  |
 
