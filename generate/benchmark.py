@@ -3,17 +3,12 @@
 SciForma — Benchmark Image Generation
 
 Generates images for SciFormaBench-2K (simple / medium / hard splits).
-Supports both HuggingFace models and local EMA checkpoints (ema_weights.pt).
-
-Usage — HuggingFace model:
-    python generate/benchmark.py \
-        --model_path microsoft/SciForma-9B \
-        --split simple medium hard \
-        --output_dir ./benchmark_outputs/sciforma-9b
+Loads models from local directories and supports local EMA checkpoints
+(`ema_weights.pt`).
 
 Usage — local EMA checkpoint (e.g., your own trained model):
     python generate/benchmark.py \
-        --model_path black-forest-labs/FLUX.2-klein-base-9B \
+        --model_path /path/to/local/FLUX.2-klein-base-9B \
         --ema_weights /path/to/checkpoint-90000/ema_weights.pt \
         --split simple medium hard \
         --output_dir ./benchmark_outputs/sciforma-base
@@ -37,7 +32,7 @@ from pathlib import Path
 
 import torch
 from PIL import Image
-from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
+from diffusers import Flux2KleinPipeline
 
 
 CFG = 4.0
@@ -100,9 +95,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model_path", type=str,
-        default="microsoft/SciForma-9B",
-        help="HuggingFace repo ID or local directory. "
-             "Use 'microsoft/SciForma-9B' → official SciForma-9B model on HuggingFace.",
+        required=True,
+        help="Local full-pipeline directory. Remote model IDs are not accepted.",
     )
     parser.add_argument(
         "--ema_weights", type=str, default=None,
@@ -164,40 +158,15 @@ def main():
     args = parse_args()
     hf_token = os.environ.get("HF_TOKEN")
 
+    model_path = Path(args.model_path).expanduser().resolve()
+    if not model_path.is_dir():
+        raise ValueError(f"--model_path must be a local directory: {model_path}")
+
     print(f"\n{'='*60}")
-    print(f"Loading pipeline: {args.model_path}")
-
-    # If model_path only has transformer weights (SciForma-Base/9B on HF),
-    # load the full pipeline from FLUX base + inject fine-tuned transformer.
-    from huggingface_hub import model_info as hf_model_info
-    try:
-        info = hf_model_info(args.model_path, token=hf_token)
-        files = [f.rfilename for f in info.siblings]
-        has_full_pipeline = any("scheduler_config.json" in f for f in files)
-    except Exception:
-        has_full_pipeline = True  # local path, try directly
-
-    if not has_full_pipeline:
-        BASE_MODEL = "black-forest-labs/FLUX.2-klein-base-9B"
-        print(f"  Transformer-only repo detected → loading base pipeline from {BASE_MODEL}")
-        transformer = Flux2Transformer2DModel.from_pretrained(
-            args.model_path,
-            subfolder="transformer",
-            torch_dtype=DTYPE,
-            token=hf_token,
-        )
-        pipe = Flux2KleinPipeline.from_pretrained(
-            BASE_MODEL,
-            transformer=transformer,
-            torch_dtype=DTYPE,
-            token=hf_token,
-        )
-    else:
-        pipe = Flux2KleinPipeline.from_pretrained(
-            args.model_path,
-            torch_dtype=DTYPE,
-            token=hf_token,
-        )
+    print(f"Loading local pipeline: {model_path}")
+    pipe = Flux2KleinPipeline.from_pretrained(
+        str(model_path), torch_dtype=DTYPE, local_files_only=True
+    )
 
     if args.ema_weights:
         print(f"\nApplying EMA weights: {args.ema_weights}")

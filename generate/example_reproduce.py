@@ -16,6 +16,7 @@ torch.Generator("cpu") produces completely different noise even with the same se
 
 Usage:
     python generate/example_reproduce.py \
+        --model_path /path/to/local/FLUX.2-klein-base-9B \
         --ema_weights /path/to/checkpoint-4000/ema_weights.pt \
         --output_dir ./outputs/example
 """
@@ -63,10 +64,10 @@ def main():
     repo_root = Path(__file__).resolve().parent.parent
 
     parser = argparse.ArgumentParser(description="Reproduce a single SciForma benchmark image")
-    parser.add_argument("--model_path", default="microsoft/SciForma-9B",
-                        help="HuggingFace repo ID or base model path")
-    parser.add_argument("--ema_weights", default=None,
-                        help="Path to ema_weights.pt (overrides model_path weights)")
+    parser.add_argument("--model_path", required=True,
+                        help="Local full-pipeline directory")
+    parser.add_argument("--ema_weights", required=True,
+                        help="Path to local ema_weights.pt")
     parser.add_argument("--output_dir", default="./outputs/example",
                         help="Where to save the generated image")
     args = parser.parse_args()
@@ -83,13 +84,14 @@ def main():
     print(f"Prompt: {prompt[:80]}...\n")
 
     # ── Load model ────────────────────────────────────────────────────────────
-    hf_token = __import__("os").environ.get("HF_TOKEN")
-    print(f"Loading pipeline: {args.model_path}")
+    model_path = Path(args.model_path).expanduser().resolve()
+    if not model_path.is_dir():
+        raise ValueError(f"--model_path must be a local directory: {model_path}")
+    print(f"Loading local pipeline: {model_path}")
     pipe = Flux2KleinPipeline.from_pretrained(
-        args.model_path, torch_dtype=DTYPE, token=hf_token,
+        str(model_path), torch_dtype=DTYPE, local_files_only=True,
     )
-    if args.ema_weights:
-        load_ema_weights(args.ema_weights, pipe.transformer)
+    load_ema_weights(args.ema_weights, pipe.transformer)
 
     pipe = pipe.to("cuda")   # full GPU — matches original inference setup
     pipe.transformer.eval()

@@ -26,9 +26,8 @@ transformer_cfg = dict(type='Flux2Transformer2DModel')
 
 # ── Checkpoint init ────────────────────────────────────────────────────────────
 # Init policy and reference from SciForma-Base
-# Option A (HuggingFace, recommended): loads transformer weights directly
-#   SCIFORMA_STAGE2_CKPT not set → falls back to HF model
-# Option B (local EMA weights): set SCIFORMA_STAGE2_CKPT=/path/to/ema_weights.pt
+# Set SCIFORMA_STAGE2_CKPT to a local Stage 2 EMA checkpoint. The default below
+# is the corresponding path under SCIFORMA_DATA_ROOT.
 _base_ckpt = os.environ.get(
     "SCIFORMA_STAGE2_CKPT",
     # local fallback path (B200 experiment)
