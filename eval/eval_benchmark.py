@@ -106,7 +106,7 @@ logger = logging.getLogger(__name__)
 # Copy eval/judge_config.example.py → eval/judge_config.py and fill in
 # your credentials. judge_config.py is gitignored and never committed.
 _JUDGE_BACKEND      = "azure_cli"   # default (overridden by judge_config if present)
-_JUDGE_DEPLOYMENT   = "gpt-4o"     # paper used gpt-5.4; gpt-4o is the public equivalent
+_JUDGE_DEPLOYMENT   = "gpt-5.4"    # paper benchmark judge
 ENDPOINT_TOKEN_SCOPE: dict[str, str] = {}   # populated below from judge_config
 
 try:

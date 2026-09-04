@@ -308,12 +308,12 @@ Generated images are saved as `promptNNNN_<slug>.png` in `<output_dir>/<split>/c
 python eval/eval_benchmark.py \
     --gen_dir  ./results/sciforma-9b \
     --output_dir ./eval_results/sciforma-9b \
-    --deployment_name gpt-4o
+    --deployment_name gpt-5.4
 ```
 
 Results in `eval_results/sciforma-9b/eval_summary.json`.
 
-> **Judge model**: Paper used `gpt-5.4`. `gpt-4o` is the publicly available alternative with comparable scores (±1%). Set `AZURE_OPENAI_ENDPOINT` in `.env` for Azure, or `OPENAI_API_KEY` for standard OpenAI.
+> **Judge model**: Paper results were evaluated with `gpt-5.4`. Use the same model to reproduce the reported Component / Arrow / Text scores. Set `AZURE_OPENAI_ENDPOINT` in `.env` for Azure, or `OPENAI_API_KEY` for standard OpenAI.
 
 ---
 
