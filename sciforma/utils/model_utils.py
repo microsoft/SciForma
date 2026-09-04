@@ -258,7 +258,7 @@ def load_ema_into_transformer(ema_weights_path: str, transformer) -> None:
 
 
 def load_sciforma_transformer(
-    model_id: str = "microsoft/SciForma-9B",
+    model_id: str = "LoYuXrqw/SciForma-9B",
     dtype: torch.dtype = torch.bfloat16,
     device: str = "cuda",
     ema_weights_path: str = None,
@@ -268,7 +268,7 @@ def load_sciforma_transformer(
     Load a SciForma transformer from HuggingFace or a local EMA checkpoint.
 
     Args:
-        model_id: HF model ID (e.g., 'microsoft/SciForma-9B') or local path.
+        model_id: HF model ID (e.g., 'LoYuXrqw/SciForma-9B') or local path.
         dtype: Model dtype (default: bfloat16).
         device: Target device.
         ema_weights_path: Optional path to local ema_weights.pt.
@@ -276,7 +276,7 @@ def load_sciforma_transformer(
 
     Examples:
         # From HuggingFace (recommended)
-        transformer = load_sciforma_transformer("microsoft/SciForma-9B")
+        transformer = load_sciforma_transformer("LoYuXrqw/SciForma-9B")
 
         # From local EMA checkpoint
         transformer = load_sciforma_transformer(

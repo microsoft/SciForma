@@ -7,7 +7,7 @@
   &nbsp;
   <a href="https://microsoft.github.io/SciForma/"><img alt="Project Page" src="https://img.shields.io/badge/Project-Page-2ea44f?logo=githubpages&logoColor=white" height="22" /></a>
   &nbsp;
-  <a href="https://huggingface.co/microsoft/SciForma-9B"><img alt="Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97-Models-yellow" height="22" /></a>
+  <a href="https://huggingface.co/LoYuXrqw/SciForma-9B"><img alt="Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97-Models-yellow" height="22" /></a>
   &nbsp;
   <a href="https://huggingface.co/datasets/microsoft/SciFormaData-700K"><img alt="Dataset" src="https://img.shields.io/badge/%F0%9F%A4%97-Dataset-green" height="22" /></a>
   &nbsp;
@@ -57,8 +57,8 @@ On **AIBench**, SciForma-9B reaches **70.29**, edging human-drawn originals (70.
 
 | Model                   | Overall ↑      | Comp. ↑ | Arrow ↑ | Text ↑ | Download                                                        |
 | ----------------------- | --------------- | -------- | -------- | ------- | --------------------------------------------------------------- |
-| **SciForma-9B**   | **69.51** | 74.49    | 66.46    | 67.00   | [🤗 HuggingFace](https://huggingface.co/microsoft/SciForma-9B)   |
-| **SciForma-Base** | 67.59           | 73.52    | 64.64    | 63.84   | [🤗 HuggingFace](https://huggingface.co/microsoft/SciForma-Base) |
+| **SciForma-9B**   | **69.51** | 74.49    | 66.46    | 67.00   | [🤗 HuggingFace](https://huggingface.co/LoYuXrqw/SciForma-9B)   |
+| **SciForma-Base** | 67.59           | 73.52    | 64.64    | 63.84   | [🤗 HuggingFace](https://huggingface.co/LoYuXrqw/SciForma-Base) |
 
 Both models are fine-tuned from [FLUX.2-klein-base-9B](https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B).
 
@@ -140,7 +140,7 @@ from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
 
 # Load fine-tuned transformer from HuggingFace
 transformer = Flux2Transformer2DModel.from_pretrained(
-    "microsoft/SciForma-9B",
+    "LoYuXrqw/SciForma-9B",
     subfolder="transformer",
     torch_dtype=torch.bfloat16,
     token="hf_...",
@@ -186,7 +186,7 @@ import torch
 from diffusers import Flux2KleinPipeline
 
 transformer = Flux2Transformer2DModel.from_pretrained(
-    "microsoft/SciForma-9B", subfolder="transformer",
+    "LoYuXrqw/SciForma-9B", subfolder="transformer",
     torch_dtype=torch.bfloat16, token="hf_...",
 )
 pipe = Flux2KleinPipeline.from_pretrained(
@@ -273,7 +273,7 @@ Prompts, GT images, and rubrics are loaded automatically from [`microsoft/SciFor
 ```bash
 # Generate all three splits (prompts loaded from HF automatically)
 python generate/benchmark.py \
-    --model_path microsoft/SciForma-9B \
+    --model_path LoYuXrqw/SciForma-9B \
     --split simple medium hard \
     --output_dir ./results/sciforma-9b
 

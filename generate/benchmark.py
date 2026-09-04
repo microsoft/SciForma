@@ -7,7 +7,7 @@ Supports both HuggingFace models and local EMA checkpoints (ema_weights.pt).
 
 Usage — HuggingFace model:
     python generate/benchmark.py \
-        --model_path microsoft/SciForma-9B \
+        --model_path LoYuXrqw/SciForma-9B \
         --split simple medium hard \
         --output_dir ./benchmark_outputs/sciforma-9b
 
@@ -100,9 +100,9 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model_path", type=str,
-        default="microsoft/SciForma-9B",
+        default="LoYuXrqw/SciForma-9B",
         help="HuggingFace repo ID or local directory. "
-             "Use 'microsoft/SciForma-9B' → official SciForma-9B model on HuggingFace.",
+             "Use 'LoYuXrqw/SciForma-9B' → SciForma-9B model on HuggingFace.",
     )
     parser.add_argument(
         "--ema_weights", type=str, default=None,

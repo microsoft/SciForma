@@ -63,7 +63,7 @@ def main():
     repo_root = Path(__file__).resolve().parent.parent
 
     parser = argparse.ArgumentParser(description="Reproduce a single SciForma benchmark image")
-    parser.add_argument("--model_path", default="microsoft/SciForma-9B",
+    parser.add_argument("--model_path", default="LoYuXrqw/SciForma-9B",
                         help="HuggingFace repo ID or base model path")
     parser.add_argument("--ema_weights", default=None,
                         help="Path to ema_weights.pt (overrides model_path weights)")

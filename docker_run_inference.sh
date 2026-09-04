@@ -27,7 +27,7 @@ docker run --rm -it \
     --env CUDA_VISIBLE_DEVICES="$GPU_IDS" \
     "$IMAGE" \
     python generate/benchmark.py \
-        --model_path microsoft/SciForma-9B \
+        --model_path LoYuXrqw/SciForma-9B \
         --split simple medium hard \
         --output_dir /workspace/output/sciforma-9b \
         --cfg 4.0 --steps 50 --max_seq_len 2048 \

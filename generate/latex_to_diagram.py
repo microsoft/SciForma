@@ -14,11 +14,11 @@ Usage:
         --latex path/to/paper.tex \\
         --list_captions
 
-    # Custom model (default: microsoft/SciForma-9B):
+    # Custom model (default: LoYuXrqw/SciForma-9B):
     python generate/latex_to_diagram.py \\
         --latex paper.tex \\
         --caption "..." \\
-        --model_path microsoft/SciForma-Base \\
+        --model_path LoYuXrqw/SciForma-Base \\
         --output figure.png
 
 Environment variables (set ONE of):
@@ -52,7 +52,7 @@ from generate.agents.condense import condense
 
 def generate_image(
     prompt: str,
-    model_path: str = "microsoft/SciForma-9B",
+    model_path: str = "LoYuXrqw/SciForma-9B",
     output: str = "output.png",
     width: int = 1008,
     height: int = 576,
@@ -173,7 +173,7 @@ def parse_args():
                    help="Figure caption (\\caption{...} text to target)")
     p.add_argument("--output",       default="output.png",
                    help="Output PNG path")
-    p.add_argument("--model_path",   default="microsoft/SciForma-9B",
+    p.add_argument("--model_path",   default="LoYuXrqw/SciForma-9B",
                    help="HuggingFace model ID or local path")
     p.add_argument("--llm_model",    default="gpt-4o",
                    help="LLM for planning/condensing (gpt-4o, o3, etc.)")
