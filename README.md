@@ -410,6 +410,21 @@ Key hyperparameters: `dpo_beta=2000`, `sft_weight=0`, `lr=1e-6`, logit-normal ti
 
 ---
 
+## Citation
+
+If you find SciForma useful, please cite:
+
+```bibtex
+@article{luo2026sciforma,
+  title={SciForma: Structure-Faithful Generation of Scientific Diagrams},
+  author={Luo, Yuxuan and Zhang, Peng and Zhang, Xinjie and Guo, Xun and Lian, Zhouhui and Lu, Yan},
+  journal={arXiv preprint arXiv:2607.18091},
+  year={2026}
+}
+```
+
+---
+
 ## License
 
 The code in this repository is released under the [MIT License](LICENSE). The pretrained model weights (SciForma-Base, SciForma-9B) are released under the [FLUX Non-Commercial License v2.1](https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B/blob/main/LICENSE.md) inherited from FLUX.2-klein-base-9B.
