@@ -8,7 +8,7 @@ openai==2.14.0
 azure-identity==1.25.1
 python-dotenv==1.2.1
 Pillow==11.3.0
-gradio==5.50.0
+gradio==6.15.1
 gradio-client==1.14.0
 huggingface-hub==0.36.2
 fastapi==0.141.1
