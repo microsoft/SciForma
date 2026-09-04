@@ -1,137 +1,90 @@
 #!/usr/bin/env python3
-"""
-SciForma — Minimal Reproducible Example
-=========================================
-Reproduces the specific benchmark image:
-  hard split, local index 494 (old_local_idx=640)
-  "The figure illustrates a three-stage pipeline for efficient 3D scene rendering..."
+"""Generate the CSSL showcase adapted from SciFormaBench-2K medium sample #910."""
 
-Expected output: prompt0494_The_figure_illustrates_a_three-stage_pipeline_for.png
-Resolution: 1728 × 576
-
-⚠️  REPRODUCIBILITY NOTE (复现性说明)
-torch.Generator(device="cuda") is REQUIRED to reproduce paper results.
-torch.Generator("cpu") produces completely different noise even with the same seed.
-必须使用 torch.Generator(device="cuda")，CPU generator 即使相同 seed 也产生不同噪声。
-
-Usage:
-    python generate/example_reproduce.py \
-        --ema_weights /path/to/checkpoint-4000/ema_weights.pt \
-        --output_dir ./outputs/example
-"""
 import argparse
-import json
-from collections import OrderedDict
+import os
 from pathlib import Path
 
 import torch
-from diffusers import Flux2KleinPipeline
+from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
 
-# ── Paper-fixed constants ─────────────────────────────────────────────────────
-CFG       = 4.0
+MODEL_ID = "LoYuXrqw/SciForma-9B"
+BASE_MODEL_ID = "black-forest-labs/FLUX.2-klein-base-9B"
+WIDTH, HEIGHT = 1600, 640
+CFG = 4.0
 NUM_STEPS = 50
-MAX_SEQ   = 2048
-SEED_BASE = 42
-DTYPE     = torch.bfloat16
+MAX_SEQ_LEN = 2048
+SEED = 42
+DTYPE = torch.bfloat16
 
-# ── Target sample ─────────────────────────────────────────────────────────────
-SPLIT       = "hard"
-LOCAL_IDX   = 494      # index in eval/prompts/hard.json (current 600-prompt set)
-OLD_LOCAL_IDX = 640    # index in original 800-prompt generation set (used for paper seed)
+PROMPT = """Create a clean scientific diagram of the Context-aware Sparse Spatiotemporal Learning (CSSL) framework for event-based vision.
 
-# ⚠️  CRITICAL: Use old_local_idx for seed to reproduce paper result.
-# The paper generated images using seed = SEED_BASE + old_local_idx (i.e. 42+640=682).
-# Using seed = SEED_BASE + LOCAL_IDX (42+494=536) produces a DIFFERENT image.
-REPRODUCTION_SEED = SEED_BASE + OLD_LOCAL_IDX  # = 682, matches paper
+LAYOUT:
+Use a single left-to-right pipeline on a white background. Place the main components in this order: Event flow, Convolution, Dense output feature, Threshold operator, Sparse feature, and two output tasks stacked vertically on the far right.
 
-# File name: prompt0494_The_figure_illustrates_a_three-stage_pipeline_for.png
+COMPONENTS:
+- Event flow: a 3D x-y-t cube containing red and blue event points.
+- Convolution: one light-blue rectangular module labeled "Convolution".
+- Dense output feature: a stack of gray grid feature maps labeled "Dense output feature".
+- Context-aware Threshold: one peach grid below the dense feature maps, labeled "Context-aware Threshold".
+- Threshold operator: one gray circle containing a step-function symbol.
+- Sparse feature: a stack of white grid maps with a few red active cells, labeled "Sparse feature".
+- Event-based object detection: a grayscale street image with colored bounding boxes, placed at the upper right.
+- Event-based optical flow: a colorful optical-flow street image, placed at the lower right.
+
+CONNECTIONS:
+Event flow feeds Convolution. Convolution has two outgoing paths: the main horizontal path goes to Dense output feature, while one short downward path goes to Context-aware Threshold. Dense output feature and Context-aware Threshold each feed the same Threshold operator. The Threshold operator feeds Sparse feature. From the right edge of Sparse feature, draw two completely separate outgoing arrows: one direct diagonal arrow to the upper Event-based object detection panel, and one direct diagonal arrow to the lower Event-based optical flow panel.
+
+Draw each connection once. Use only short, straight or right-angle, solid blue arrows with clear arrowheads. The two output arrows must remain visually separate from start to finish: do not merge them into a shared trunk, vertical bus, bracket, fork node, or intermediate junction. Do not show edge numbers or edge labels. Do not draw curved arrows, feedback loops, bidirectional arrows, crossing lines, direct arrows from Event flow to Context-aware Threshold, or direct arrows from Dense output feature to Sparse feature. Keep labels readable and do not add extra modules or connections."""
 
 
-def load_ema_weights(ema_path: str, transformer) -> None:
-    """Load EMA shadow_params into transformer (required for paper-quality output)."""
-    print(f"  Loading EMA weights: {ema_path}")
-    ema = torch.load(ema_path, map_location="cpu", weights_only=False)
-    shadow = ema["shadow_params"]
-    names = [n for n, _ in transformer.named_parameters()]
-    assert len(shadow) == len(names), f"Mismatch: shadow={len(shadow)} model={len(names)}"
-    state = OrderedDict((n, s.to(DTYPE)) for n, s in zip(names, shadow))
-    transformer.load_state_dict(state, strict=False)
-    print(f"  Loaded {len(state)} EMA parameters ✓")
+def parse_args():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model_path", default=MODEL_ID,
+                        help="Hugging Face transformer repo ID or local directory")
+    parser.add_argument("--base_model_path", default=BASE_MODEL_ID,
+                        help="Hugging Face base pipeline ID or local directory")
+    parser.add_argument("--output", default="cssl_showcase.png",
+                        help="Output PNG path")
+    parser.add_argument("--cpu_offload", action="store_true",
+                        help="Use CPU offload if the full pipeline does not fit on the GPU")
+    return parser.parse_args()
 
 
 def main():
-    repo_root = Path(__file__).resolve().parent.parent
-
-    parser = argparse.ArgumentParser(description="Reproduce a single SciForma benchmark image")
-    parser.add_argument("--model_path", default="LoYuXrqw/SciForma-9B",
-                        help="HuggingFace repo ID or base model path")
-    parser.add_argument("--ema_weights", default=None,
-                        help="Path to ema_weights.pt (overrides model_path weights)")
-    parser.add_argument("--output_dir", default="./outputs/example",
-                        help="Where to save the generated image")
-    args = parser.parse_args()
-
-    # ── Load benchmark prompt ─────────────────────────────────────────────────
-    prompt_file = repo_root / "benchmark" / "prompts" / f"{SPLIT}.json"
-    bench  = json.loads(prompt_file.read_text())
-    prompt = bench["validation_prompts"][LOCAL_IDX]
-    width, height = bench["resolution_list"][LOCAL_IDX]  # [1728, 576]
-
-    print(f"\nTarget: {SPLIT} split, index={LOCAL_IDX} (original index={OLD_LOCAL_IDX})")
-    print(f"Resolution: {width}×{height}")
-    print(f"Seed: {SEED_BASE} + {OLD_LOCAL_IDX} (old_local_idx) = {REPRODUCTION_SEED}")
-    print(f"Prompt: {prompt[:80]}...\n")
-
-    # ── Load model ────────────────────────────────────────────────────────────
-    hf_token = __import__("os").environ.get("HF_TOKEN")
-    print(f"Loading pipeline: {args.model_path}")
-    pipe = Flux2KleinPipeline.from_pretrained(
-        args.model_path, torch_dtype=DTYPE, token=hf_token,
+    args = parse_args()
+    transformer = Flux2Transformer2DModel.from_pretrained(
+        args.model_path,
+        subfolder="transformer",
+        torch_dtype=DTYPE,
     )
-    if args.ema_weights:
-        load_ema_weights(args.ema_weights, pipe.transformer)
-
-    pipe = pipe.to("cuda")   # full GPU — matches original inference setup
+    pipe = Flux2KleinPipeline.from_pretrained(
+        args.base_model_path,
+        transformer=transformer,
+        torch_dtype=DTYPE,
+        token=os.environ.get("HF_TOKEN"),
+    )
+    if args.cpu_offload:
+        pipe.enable_model_cpu_offload()
+    else:
+        pipe.to("cuda")
     pipe.transformer.eval()
-    print("Pipeline ready.\n")
-
-    # ── Generate ──────────────────────────────────────────────────────────────
-    # ⚠️  CRITICAL: must use Generator(device="cuda"), NOT Generator("cpu")
-    # Verified: cuda generator reproduces ~9px mean diff vs original;
-    #           cpu generator produces ~43px mean diff (4.9x worse)
-    # ⚠️  CRITICAL: use REPRODUCTION_SEED (=682) not SEED_BASE+LOCAL_IDX (=536)
-    # Paper generated with seed = 42 + old_local_idx = 42 + 640 = 682
-    generator = torch.Generator(device="cuda").manual_seed(REPRODUCTION_SEED)
 
     with torch.no_grad():
         image = pipe(
-            prompt=prompt,
-            width=width,
-            height=height,
+            prompt=PROMPT,
+            width=WIDTH,
+            height=HEIGHT,
             num_inference_steps=NUM_STEPS,
             guidance_scale=CFG,
-            max_sequence_length=MAX_SEQ,
-            generator=generator,
-            output_type="pil",
+            max_sequence_length=MAX_SEQ_LEN,
+            generator=torch.Generator(device="cuda").manual_seed(SEED),
         ).images[0]
 
-    # ── Save ──────────────────────────────────────────────────────────────────
-    import os, re
-    os.makedirs(args.output_dir, exist_ok=True)
-    slug = "".join(c if c.isalnum() or c in " -_" else "_" for c in prompt[:50]).strip().replace(" ", "_")
-    fname = f"prompt{LOCAL_IDX:04d}_{slug}.png"
-    out_path = os.path.join(args.output_dir, fname)
-    image.save(out_path)
-
-    print(f"✓ Saved: {out_path}")
-    print(f"  Size: {image.size}")
-    print()
-    print("To verify reproduction quality vs. original:")
-    print("  import numpy as np; from PIL import Image")
-    print(f"  orig = Image.open('/path/to/original/prompt0640_....png')")
-    print(f"  gen  = Image.open('{out_path}')")
-    print("  diff = np.abs(np.array(orig).astype(int) - np.array(gen).astype(int)).mean()")
-    print("  # Expected: ~9px with cuda generator | ~43px with cpu generator")
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    image.save(output)
+    print(f"Saved {output} ({WIDTH}x{HEIGHT}, seed={SEED}, cfg={CFG})")
 
 
 if __name__ == "__main__":

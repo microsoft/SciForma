@@ -179,7 +179,7 @@ image.save("output.png")
 ```
 
 <details>
-<summary><b>Minimal Reproduction Example</b> (SciFormaBench-2K hard split, sample #640)</summary>
+<summary><b>Showcase Example</b> (adapted from SciFormaBench-2K medium sample #910)</summary>
 
 ```python
 import os
@@ -199,27 +199,37 @@ pipe = Flux2KleinPipeline.from_pretrained(
 pipe.enable_model_cpu_offload()
 pipe.transformer.eval()
 
-# SciFormaBench-2K  |  hard split  |  original index=640  |  seed=42+640=682
-prompt = """The figure illustrates a three-stage pipeline for efficient 3D scene rendering using a mixture-of-experts framework with pretrained NeRFs. The global layout is divided into three main sections: 1. Sampling and filtering of 3D points, 2. Gate G, and 3. Radiance computation with pretrained NeRFs Experts. These are arranged left-to-right, with data flow indicated by arrows connecting components across stages.
+# Adapted from SciFormaBench-2K medium sample #910; fixed seed for this showcase.
+prompt = """Create a clean scientific diagram of the Context-aware Sparse Spatiotemporal Learning (CSSL) framework for event-based vision.
 
-In Stage 1, 'Sampling and filtering of 3D points', a 3D volume V_D is shown with a ray passing through it, sampling points (x,y,z) along the ray. A density field is computed at each point, and a filtering step discards low-density points, leaving only high-density points x_p for further processing. This stage outputs a set of filtered 3D points.
+LAYOUT:
+Use a single left-to-right pipeline on a white background. Place the main components in this order: Event flow, Convolution, Dense output feature, Threshold operator, Sparse feature, and two output tasks stacked vertically on the far right.
 
-Stage 2, labeled 'Gate G', processes the filtered points. Each point is fed into a small MLP, which outputs a vector that is passed through a Softmax layer to produce a probability field G(x_i). This probability field represents the likelihood of assigning each point to one of several experts. The output is a set of probabilities, visualized as a bar chart, indicating the distribution over experts. The gate module is represented as a purple grid cube (V_G), symbolizing the input feature space, connected to the small MLP (yellow double-layer block) and then to the Softmax (green block).
+COMPONENTS:
+- Event flow: a 3D x-y-t cube containing red and blue event points.
+- Convolution: one light-blue rectangular module labeled "Convolution".
+- Dense output feature: a stack of gray grid feature maps labeled "Dense output feature".
+- Context-aware Threshold: one peach grid below the dense feature maps, labeled "Context-aware Threshold".
+- Threshold operator: one gray circle containing a step-function symbol.
+- Sparse feature: a stack of white grid maps with a few red active cells, labeled "Sparse feature".
+- Event-based object detection: a grayscale street image with colored bounding boxes, placed at the upper right.
+- Event-based optical flow: a colorful optical-flow street image, placed at the lower right.
 
-Stage 3, 'Radiance computation with pretrained NeRFs Experts', receives the probability field from the gate. A 'Top-K' selection module dispatches the points to the K most probable experts. Experts are depicted as green rectangular blocks, with dashed outlines for inactive experts and solid green for active ones. Each selected expert E_i (e.g., E_q, E_t, E_0) processes the assigned points and outputs color and density values (c_i,f, σ_i,f) for the corresponding point. These outputs are aggregated via element-wise multiplication with the gating probability (c_i, σ_i) to produce final color and density values (c_f, σ_f).
+CONNECTIONS:
+Event flow feeds Convolution. Convolution has two outgoing paths: the main horizontal path goes to Dense output feature, while one short downward path goes to Context-aware Threshold. Dense output feature and Context-aware Threshold each feed the same Threshold operator. The Threshold operator feeds Sparse feature. From the right edge of Sparse feature, draw two completely separate outgoing arrows: one direct diagonal arrow to the upper Event-based object detection panel, and one direct diagonal arrow to the lower Event-based optical flow panel.
 
-The final step involves RGBσ Rendering, where the aggregated color and density values are used in the volume rendering equation to produce the final rendered image of a yellow construction vehicle on a textured ground plane. This rendered image is compared against a ground truth image, and the difference is used to compute losses: L_nerf (NeRF loss) and L_rw-aux (resolution-weighted auxiliary loss). These losses are backpropagated to refine the model, improving both rendering quality and efficiency. The entire process is designed to leverage multiple pretrained NeRF experts selectively, enabling high-quality, efficient rendering by focusing computation on the most relevant experts for each point."""
+Draw each connection once. Use only short, straight or right-angle, solid blue arrows with clear arrowheads. The two output arrows must remain visually separate from start to finish: do not merge them into a shared trunk, vertical bus, bracket, fork node, or intermediate junction. Do not show edge numbers or edge labels. Do not draw curved arrows, feedback loops, bidirectional arrows, crossing lines, direct arrows from Event flow to Context-aware Threshold, or direct arrows from Dense output feature to Sparse feature. Keep labels readable and do not add extra modules or connections."""
 
 with torch.no_grad():
     image = pipe(
         prompt=prompt,
-        width=1728, height=576,
+        width=1600, height=640,
         num_inference_steps=50,
         guidance_scale=4.0,
         max_sequence_length=2048,
-        generator=torch.Generator(device="cuda").manual_seed(682),
+        generator=torch.Generator(device="cuda").manual_seed(42),
     ).images[0]
-image.save("hard_640_three_stage_pipeline.png")
+image.save("cssl_showcase.png")
 ```
 
 </details>
