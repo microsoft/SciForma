@@ -1,7 +1,7 @@
 """
 latex_to_diagram.py — One-command LaTeX → scientific diagram generation.
 
-Pipeline: LaTeX → [Planner] → [Condense] → local SciForma checkpoint → PNG
+Pipeline: LaTeX → [Planner] → [Condense] → SciForma-9B → PNG
 
 Usage:
     python generate/latex_to_diagram.py \\
@@ -14,16 +14,18 @@ Usage:
         --latex path/to/paper.tex \\
         --list_captions
 
-    # Local model:
+    # Custom model (default: microsoft/SciForma-9B):
     python generate/latex_to_diagram.py \\
         --latex paper.tex \\
         --caption "..." \\
-        --model_path /path/to/local/pipeline \\
+        --model_path microsoft/SciForma-Base \\
         --output figure.png
 
 Environment variables (set ONE of):
     OPENAI_API_KEY=sk-xxx                         (standard OpenAI)
     AZURE_OPENAI_API_KEY + AZURE_OPENAI_ENDPOINT  (Azure OpenAI)
+
+    HF_TOKEN=hf_xxx    (if SciForma model repo is private)
 """
 from __future__ import annotations
 import argparse, asyncio, os, sys
@@ -50,7 +52,7 @@ from generate.agents.condense import condense
 
 def generate_image(
     prompt: str,
-    model_path: str,
+    model_path: str = "microsoft/SciForma-9B",
     output: str = "output.png",
     width: int = 1008,
     height: int = 576,
@@ -59,17 +61,34 @@ def generate_image(
     seed: int = 42,
 ):
     import torch
-    from diffusers import Flux2KleinPipeline
+    from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
 
-    local_model_path = Path(model_path).expanduser().resolve()
-    if not local_model_path.is_dir():
-        raise ValueError(f"--model_path must be a local directory: {local_model_path}")
-    print(f"\nLoading local pipeline from {local_model_path} ...")
-    pipe = Flux2KleinPipeline.from_pretrained(
-        str(local_model_path),
-        torch_dtype=torch.bfloat16,
-        local_files_only=True,
-    )
+    hf_token = os.environ.get("HF_TOKEN")
+    print(f"\nLoading SciForma transformer from {model_path} ...")
+
+    try:
+        from huggingface_hub import model_info
+        info = model_info(model_path, token=hf_token)
+        files = [f.rfilename for f in info.siblings]
+        has_full = any("scheduler_config.json" in f for f in files)
+    except Exception:
+        has_full = os.path.isdir(model_path)  # local path
+
+    if has_full:
+        pipe = Flux2KleinPipeline.from_pretrained(
+            model_path, torch_dtype=torch.bfloat16, token=hf_token
+        )
+    else:
+        BASE = "black-forest-labs/FLUX.2-klein-base-9B"
+        print(f"  Transformer-only repo → loading base pipeline from {BASE}")
+        transformer = Flux2Transformer2DModel.from_pretrained(
+            model_path, subfolder="transformer",
+            torch_dtype=torch.bfloat16, token=hf_token,
+        )
+        pipe = Flux2KleinPipeline.from_pretrained(
+            BASE, transformer=transformer,
+            torch_dtype=torch.bfloat16, token=hf_token,
+        )
 
     pipe.enable_model_cpu_offload()
     pipe.transformer.eval()
@@ -146,7 +165,7 @@ async def run_pipeline(args):
 
 def parse_args():
     p = argparse.ArgumentParser(
-        description="Generate a scientific diagram from LaTeX using a local SciForma checkpoint"
+        description="Generate a scientific diagram from LaTeX source using SciForma-9B"
     )
     p.add_argument("--latex",        required=True,
                    help="Path to .tex file, directory, or .tar.gz")
@@ -154,8 +173,8 @@ def parse_args():
                    help="Figure caption (\\caption{...} text to target)")
     p.add_argument("--output",       default="output.png",
                    help="Output PNG path")
-    p.add_argument("--model_path",   default=None,
-                   help="Local full-pipeline directory (required unless using --list_captions or --prompt_only)")
+    p.add_argument("--model_path",   default="microsoft/SciForma-9B",
+                   help="HuggingFace model ID or local path")
     p.add_argument("--llm_model",    default="gpt-4o",
                    help="LLM for planning/condensing (gpt-4o, o3, etc.)")
     p.add_argument("--width",        type=int, default=1008)

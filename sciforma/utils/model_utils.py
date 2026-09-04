@@ -258,41 +258,42 @@ def load_ema_into_transformer(ema_weights_path: str, transformer) -> None:
 
 
 def load_sciforma_transformer(
-    model_id: str,
+    model_id: str = "microsoft/SciForma-9B",
     dtype: torch.dtype = torch.bfloat16,
     device: str = "cuda",
     ema_weights_path: str = None,
     hf_token: str = None,
 ):
     """
-    Load a SciForma transformer from a local directory or local EMA checkpoint.
+    Load a SciForma transformer from HuggingFace or a local EMA checkpoint.
 
     Args:
-        model_id: Local model directory.
+        model_id: HF model ID (e.g., 'microsoft/SciForma-9B') or local path.
         dtype: Model dtype (default: bfloat16).
         device: Target device.
         ema_weights_path: Optional path to local ema_weights.pt.
-        hf_token: Deprecated; retained for API compatibility.
+        hf_token: HuggingFace token for private repos.
 
     Examples:
+        # From HuggingFace (recommended)
+        transformer = load_sciforma_transformer("microsoft/SciForma-9B")
+
         # From local EMA checkpoint
         transformer = load_sciforma_transformer(
-            "/path/to/local/FLUX.2-klein-base-9B",
+            "black-forest-labs/FLUX.2-klein-base-9B",
             ema_weights_path="/path/to/ema_weights.pt"
         )
     """
     import os
     from diffusers import Flux2Transformer2DModel
 
-    model_path = os.path.abspath(os.path.expanduser(model_id))
-    if not os.path.isdir(model_path):
-        raise ValueError(f"model_id must be a local directory: {model_path}")
+    token = hf_token or os.environ.get("HF_TOKEN")
 
     transformer = Flux2Transformer2DModel.from_pretrained(
-        model_path,
+        model_id,
         subfolder="transformer",
         torch_dtype=dtype,
-        local_files_only=True,
+        token=token,
     )
 
     if ema_weights_path:
