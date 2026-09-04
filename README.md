@@ -135,6 +135,7 @@ Expected output: `✅ All critical checks passed — ready to train!`
 Generate a scientific methodology diagram from a structured text description:
 
 ```python
+import os
 import torch
 from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
 
@@ -143,7 +144,6 @@ transformer = Flux2Transformer2DModel.from_pretrained(
     "LoYuXrqw/SciForma-9B",
     subfolder="transformer",
     torch_dtype=torch.bfloat16,
-    token="hf_...",
 )
 
 # Load full pipeline with base model components
@@ -151,7 +151,7 @@ pipe = Flux2KleinPipeline.from_pretrained(
     "black-forest-labs/FLUX.2-klein-base-9B",
     transformer=transformer,
     torch_dtype=torch.bfloat16,
-    token="hf_...",
+    token=os.environ["HF_TOKEN"],
 )
 pipe.enable_model_cpu_offload()
 pipe.transformer.eval()
@@ -182,16 +182,19 @@ image.save("output.png")
 <summary><b>Minimal Reproduction Example</b> (SciFormaBench-2K hard split, sample #640)</summary>
 
 ```python
+import os
 import torch
-from diffusers import Flux2KleinPipeline
+from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
 
 transformer = Flux2Transformer2DModel.from_pretrained(
     "LoYuXrqw/SciForma-9B", subfolder="transformer",
-    torch_dtype=torch.bfloat16, token="hf_...",
+    torch_dtype=torch.bfloat16,
 )
 pipe = Flux2KleinPipeline.from_pretrained(
     "black-forest-labs/FLUX.2-klein-base-9B",
-    transformer=transformer, torch_dtype=torch.bfloat16, token="hf_...",
+    transformer=transformer,
+    torch_dtype=torch.bfloat16,
+    token=os.environ["HF_TOKEN"],
 )
 pipe.enable_model_cpu_offload()
 pipe.transformer.eval()
@@ -230,6 +233,7 @@ All SciForma training checkpoints save EMA weights as `ema_weights.pt` (not `dif
 The EMA weights must be explicitly loaded into the transformer via `shadow_params`:
 
 ```python
+import os
 import torch
 from collections import OrderedDict
 from diffusers import Flux2KleinPipeline
@@ -249,7 +253,7 @@ def load_ema_into_transformer(ema_path: str, transformer) -> None:
 pipe = Flux2KleinPipeline.from_pretrained(
     "black-forest-labs/FLUX.2-klein-base-9B",
     torch_dtype=torch.bfloat16,
-    token="hf_...",
+    token=os.environ["HF_TOKEN"],
 )
 load_ema_into_transformer(
     "/path/to/checkpoint-90000/ema_weights.pt",
