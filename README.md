@@ -32,7 +32,7 @@
 
 - **Structural inventory.** Per-axis (Component / Arrow / Text) verification with critical/moderate error severity instead of a single holistic score.
 - **M-DPO.** Multi-way Bradley–Terry objective with dimension-anchored preference construction and adaptive gradient reweighting — breaks the SFT plateau where scalar DPO / GDRO / GRPO stagnate.
-- **LaTeX-to-Diagram Agent.** Generate figures directly from your paper's LaTeX source via a GPT planner + SciForma-9B renderer.
+- **LaTeX-to-Diagram Agent.** Generate figures directly from your paper's LaTeX source via GPT planning and styling + the SciForma-9B renderer.
 - **Data & benchmark.** `SciFormaData-700K` (661K generation pairs + 70K editing triplets) and `SciFormaBench-2K` (Simple 500 / Medium 900 / Hard 600) with human-verified inventories.
 
 ---
@@ -68,7 +68,7 @@ Both models are fine-tuned from [FLUX.2-klein-base-9B](https://huggingface.co/bl
 
 ### Requirements
 
-- **Python 3.10** (mmengine 0.10.7 requires 3.10; Python 3.11+ not tested), CUDA 12.1
+- **Python 3.10** (validated with 3.10.19), CUDA 12.8
 - GPU: ≥ 24 GB VRAM for inference (one A100/H100/B200); 8× B200 for training
 
 ### Setup
@@ -79,15 +79,15 @@ git clone https://github.com/microsoft/SciForma.git
 cd SciForma
 
 # Create conda environment
-conda create -n sciforma python=3.10 -y
+conda create -n sciforma python=3.10.19 -y
 conda activate sciforma
 
-# Install PyTorch (CUDA 12.1)
-pip install torch==2.5.1 torchvision torchaudio \
-    --index-url https://download.pytorch.org/whl/cu121
+# Install PyTorch (CUDA 12.8)
+pip install torch==2.8.0 torchvision==0.23.0 \
+    --index-url https://download.pytorch.org/whl/cu128
 
-# Install diffusers from git (required for Flux2Klein / Flux2Transformer2DModel support)
-pip install git+https://github.com/huggingface/diffusers.git
+# Install the validated Diffusers source (pinned for Flux2Klein compatibility)
+pip install "git+https://github.com/huggingface/diffusers.git@1fe688a651bc078326082b8927f8fbdd6cefeef0"
 
 # Install all other dependencies
 pip install -r requirements.txt
@@ -269,7 +269,7 @@ Results in `eval_results/sciforma-9b/eval_summary.json`.
 
 ### LaTeX-to-Diagram Agent
 
-Generate a diagram directly from your LaTeX source code — no manual prompt writing needed.
+Generate a diagram directly from LaTeX with `LaTeX parser → Planner → Stylist → Condense → SciForma-9B`. GPT-5.4 is recommended.
 
 ```bash
 # List all figures in your paper
@@ -282,8 +282,43 @@ python generate/latex_to_diagram.py \
     --output figure.png
 ```
 
-The pipeline runs: LaTeX parser → Planner (GPT) → Condense → SciForma-9B.
-Requires `AZURE_OPENAI_ENDPOINT` or `OPENAI_API_KEY` in `.env` for the planning step.
+#### Interactive Web Agent
+
+The desktop interface accepts pasted paper context and turns it into an editable diagram plan and a SciForma prompt. It provides two workflows:
+
+- **Human-in-the-loop:** generate and edit the plan, approve it, edit the resulting diffusion prompt, then generate the diagram.
+- **Automatic refinement (YOLO):** run planning, styling, prompt construction, SciForma generation, and optional image-aware prompt refinement automatically for the selected number of rounds.
+
+After generation, **AI Review Image** accepts a high-level revision request, inspects the current result, and proposes a complete replacement prompt before regeneration. The control panel exposes CFG, steps, seed, and the canonical 1024-resolution aspect-ratio buckets from `1:4` through `4:1`. Rendering always uses `SciForma-9B` with `FLUX.2-klein-base-9B`; the LLM is used only for planning, styling, prompt selection, and review. Runtime ICL is text-only and selected dynamically by resolution and semantic structure from an offline-screened high-aesthetic reference subset.
+
+![SciForma Interactive Web Agent](assets/sciforma_agent_demo.png)
+
+After completing the main setup above, install the UI dependencies, run `az login`, and keep the Azure endpoint configuration outside this repository. Copy `.env.example` to the ignored `.env`. GPT-5.4 is validated and recommended; `LLM_MODEL` and `VISION_MODEL` may instead name other compatible Azure deployments. AI Review and multi-round YOLO require `VISION_MODEL` to accept image input. No API key or endpoint value is stored in this repository.
+
+The external endpoint file referenced by `SCIFORMA_AZURE_CONFIG_PATH` has this placeholder-only form:
+
+```python
+endpoint_token_provider_dict = {
+    "https://<resource>.openai.azure.com/openai/v1":
+        "https://cognitiveservices.azure.com/.default",
+}
+```
+
+```bash
+pip install -r requirements-ui.txt
+az login
+cp .env.example .env
+
+# One-time download after accepting the FLUX.2-klein-base-9B license
+read -rsp "Hugging Face token: " HF_TOKEN && export HF_TOKEN
+python generate/prepare_ui_models.py
+unset HF_TOKEN
+
+# Later starts validate the local cache and preload the model before serving
+bash generate/run_latex_to_diagram_ui.sh
+```
+
+Open `http://127.0.0.1:7860`, or forward port `7860` through VS Code. CFG defaults to the validated value `4.0` and remains adjustable in the UI.
 
 ---
 

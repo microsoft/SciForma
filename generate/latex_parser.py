@@ -4,7 +4,7 @@ latex_parser.py — Extract methodology sections and figure captions from LaTeX.
 Supports:
   - Single .tex file
   - Directory of .tex files (searches all, merges methodology sections)
-  - ArXiv tar.gz (auto-extract)
+  - .zip, .tar, .tar.gz, and .tgz source archives (safe auto-extract)
 
 Usage:
     from generate.latex_parser import LatexParser
@@ -13,9 +13,11 @@ Usage:
     captions = parser.get_figure_captions()        # list of str
 """
 from __future__ import annotations
-import re, os, tarfile, glob
-from pathlib import Path
 
+import re
+import tarfile
+import zipfile
+from pathlib import Path
 
 # Section headings we treat as "methodology"
 _METHOD_KEYWORDS = re.compile(
@@ -31,6 +33,8 @@ _CAPTION_RE = re.compile(
 )
 _LABEL_CMD  = re.compile(r"\\[a-zA-Z]+\{[^}]*\}")
 _COMMENT_RE = re.compile(r"(?<!\\)%.*")
+_MAX_ARCHIVE_FILES = 10_000
+_MAX_ARCHIVE_BYTES = 512 * 1024 * 1024
 
 
 def _clean(text: str) -> str:
@@ -43,12 +47,18 @@ def _clean(text: str) -> str:
 class LatexParser:
     def __init__(self, source: str | Path):
         source = Path(source)
-        if source.suffix == ".gz" or source.suffix == ".tar":
-            self._tex = self._extract_tar(source)
+        if not source.exists():
+            raise FileNotFoundError(f"LaTeX source not found: {source}")
+        if source.suffix.lower() == ".zip":
+            self._tex = self._extract_archive(source, "zip")
+        elif source.suffix.lower() in {".gz", ".tgz", ".tar"}:
+            self._tex = self._extract_archive(source, "tar")
         elif source.is_dir():
             self._tex = self._load_dir(source)
-        else:
+        elif source.suffix.lower() == ".tex":
             self._tex = source.read_text(errors="ignore")
+        else:
+            raise ValueError("Source must be a .tex file, directory, .zip, .tar, .tar.gz, or .tgz")
 
 
     def get_methodology_sections(self, max_chars: int = 8000) -> list[tuple[str, str]]:
@@ -95,16 +105,55 @@ class LatexParser:
         for f in sorted(d.glob("**/*.tex")):
             try:
                 texts.append(f.read_text(errors="ignore"))
-            except Exception:
-                pass
+            except OSError:
+                continue
         return "\n".join(texts)
 
-    def _extract_tar(self, path: Path) -> str:
-        import tempfile, shutil
+    @staticmethod
+    def _safe_target(root: Path, member_name: str) -> Path:
+        target = (root / member_name).resolve()
+        if target != root and root not in target.parents:
+            raise ValueError(f"Unsafe archive path: {member_name}")
+        return target
+
+    def _extract_archive(self, path: Path, kind: str) -> str:
+        import shutil
+        import tempfile
+
         tmp = Path(tempfile.mkdtemp())
         try:
-            with tarfile.open(path) as tar:
-                tar.extractall(tmp)
+            root = tmp.resolve()
+            if kind == "zip":
+                with zipfile.ZipFile(path) as archive:
+                    members = archive.infolist()
+                    if len(members) > _MAX_ARCHIVE_FILES or sum(m.file_size for m in members) > _MAX_ARCHIVE_BYTES:
+                        raise ValueError("Archive exceeds the extraction safety limit")
+                    for member in members:
+                        self._safe_target(root, member.filename)
+                        if member.is_dir():
+                            continue
+                        target = self._safe_target(root, member.filename)
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        with archive.open(member) as src, target.open("wb") as dst:
+                            shutil.copyfileobj(src, dst)
+            else:
+                with tarfile.open(path) as archive:
+                    members = archive.getmembers()
+                    if len(members) > _MAX_ARCHIVE_FILES or sum(m.size for m in members) > _MAX_ARCHIVE_BYTES:
+                        raise ValueError("Archive exceeds the extraction safety limit")
+                    for member in members:
+                        self._safe_target(root, member.name)
+                        if not (member.isdir() or member.isfile()):
+                            raise ValueError(f"Unsupported archive member: {member.name}")
+                        if member.isdir():
+                            continue
+                        target = self._safe_target(root, member.name)
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        src = archive.extractfile(member)
+                        if src is None:
+                            raise ValueError(f"Cannot extract archive member: {member.name}")
+                        with src, target.open("wb") as dst:
+                            shutil.copyfileobj(src, dst)
             return self._load_dir(tmp)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)

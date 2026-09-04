@@ -1,5 +1,5 @@
 # SciForma — Python dependencies
-# Python 3.10, CUDA 12.1+
+# Python 3.10, CUDA 12.8 for the validated local UI
 #
 # Quick install (inference only):
 #   pip install -r requirements.txt
@@ -9,7 +9,7 @@
 
 # ── Core ML ──────────────────────────────────────────────────────────────────
 # CUDA build — install manually before this file:
-#   pip install torch==2.5.1 torchvision --index-url https://download.pytorch.org/whl/cu121
+#   pip install torch==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu128
 torch>=2.4.0
 
 # ── HuggingFace stack ─────────────────────────────────────────────────────────
@@ -18,11 +18,12 @@ torch>=2.4.0
 transformers>=4.50.0
 accelerate>=0.34.0
 safetensors>=0.4.0
-huggingface_hub>=0.27.0
+huggingface_hub>=0.27.0,<1.0.0
 
 # ── Inference / generate pipeline ─────────────────────────────────────────────
 openai>=1.30.0
 azure-identity>=1.17.0
+gradio==5.50.0
 python-dotenv>=1.0.0
 
 # ── Data / image ──────────────────────────────────────────────────────────────

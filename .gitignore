@@ -11,6 +11,9 @@ training_state.pt
 _local_secrets.py
 .env
 *.env
+.env.*
+!.env.example
+eval/judge_config.py
 
 # Data & outputs
 outputs/

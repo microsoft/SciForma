@@ -36,6 +36,10 @@ logs/
 _local_secrets.py
 .env
 *.env
+.env.*
+!.env.example
+eval/judge_config.py
+benchmark/judge_config.py
 
 # Paper source (PDFs)
 paper/

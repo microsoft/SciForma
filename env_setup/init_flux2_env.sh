@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # 1. 创建环境 (命名为 flux2)
-conda create -n flux2 python=3.10 -y
+conda create -n flux2 python=3.10.19 -y
 conda activate flux2
 
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-pip install git+https://github.com/huggingface/diffusers.git
-pip install --upgrade transformers accelerate protobuf wandb
+pip install torch==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu128
+pip install "git+https://github.com/huggingface/diffusers.git@1fe688a651bc078326082b8927f8fbdd6cefeef0"
+pip install --upgrade transformers==4.57.3 accelerate==1.12.0 protobuf wandb
 pip install opencv-python pandas pyarrow datasets ftfy sentencepiece einops scikit-learn timm mmengine tqdm
 pip install bitsandbytes>=0.43.0 peft>=0.11.1 pydantic ray[train] prodigyopt
 

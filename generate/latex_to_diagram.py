@@ -1,7 +1,7 @@
 """
 latex_to_diagram.py — One-command LaTeX → scientific diagram generation.
 
-Pipeline: LaTeX → [Planner] → [Condense] → SciForma-9B → PNG
+Pipeline: LaTeX → [Planner] → [Stylist] → [Condense] → SciForma-9B → PNG
 
 Usage:
     python generate/latex_to_diagram.py \\
@@ -28,7 +28,11 @@ Environment variables (set ONE of):
     HF_TOKEN=hf_xxx    (if SciForma model repo is private)
 """
 from __future__ import annotations
-import argparse, asyncio, os, sys
+
+import argparse
+import asyncio
+import os
+import sys
 from pathlib import Path
 
 _env = Path(__file__).parent.parent / ".env"
@@ -44,10 +48,10 @@ if _env.exists():
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from generate.latex_parser import LatexParser
-from generate.agents.planner import plan
 from generate.agents.condense import condense
-
+from generate.agents.planner import plan
+from generate.agents.stylist import style
+from generate.latex_parser import LatexParser
 
 
 def generate_image(
@@ -71,7 +75,7 @@ def generate_image(
         info = model_info(model_path, token=hf_token)
         files = [f.rfilename for f in info.siblings]
         has_full = any("scheduler_config.json" in f for f in files)
-    except Exception:
+    except Exception:  # noqa: BLE001 - remote lookup failure falls back to local detection
         has_full = os.path.isdir(model_path)  # local path
 
     if has_full:
@@ -130,15 +134,38 @@ async def run_pipeline(args):
 
     llm_model = args.llm_model
 
-    print(f"\n[1/2] Planning diagram description (model={llm_model})...")
-    raw_desc = await plan(methodology, caption, model=llm_model)
+    print(f"\n[1/3] Planning diagram description (model={llm_model})...")
+    raw_desc = await plan(
+        methodology,
+        caption,
+        model=llm_model,
+        target_width=args.width,
+        target_height=args.height,
+    )
     print(f"  Planner output: {len(raw_desc)} chars")
 
     if args.verbose:
         print(f"\n--- Planner output ---\n{raw_desc}\n---\n")
 
-    print(f"[2/2] Condensing to FLUX prompt style...")
-    flux_prompt = await condense(raw_desc, model=llm_model)
+    print("[2/3] Applying domain-aware visual styling...")
+    styled_desc = await style(
+        raw_desc,
+        methodology_text=methodology,
+        figure_caption=caption,
+        model=llm_model,
+    )
+    print(f"  Stylist output: {len(styled_desc)} chars")
+
+    if args.verbose:
+        print(f"\n--- Stylist output ---\n{styled_desc}\n---\n")
+
+    print("[3/3] Condensing to FLUX prompt style...")
+    flux_prompt = await condense(
+        styled_desc,
+        model=llm_model,
+        target_width=args.width,
+        target_height=args.height,
+    )
     print(f"  Final prompt: {len(flux_prompt)} chars")
 
     if args.verbose or args.print_prompt:
@@ -175,8 +202,8 @@ def parse_args():
                    help="Output PNG path")
     p.add_argument("--model_path",   default="LoYuXrqw/SciForma-9B",
                    help="HuggingFace model ID or local path")
-    p.add_argument("--llm_model",    default="gpt-4o",
-                   help="LLM for planning/condensing (gpt-4o, o3, etc.)")
+    p.add_argument("--llm_model",    default=os.environ.get("LLM_MODEL", "gpt-5.4"),
+                   help="LLM or Azure deployment for planning/styling/condensing")
     p.add_argument("--width",        type=int, default=1008)
     p.add_argument("--height",       type=int, default=576)
     p.add_argument("--cfg",          type=float, default=4.0)
