@@ -139,53 +139,6 @@ import os
 import torch
 from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
 
-# Load fine-tuned transformer from HuggingFace
-transformer = Flux2Transformer2DModel.from_pretrained(
-    "LoYuXrqw/SciForma-9B",
-    subfolder="transformer",
-    torch_dtype=torch.bfloat16,
-)
-
-# Load full pipeline with base model components
-pipe = Flux2KleinPipeline.from_pretrained(
-    "black-forest-labs/FLUX.2-klein-base-9B",
-    transformer=transformer,
-    torch_dtype=torch.bfloat16,
-    token=os.environ["HF_TOKEN"],
-)
-pipe.enable_model_cpu_offload()
-pipe.transformer.eval()
-
-prompt = (
-    "The figure illustrates a two-stage training pipeline. "
-    "Stage 1 collects raw data and trains a base model. "
-    "Stage 2 fine-tunes using curated high-quality pairs. "
-    "Components: [Data Collection], [Base Model], [Fine-tuning], [Final Model]. "
-    "Arrows: Data Collection → Base Model → Fine-tuning → Final Model. "
-    "Text: each stage is labeled inside a rounded rectangle."
-)
-
-with torch.no_grad():
-    image = pipe(
-        prompt=prompt,
-        width=1008, height=576,
-        num_inference_steps=50,
-        guidance_scale=4.0,
-        max_sequence_length=2048,
-        # ⚠️ Must use cuda generator — cpu generator gives different results
-        generator=torch.Generator(device="cuda").manual_seed(42),
-    ).images[0]
-image.save("output.png")
-```
-
-<details>
-<summary><b>Showcase Example</b> (adapted from SciFormaBench-2K medium sample #910)</summary>
-
-```python
-import os
-import torch
-from diffusers import Flux2KleinPipeline, Flux2Transformer2DModel
-
 transformer = Flux2Transformer2DModel.from_pretrained(
     "LoYuXrqw/SciForma-9B", subfolder="transformer",
     torch_dtype=torch.bfloat16,
@@ -199,7 +152,6 @@ pipe = Flux2KleinPipeline.from_pretrained(
 pipe.enable_model_cpu_offload()
 pipe.transformer.eval()
 
-# Adapted from SciFormaBench-2K medium sample #910; fixed seed for this showcase.
 prompt = """Create a clean scientific diagram of the Context-aware Sparse Spatiotemporal Learning (CSSL) framework for event-based vision.
 
 LAYOUT:
@@ -231,8 +183,6 @@ with torch.no_grad():
     ).images[0]
 image.save("cssl_showcase.png")
 ```
-
-</details>
 
 ---
 

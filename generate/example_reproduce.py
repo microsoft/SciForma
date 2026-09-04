@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the CSSL showcase adapted from SciFormaBench-2K medium sample #910."""
+"""Generate a CSSL scientific methodology diagram with SciForma-9B."""
 
 import argparse
 import os
