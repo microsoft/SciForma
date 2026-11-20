@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@4901385134134e04cec5fbe5ddfe3b2c5bd5d976 # v4.0.0
         with:
           # Fail the PR on moderate-or-higher severity vulnerabilities.
           fail-on-severity: moderate
